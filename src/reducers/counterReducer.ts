@@ -4,20 +4,20 @@ import { createReducer } from '@reduxjs/toolkit';
 import { increment, decrement } from '../actions/counterActions';
 
 interface CounterState {
-  count: number;
+  value: number;
 }
 
 const initialState: CounterState = {
-  count: 0,
+  value: 0,
 };
 
 const counterReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(increment, (state) => {
-      state.count += 1;
+      state.value += 1;
     })
     .addCase(decrement, (state) => {
-      state.count -= 1;
+      state.value -= 1;
     });
 });
 

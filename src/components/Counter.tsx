@@ -7,15 +7,17 @@ import { RootState, AppDispatch } from '../store';
 
 
 const Counter: React.FC = () => {
-  const count = useSelector((state: RootState) => state.counter.count);
+  const count = useSelector((state: RootState) => state.counter.value);
+  // const dispatch: AppDispatch = useDispatch();
   const dispatch: AppDispatch = useDispatch();
 
   return (
     <div>
       <h2 className='underline'>Counter: {count}</h2>
-      <button className='text-white' onClick={() => dispatch(increment())}>Increment</button>
+      <button onClick={() => dispatch(increment())}>Increment</button>
       <button onClick={() => dispatch(decrement())}>Decrement</button>
     </div>
+    
   );
 };
 
