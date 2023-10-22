@@ -1,4 +1,6 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../reducers/reducer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
    faList,
@@ -11,6 +13,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 const Header: React.FC = () => {
+   const cartQuantity = useSelector((state: RootState) => state.cart.quantity);
+   // console.log(cartQuantity);
    return (
       <header className=' sticky m-auto flex h-[74px]  w-[1200px] items-center justify-between text-white'>
          {/* Logo and navigation links go here */}
@@ -78,7 +82,7 @@ const Header: React.FC = () => {
             <div className='relative flex items-center px-[12px] text-[18px]'>
                <FontAwesomeIcon icon={faShoppingCart} />
                <span className='absolute right-[2px] top-[2px] h-[16px] w-[16px] rounded-[50%] border-2 border-solid border-white bg-[#FDD835] text-center text-[12px] font-[600] leading-[12px] text-[black] '>
-                  <span>0</span>
+                  <span className='quantity-cart'>{cartQuantity}</span>
                </span>
             </div>
             <div className='leading-[21px]'>

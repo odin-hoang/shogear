@@ -1,4 +1,8 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../reducers/reducer';
+import { updateQuantity } from '../cart/cart';
+import { increaseQuantity, decreaseQuantity } from '../pricetotal/pricetotal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
    faTag,
@@ -14,9 +18,24 @@ import {
    faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { faYoutube } from '@fortawesome/free-brands-svg-icons';
+
 const Body: React.FC = () => {
+   const quantity = useSelector((state: RootState) => state.pricetotal.quantity);
+   // const currentQuantityCart = useSelector((state: RootState) => state.cart.quantity);
+   const total = useSelector((state: RootState) => state.pricetotal.total);
+   const dispatch = useDispatch();
+   const formattedTotal = total.toLocaleString('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+   });
+   const formattedTotalWithoutSpace = formattedTotal.replace(/\s/g, '');
+   const HandleOrderClick = () => {
+      const quantityProductInput = document.querySelector<HTMLInputElement>('.quantity-product');
+      const quantityProduct = parseInt(quantityProductInput?.value || '0');
+      dispatch(updateQuantity(quantityProduct));
+   };
    return (
-      <body className='mt-[74px]'>
+      <main className='mt-[74px]'>
          <div className='body-item  border-b-[1px]'>
             <ul className='list-submenu m-auto flex  h-[40px] w-[1200px] items-center justify-between '>
                <li className='item-submenu inline-block h-[100%] leading-[40px]'>
@@ -165,19 +184,25 @@ const Body: React.FC = () => {
                                     <del className='text-[14px] text-[#6D6E72]'>30.490.000₫</del>
                                  </div>
                                  <div className='ml-auto flex w-[114px] items-end justify-between'>
-                                    <button className='h-[32px] w-[32px] flex-grow justify-center rounded-bl-[4px] rounded-tl-[4px] border-[1px] border-solid border-[#CFCFCF] bg-[#fff] text-center'>
+                                    <button
+                                       onClick={() => dispatch(decreaseQuantity())}
+                                       className='decrease-button h-[32px] w-[32px] flex-grow justify-center rounded-bl-[4px] rounded-tl-[4px] border-[1px] border-solid border-[#CFCFCF] bg-[#fff] text-center'
+                                    >
                                        <FontAwesomeIcon icon={faMinus} />
                                     </button>
                                     <input
-                                       className=' rounded-0	 h-[32px] w-[50px] flex-grow border-b-[1px] border-t-[1px] border-solid border-[#CFCFCF] bg-white px-0 text-center text-sm font-normal outline-none'
+                                       className=' quantity-product rounded-0 h-[32px] w-[50px] flex-grow border-b-[1px] border-t-[1px] border-solid border-[#CFCFCF] bg-white px-0 text-center text-sm font-normal outline-none'
                                        type='text'
                                        min={1}
                                        readOnly
                                        data-price={264900000}
-                                       data-quantity={2}
-                                       value={2}
+                                       data-quantity={quantity}
+                                       value={quantity}
                                     />
-                                    <button className='h-[32px] w-[32px] flex-grow justify-center rounded-br-[4px] rounded-tr-[4px] border-[1px] border-solid border-[#CFCFCF] bg-[#fff] text-center'>
+                                    <button
+                                       onClick={() => dispatch(increaseQuantity())}
+                                       className='increase-button h-[32px] w-[32px] flex-grow justify-center rounded-br-[4px] rounded-tr-[4px] border-[1px] border-solid border-[#CFCFCF] bg-[#fff] text-center'
+                                    >
                                        <FontAwesomeIcon icon={faPlus} />
                                     </button>
                                  </div>
@@ -193,19 +218,22 @@ const Body: React.FC = () => {
                         </div>
                         <div className=' cost-total item-center mb-[24px] flex justify-between font-[600]'>
                            <span className='total-title text-[18px]'>Tổng tiền:</span>
-                           <span className='total-price text-[24px] text-[#E30019]'>52.980.000₫</span>
+                           <span className='total-price text-[24px] text-[#E30019]'>{formattedTotalWithoutSpace}</span>
                         </div>
                         <div className='h-[70px] rounded-[4px] bg-[#E30019] text-center'>
-                           <a href='' className='w-[100%] p-[20px] text-[18px] font-[600] leading-[72px] text-[white]'>
-                              ĐẶT HÀNG NGAY
-                           </a>
+                           <button
+                              className='order-product w-[100%] text-[18px] font-[600] leading-[72px] text-[white]'
+                              onClick={() => HandleOrderClick()}
+                           >
+                              THÊM VÀO GIỎ HÀNG
+                           </button>
                         </div>
                      </section>
                   </div>
                </div>
             </div>
          </div>
-      </body>
+      </main>
    );
 };
 
