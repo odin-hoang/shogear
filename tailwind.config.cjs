@@ -6,7 +6,7 @@ export default {
     // Define your custom CSS variables as Tailwind CSS classes
     extend: {
       fontFamily: {
-        sf: ['"SF"', "sans-serif", ...defaultTheme.fontFamily.sans],
+        sf: ["SF-Pro", "Arial", "sans-serif", ...defaultTheme.fontFamily.sans],
       },
       colors: {
         primary: {

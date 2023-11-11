@@ -3,15 +3,19 @@
 @tailwind utilities;
 
 @layer base {
-  /* @font-face {
-    font-family: "SF PRO 500";
-    font-weight: 500;
-    src: url(./assets/fonts/SF-Pro-Display-Regular.otf) format("otf");
-  }
-
-  @font-face {
-    font-family: "SF PRO 500";
-    font-weight: 600;
-    src: url(./assets/fonts/SF-Pro-Display-Semibold.otf) format("otf");
-  } */
+    @font-face {
+        font-family: 'SF-Pro';
+        font-weight: 400;
+        src: url('./assets/fonts/SF-Pro-Display-Regular.otf');
+    }
+    @font-face {
+        font-family: 'SF-Pro';
+        font-weight: 600;
+        src: url('./assets/fonts/SF-Pro-Display-Semibold.otf');
+    }
+    @font-face {
+        font-family: 'SF-Pro';
+        font-weight: 500;
+        src: url('./assets/fonts/SF-Pro-Display-Medium.otf');
+    }
 }
