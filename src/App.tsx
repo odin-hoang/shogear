@@ -1,20 +1,12 @@
 // App.tsx
 import React from 'react';
 import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import pricetotalSlice from './pricetotal/pricetotal';
-import cartSlice from './cart/cart';
+import store from './app/store';
 
-import Header from './header/header';
-import Body from './body/body';
-import Footer from './footer/footer';
+import Header from './components/header/header';
+import Body from './components/body/body';
+import Footer from './components/footer/footer';
 
-const store = configureStore({
-   reducer: {
-      pricetotal: pricetotalSlice, // Add your reducer to the store
-      cart: cartSlice,
-   },
-});
 const App: React.FC = () => {
    return (
       <Provider store={store}>

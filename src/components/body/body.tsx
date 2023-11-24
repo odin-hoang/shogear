@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../reducers/reducer';
-import { updateQuantity } from '../cart/cart';
-import { increaseQuantity, decreaseQuantity } from '../pricetotal/pricetotal';
+import { RootState } from '../../app/store';
+import { updateQuantity } from '../../features/cart/cartSlice';
+import { increaseQuantity, decreaseQuantity } from '../../features/priceTotal/priceTotalSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
    faTag,

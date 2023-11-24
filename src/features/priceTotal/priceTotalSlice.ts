@@ -11,7 +11,7 @@ interface PriceState {
 const initialState: PriceState = {
    quantity: 1,
    pricePerProduct: 26490000,
-   total: 26490000
+   total: 26490000,
 };
 
 const pricetotalSlice = createSlice({
