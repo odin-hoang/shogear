@@ -1,8 +1,4 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../app/store';
-import { updateQuantity } from '../../features/cart/cartSlice';
-import { increaseQuantity, decreaseQuantity } from '../../features/priceTotal/priceTotalSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
    faTag,
@@ -19,21 +15,34 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faYoutube } from '@fortawesome/free-brands-svg-icons';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../app/store';
+
+import { updateQuantity } from '../../features/cart/cartSlice';
+import { increaseQuantity, decreaseQuantity } from '../../features/priceTotal/priceTotalSlice';
+
 const Body: React.FC = () => {
-   const quantity = useSelector((state: RootState) => state.pricetotal.quantity);
-   // const currentQuantityCart = useSelector((state: RootState) => state.cart.quantity);
-   const total = useSelector((state: RootState) => state.pricetotal.total);
+   const itemQuantity = useSelector((state: RootState) => state.pricetotal.quantity);
+   const totalPrice = useSelector((state: RootState) => state.pricetotal.total);
+
    const dispatch = useDispatch();
-   const formattedTotal = total.toLocaleString('vi-VN', {
+
+   const handleInCreaseItemQuantity = () => {
+      dispatch(increaseQuantity());
+   };
+   const handleDecreaseItemQuantity = () => {
+      dispatch(decreaseQuantity());
+   };
+   const handleAddToCartClick = () => {
+      dispatch(updateQuantity(itemQuantity));
+   };
+
+   const formattedTotal = totalPrice.toLocaleString('vi-VN', {
       style: 'currency',
       currency: 'VND',
    });
    const formattedTotalWithoutSpace = formattedTotal.replace(/\s/g, '');
-   const HandleOrderClick = () => {
-      const quantityProductInput = document.querySelector<HTMLInputElement>('.quantity-product');
-      const quantityProduct = parseInt(quantityProductInput?.value || '0');
-      dispatch(updateQuantity(quantityProduct));
-   };
+
    return (
       <main className='mt-[74px]'>
          <div className='body-item  border-b-[1px]'>
@@ -154,10 +163,13 @@ const Body: React.FC = () => {
                                  </a>
                               </div>
                               <div className='mt-[8px]  text-[#6D6E72]'>
-                                 <a href='' className='flex h-[21px] items-center justify-center text-[14px] '>
+                                 <div
+                                    onClick={() => dispatch(updateQuantity(0))}
+                                    className='flex h-[21px] items-center justify-center text-[14px] hover:cursor-pointer'
+                                 >
                                     <FontAwesomeIcon icon={faTrash} className='mr-[8px]' />{' '}
-                                    <span className='hover:text-red-500'>Xoá</span>
-                                 </a>
+                                    <span className=' hover:text-red-500'>Xoá</span>
+                                 </div>
                               </div>
                            </div>
                            <div className='right-product ml-[8px] flex w-[100%]'>
@@ -185,7 +197,7 @@ const Body: React.FC = () => {
                                  </div>
                                  <div className='ml-auto flex w-[114px] items-end justify-between'>
                                     <button
-                                       onClick={() => dispatch(decreaseQuantity())}
+                                       onClick={handleDecreaseItemQuantity}
                                        className='decrease-button h-[32px] w-[32px] flex-grow justify-center rounded-bl-[4px] rounded-tl-[4px] border-[1px] border-solid border-[#CFCFCF] bg-[#fff] text-center'
                                     >
                                        <FontAwesomeIcon icon={faMinus} />
@@ -196,11 +208,11 @@ const Body: React.FC = () => {
                                        min={1}
                                        readOnly
                                        data-price={264900000}
-                                       data-quantity={quantity}
-                                       value={quantity}
+                                       data-quantity={itemQuantity}
+                                       value={itemQuantity}
                                     />
                                     <button
-                                       onClick={() => dispatch(increaseQuantity())}
+                                       onClick={handleInCreaseItemQuantity}
                                        className='increase-button h-[32px] w-[32px] flex-grow justify-center rounded-br-[4px] rounded-tr-[4px] border-[1px] border-solid border-[#CFCFCF] bg-[#fff] text-center'
                                     >
                                        <FontAwesomeIcon icon={faPlus} />
@@ -223,7 +235,7 @@ const Body: React.FC = () => {
                         <div className='h-[70px] rounded-[4px] bg-[#E30019] text-center'>
                            <button
                               className='order-product w-[100%] text-[18px] font-[600] leading-[72px] text-[white]'
-                              onClick={() => HandleOrderClick()}
+                              onClick={handleAddToCartClick}
                            >
                               THÊM VÀO GIỎ HÀNG
                            </button>
