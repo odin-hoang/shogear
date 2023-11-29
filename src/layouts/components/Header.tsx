@@ -1,6 +1,6 @@
 import { FaBars } from 'react-icons/fa';
 import Icons from '../../assets/icons';
-import Action from './action';
+import Action from './Action';
 const Header = () => {
     const listActions = [
         {

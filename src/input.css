@@ -6,16 +6,16 @@
     @font-face {
         font-family: 'SF-Pro';
         font-weight: 400;
-        src: url('./assets/fonts/SF-Pro-Display-Regular.otf');
+        src: url('/src/assets/fonts/SF-Pro-Display-Regular.otf');
     }
     @font-face {
         font-family: 'SF-Pro';
         font-weight: 600;
-        src: url('./assets/fonts/SF-Pro-Display-Semibold.otf');
+        src: url('/src/assets/fonts/SF-Pro-Display-Semibold.otf');
     }
     @font-face {
         font-family: 'SF-Pro';
         font-weight: 500;
-        src: url('./assets/fonts/SF-Pro-Display-Medium.otf');
+        src: url('/src/assets/fonts/SF-Pro-Display-Medium.otf');
     }
 }
