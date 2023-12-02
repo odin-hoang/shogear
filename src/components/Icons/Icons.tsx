@@ -36,7 +36,7 @@ export const EarnIcon = () => {
             ></path>
             <mask
                 id='mask0_5669_936'
-                // style='mask-type:alpha'
+                style={{ maskType: 'alpha' }}
                 maskUnits='userSpaceOnUse'
                 x='0'
                 y='1'
