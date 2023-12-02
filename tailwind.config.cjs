@@ -99,7 +99,7 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 };
 
 // tailwind.config.js
