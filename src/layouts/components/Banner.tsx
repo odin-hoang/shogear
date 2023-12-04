@@ -1,5 +1,12 @@
+import Carousel from '../../components/Carousel';
+
 const Banner = () => {
-    return <div>Banner</div>;
+    // Hot deal will go hear
+    return (
+        <div>
+            <Carousel />
+        </div>
+    );
 };
 
 export default Banner;

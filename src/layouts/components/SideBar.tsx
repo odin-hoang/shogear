@@ -265,14 +265,10 @@ const SideBar = () => {
     function handleMouseLeaveList() {
         setActiveIndex(-1);
     }
-    function handleMouseEnterList() {
-        setActiveIndex(0);
-    }
     return (
         <div
-            className='relative  w-56 rounded-md bg-white px-4 py-2'
+            className='relative hidden rounded-md bg-white px-4 py-2 md:w-56 lg:block'
             onMouseLeave={handleMouseLeaveList}
-            onMouseEnter={handleMouseEnterList}
         >
             <ul className='flex flex-col gap-3 font-sf text-xs'>
                 {navLinks.map((link, index) => (
@@ -291,7 +287,7 @@ const SideBar = () => {
                 ))}
             </ul>
             {/* I will change the width later */}
-            <div className='absolute left-[100%] top-0 w-[calc(1200px-14rem)]  pl-2 text-xs'>
+            <div className='absolute left-[100%] top-0 z-20  w-[calc(1200px-12rem)] pl-2 text-xs'>
                 <div className='h-full w-full   rounded-md bg-white'>
                     {navLinks.map(
                         (link, index) =>
