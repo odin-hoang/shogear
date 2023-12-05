@@ -7,7 +7,7 @@ type ActionData = {
 
 const Action = (data: ActionData) => {
     return (
-        <div className='ml-4 flex cursor-pointer space-x-3 align-middle'>
+        <div className='ml-3 flex cursor-pointer space-x-3 align-middle'>
             <div className='relative w-[18px] shrink-0'>
                 <img src={data.icon} className='h-[36px] w-[18px]' alt='icon' />
                 {data.count !== undefined && (

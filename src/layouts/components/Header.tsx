@@ -25,11 +25,11 @@ const Header = () => {
             name2: 'hàng',
             count: 0,
         },
-        {
-            icon: Icons.user,
-            name1: 'Đăng',
-            name2: 'nhập',
-        },
+        // {
+        //     icon: Icons.user,
+        //     name1: 'Đăng',
+        //     name2: 'nhập',
+        // },
     ];
     return (
         <div className='bg-primary-default'>
@@ -43,7 +43,7 @@ const Header = () => {
                         className='w-[40px]'
                     ></img>
                 </div>
-                <div className='search position-relative ml-4 flex h-10 w-1/2 flex-auto rounded border bg-white '>
+                <div className='search position-relative ml-4 flex h-10 w-1/2 flex-auto rounded border bg-white'>
                     <input
                         className='font-italic w-full pl-2 font-sf text-sm text-placeholder outline-none placeholder:text-placeholder'
                         placeholder='Bạn cần tìm gì?'
@@ -51,7 +51,7 @@ const Header = () => {
                     {/* <span className='position-relative'> */}
                     <img src={Icons.search} alt='search' className='mx-3 h-full w-[16px]' />
                 </div>
-                <div className='actions ml-4 flex w-auto justify-between align-bottom'>
+                <div className='actions ml-3 flex w-auto justify-between align-bottom'>
                     <div className='hidden flex-grow items-center gap-2 md:flex'>
                         {listActions.map((item, index) => (
                             <Action
@@ -64,7 +64,7 @@ const Header = () => {
                         ))}
                     </div>
                 </div>
-                <div className='my-auto flex h-10 w-auto items-center justify-center gap-2 rounded bg-primary-900 p-2 md:hidden'>
+                <div className='my-auto flex h-10 w-auto items-center justify-center gap-2 rounded bg-primary-900 p-2 sm:ml-4'>
                     <div className='shrink-0'>
                         <img src={Icons.user} className='mx-auto my-auto h-[36px] w-[18px]' alt='user icon' />
                     </div>
