@@ -78,7 +78,7 @@ const Carousel = () => {
     };
     return (
         // I will change this width
-        <div className='relative mx-10 lg:mx-0 lg:max-w-[calc(1200px-14rem)]'>
+        <div className='relative mx-10 min-w-[700px] lg:mx-0 lg:max-w-[calc(1200px-14rem)]'>
             <div
                 className={cn(
                     ' grid snap-x snap-mandatory auto-cols-[calc(100%/2-9px)] grid-flow-col items-center gap-4 overflow-hidden scroll-smooth md:auto-cols-[calc(100%/4-12px)] lg:auto-cols-[calc(100%/5)]',
