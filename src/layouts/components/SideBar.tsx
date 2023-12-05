@@ -12,6 +12,7 @@ import {
 import { FaAngleRight } from 'react-icons/fa';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { cn } from '../../utils/cn';
 const SideBar = () => {
     const navLinks = [
         {
@@ -266,20 +267,21 @@ const SideBar = () => {
         setActiveIndex(-1);
     }
     return (
-        <div
-            className='relative hidden rounded-md bg-white px-4 py-2 md:w-56 lg:block'
-            onMouseLeave={handleMouseLeaveList}
-        >
-            <ul className='flex flex-col gap-3 font-sf text-xs'>
+        <div className='relative hidden rounded-md bg-white md:w-56 lg:block' onMouseLeave={handleMouseLeaveList}>
+            <ul className='flex flex-col font-sf text-xs'>
                 {navLinks.map((link, index) => (
                     <Link
                         to={link.url}
-                        className='flex  items-center justify-between '
+                        className={cn(
+                            'before:active-menu relative flex items-center justify-between px-4 py-[7px]  ',
+                            !(index === activeIndex) && ' before:content-none',
+                            index === activeIndex && ' bg-side-default text-white',
+                        )}
                         key={index}
                         onMouseEnter={() => handleMouseEnterItem(index)}
                     >
-                        <div className='flex items-center gap-3'>
-                            <span className='w-5'>{link.icon}</span>
+                        <div className={cn('flex items-center gap-3')}>
+                            <span className='h-4 w-5'>{link.icon}</span>
                             {link.label}
                         </div>
                         <FaAngleRight />
@@ -288,7 +290,7 @@ const SideBar = () => {
             </ul>
             {/* I will change the width later */}
             <div className='absolute left-[100%] top-0 z-20  w-[calc(1200px-12rem)] pl-2 text-xs'>
-                <div className='h-full w-full   rounded-md bg-white'>
+                <div className='h-full  w-full rounded-md bg-white'>
                     {navLinks.map(
                         (link, index) =>
                             !!(index === activeIndex) && (

@@ -247,6 +247,7 @@ export const MouseIcon = () => (
         height='20'
         xmlSpace='preserve'
     >
+        <style type='text/css'>{`.st0{fill:currentcolor;}`}</style>
         <path
             className='st0'
             d='M7,19.5L7,19.5c-3.6,0-6.5-3.1-6.5-6.8V7.3c0-3.7,2.9-6.8,6.5-6.8c3.6,0,6.5,3.1,6.5,6.8v5.4

@@ -19,6 +19,9 @@ export default {
         sub: {
           default: "#1982F9",
         },
+        side: {
+          default: "#ea1c04",
+        },
         state: {
           info: "#1982F9",
           success: "#24B400",
