@@ -25,11 +25,6 @@ const Header = () => {
             name2: 'hàng',
             count: 0,
         },
-        // {
-        //     icon: Icons.user,
-        //     name1: 'Đăng',
-        //     name2: 'nhập',
-        // },
     ];
     return (
         <div className='bg-primary-default'>
