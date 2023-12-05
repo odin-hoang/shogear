@@ -36,7 +36,7 @@ const NavBar = () => {
     ];
 
     return (
-        <div className=' hidden flex-row justify-between whitespace-nowrap px-40 py-2 font-sf text-xs lg:flex'>
+        <div className=' hidden flex-row justify-between whitespace-nowrap px-40 py-2 text-xs font-bold lg:flex'>
             {navLinks.map((navLink, index) => (
                 <React.Fragment key={index}>
                     <NavLink

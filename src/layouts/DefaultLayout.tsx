@@ -7,11 +7,11 @@ type LayoutProps = {
 };
 const DefaultLayout: React.FC<LayoutProps> = ({ children }) => {
     return (
-        <div>
+        <div className='min-w-[600px]'>
             <Header></Header>
             <NavBar></NavBar>
             {/* Page */}
-            <div>{children}</div>
+            <div className='bg-bodyBg-default py-4 '>{children}</div>
             <Footer></Footer>
         </div>
     );
