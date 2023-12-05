@@ -18,4 +18,22 @@
         font-weight: 500;
         src: url('/src/assets/fonts/SF-Pro-Display-Medium.otf');
     }
+    html {
+        @apply font-sf;
+    }
+}
+@layer components {
+    .active-menu {
+        right: -32px;
+        border-top: 16px solid transparent;
+        border-left: 16px solid;
+        @apply text-side-default;
+        border-bottom: 15px solid transparent;
+        border-right: 16px solid transparent;
+        z-index: 100;
+        position: absolute;
+        top: 0;
+        margin: auto;
+        content: '';
+    }
 }
