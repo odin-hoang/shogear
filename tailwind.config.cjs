@@ -7,7 +7,6 @@ export default {
       // Define your custom CSS variables as Tailwind CSS classes
       extend: {
          screens: {
-            scm: "600px",
             sm: "640px", // Đặt mức độ cho breakpoint sm
             md: "768px", // Đặt mức độ cho breakpoint md
             lg: "1024px", // Đặt mức độ cho breakpoint lg
