@@ -11,7 +11,6 @@ interface CardProps {
     price: number;
     postedAt?: string;
     zone?: string;
-    description?: string;
     className?: string;
     draggable?: boolean;
     isUsed?: boolean;
@@ -23,7 +22,6 @@ const Card = ({
     avatarUrl = 'https://picsum.photos/200',
     price,
     name,
-    description,
     postedAt,
     zone,
     className = '',
