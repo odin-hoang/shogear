@@ -69,4 +69,16 @@
         margin: auto;
         @apply animate-pulse;
     }
+    .tag-like-new {
+        clip-path: polygon(0 0, 100% 0%, 90% 100%, 0% 100%);
+        @apply bg-primary-default py-1 pl-2 pr-4 text-sm font-medium text-white;
+    }
+    .tag-used {
+        clip-path: polygon(0 0, 100% 0%, 90% 100%, 0% 100%);
+        @apply bg-secondary-default py-1 pl-2 pr-4 text-sm text-white;
+    }
+    .tag-time-used {
+        clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%);
+        @apply py-1 pl-4 pr-2 text-sm;
+    }
 }

@@ -4,7 +4,7 @@ import SideBar from '../layouts/components/SideBar';
 
 const Home = () => {
     return (
-        <div className='mx-auto min-w-[600px]  max-w-[1200px] '>
+        <div className='mx-auto  max-w-[1200px] '>
             <div className='mb-6 flex items-center gap-6'>
                 <SideBar />
                 <Banner />

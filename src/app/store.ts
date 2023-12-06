@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import counterReducer from '../features/counter/counter-slice';
+import blurReducer from '../features/blur/blur-slice';
 export const store = configureStore({
     reducer: {
         counter: counterReducer,
+        blur: blurReducer,
     },
 });
 
