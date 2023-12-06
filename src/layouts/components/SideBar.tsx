@@ -304,7 +304,7 @@ const SideBar = () => {
                     {navLinks.map(
                         (link, index) =>
                             !!(index === activeIndex) && (
-                                <div key={index} className='flex gap-20 px-4 py-4'>
+                                <div key={index} className='flex min-h-[270px] gap-20 px-4 py-4'>
                                     {link.children.map((child, index) => (
                                         <div className='flex flex-col gap-3 whitespace-nowrap' key={index}>
                                             <Link to={child.url} className=' font-bold text-primary-default'>

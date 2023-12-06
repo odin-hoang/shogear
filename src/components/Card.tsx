@@ -15,6 +15,7 @@ interface CardProps {
     className?: string;
     draggable?: boolean;
     isUsed?: boolean;
+    isSaved?: boolean;
 }
 const Card = ({
     imageUrl,
@@ -28,11 +29,17 @@ const Card = ({
     className = '',
     draggable = true,
     isUsed = true,
+    isSaved = false,
 }: CardProps) => {
     return (
         <div className={` flex flex-col ${className}`}>
-            <div className={`relative h-[200px] ${className}`}>
-                <img src={imageUrl} alt='' className='h-full w-full rounded-sm object-cover' draggable={draggable} />
+            <div className={`relative h-[200px] overflow-hidden ${className}`}>
+                <img
+                    src={imageUrl}
+                    alt=''
+                    className='h-full w-full rounded-sm object-cover transition-all duration-500 hover:scale-110'
+                    draggable={draggable}
+                />
                 <div className='absolute bottom-0 left-0 flex w-full items-center'>
                     {isUsed ? (
                         <span className='flex flex-1 items-center bg-white/50 backdrop-blur-sm'>
@@ -74,12 +81,15 @@ const Card = ({
                         <MdLocationPin />
                         <span className='text-right text-xs text-secondary-default'>{zone}</span>
                     </span>
-                    <span className=''>
-                        <FaRegHeart />
-                    </span>
-                    <span className='text-primary-default'>
-                        <FaHeart />
-                    </span>
+                    {isSaved ? (
+                        <span className='text-primary-default'>
+                            <FaHeart />
+                        </span>
+                    ) : (
+                        <span className=''>
+                            <FaRegHeart />
+                        </span>
+                    )}
                 </h2>
             </div>
         </div>

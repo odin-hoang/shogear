@@ -132,6 +132,7 @@ const Carousel = () => {
                             zone={item.zone}
                             draggable={false}
                             isUsed={item.isUsed}
+                            isSaved={index % 2 === 0 ? true : false}
                         />
                     </Link>
                 ))}
