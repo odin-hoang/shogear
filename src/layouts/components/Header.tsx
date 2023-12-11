@@ -23,7 +23,6 @@ const Header = () => {
             icon: Icons.shopcart,
             name1: 'Giỏ',
             name2: 'hàng',
-            count: 0,
         },
     ];
     return (

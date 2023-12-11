@@ -4,12 +4,16 @@ import { CiBoxList, CiGrid41 } from 'react-icons/ci';
 import { Link } from 'react-router-dom';
 import { cn } from '../../utils/cn';
 import { useState } from 'react';
+import { useAppDispatch } from '../../app/hook';
+import { addToCart } from '../../features/cart/cart-slice';
 import Card from '../../components/Card';
-type NewsProps = {};
+type NewsProps = object;
 
+// eslint-disable-next-line no-empty-pattern
 const News = ({}: NewsProps) => {
     const data = [
         {
+            id: 1,
             imageUrl:
                 'https://product.hstatic.net/200000722513/product/km086w_facd6092154b4d769a04f1859a0c4b8e_medium.png',
             username: 'David Smith',
@@ -20,6 +24,7 @@ const News = ({}: NewsProps) => {
             isUsed: false,
         },
         {
+            id: 2,
             imageUrl:
                 'https://product.hstatic.net/200000722513/product/latitude-3520-p108f001-70280538-fix_83b4c85f06d145199d87d838dc9eca04_medium.png',
             username: 'Todo Smith',
@@ -30,6 +35,7 @@ const News = ({}: NewsProps) => {
             isUsed: true,
         },
         {
+            id: 3,
             imageUrl:
                 'https://product.hstatic.net/200000722513/product/lg-gram-2023-fix_28f08b20a1724869a1d5da4920697371_medium.png',
             username: 'Kelvin Smith',
@@ -40,6 +46,7 @@ const News = ({}: NewsProps) => {
             isUsed: false,
         },
         {
+            id: 4,
             imageUrl: 'https://down-vn.img.susercontent.com/file/bc3903834d250fcdadf0e5c6b5761310',
             username: 'Kelvin Smith',
             price: 340000000,
@@ -49,6 +56,7 @@ const News = ({}: NewsProps) => {
             isUsed: true,
         },
         {
+            id: 5,
             imageUrl:
                 'https://product.hstatic.net/200000722513/product/vt200_1_compressed_c0a3639b9b2948bb89d600ce0640ba0d_08706b04e66d45aeb746128bfca9a29d_grande.jpg',
             username: 'Kelvin Smith',
@@ -59,90 +67,108 @@ const News = ({}: NewsProps) => {
             isUsed: false,
         },
         {
+            id: 6,
             imageUrl: 'https://picsum.photos/200/270',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
+            postedAt: '1 tuần trước',
+            zone: 'Đà Nẵng',
+            isUsed: false,
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/280',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/281',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/282',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/283',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/284',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/285',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/286',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/221',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/222',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/223',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/401',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/223',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/401',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/223',
             username: 'Kelvin Smith',
             price: 120000,
@@ -151,6 +177,24 @@ const News = ({}: NewsProps) => {
     ];
     // default layout = grid
     const [layout, setLayout] = useState(false);
+    const dispatch = useAppDispatch();
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    interface CartItem {
+        id: number;
+        name: string;
+        quantity: number;
+    }
+    const handleAddCart = (payload: CartItem) => {
+        const cartItem: CartItem = {
+            id: payload.id !== undefined ? payload.id : Date.now(),
+            name: payload.name,
+            quantity: payload.quantity,
+        };
+        dispatch(addToCart(cartItem));
+        console.log('handle');
+    };
+
     return (
         <div className='min-h-screen  rounded-md bg-white p-4'>
             {/* username and filterer */}
@@ -183,6 +227,7 @@ const News = ({}: NewsProps) => {
                     {data.map((item, index) => (
                         <div className={cn(' flex gap-4 rounded-sm border p-2')} key={index}>
                             <Card
+                                id={item.id}
                                 name={item.name}
                                 imageUrl={item.imageUrl}
                                 price={item.price}
@@ -191,6 +236,7 @@ const News = ({}: NewsProps) => {
                                 zone={item.zone}
                                 isUsed={item.isUsed}
                                 className='w-[200px]'
+                                onClick={() => handleAddCart({ ...item, quantity: 1 })}
                             />
                             <div>
                                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellendus pariatur illo
@@ -206,6 +252,7 @@ const News = ({}: NewsProps) => {
                     {data.map((item, index) => (
                         <Link to={'/'} className={cn('flex flex-col rounded-sm border')} key={index}>
                             <Card
+                                id={item.id}
                                 name={item.name}
                                 imageUrl={item.imageUrl}
                                 price={item.price}
@@ -213,6 +260,8 @@ const News = ({}: NewsProps) => {
                                 postedAt={item.postedAt}
                                 zone={item.zone}
                                 isUsed={item.isUsed}
+                                className='w-[200px]'
+                                onClick={() => handleAddCart({ ...item, quantity: 1 })}
                             />
                         </Link>
                     ))}
