@@ -36,7 +36,7 @@ const NavBar = () => {
     ];
 
     return (
-        <div className=' hidden flex-row justify-between whitespace-nowrap px-40 py-2 text-xs font-bold lg:flex'>
+        <div className=' hidden justify-between py-2 font-bold lg:flex lg:px-20 xl:px-40  '>
             {navLinks.map((navLink, index) => (
                 <React.Fragment key={index}>
                     <NavLink
@@ -45,7 +45,7 @@ const NavBar = () => {
                         key={index}
                     >
                         {navLink.icon}
-                        <span>{navLink.title}</span>
+                        <span className='text-[0.5rem] xl:text-xs'>{navLink.title}</span>
                     </NavLink>
                     <div className='divider divider-horizontal last:hidden'></div>
                 </React.Fragment>
