@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
-import { cn } from '../utils/cn';
+import { cn } from '../lib/utils/cn';
 import { Link } from 'react-router-dom';
 import Card from './Card';
 const Carousel = () => {

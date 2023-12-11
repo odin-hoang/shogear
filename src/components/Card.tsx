@@ -1,4 +1,4 @@
-import { numberWithCommas } from '../utils/scripts';
+import { numberWithCommas } from '../lib/scripts';
 import { FaClockRotateLeft } from 'react-icons/fa6';
 import { MdLocationPin } from 'react-icons/md';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';

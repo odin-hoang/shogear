@@ -2,9 +2,10 @@ import Button from '../../components/Button';
 import { FaAngleDoubleDown, FaFilter, FaPaperPlane } from 'react-icons/fa';
 import { CiBoxList, CiGrid41 } from 'react-icons/ci';
 import { Link } from 'react-router-dom';
-import { cn } from '../../utils/cn';
+import { cn } from '../../lib/utils/cn';
 import { useState } from 'react';
 import Card from '../../components/Card';
+import toHyphenString from '../../lib/toHyphenString';
 type NewsProps = {};
 
 const News = ({}: NewsProps) => {
@@ -204,7 +205,12 @@ const News = ({}: NewsProps) => {
                 // Grid
                 <div className='grid grid-cols-2 gap-4 sm:grid-cols-3  lg:grid-cols-5'>
                     {data.map((item, index) => (
-                        <Link to={'/'} className={cn('flex flex-col rounded-sm border')} key={index}>
+                        <Link
+                            to={`/products/${toHyphenString(item.name)}`}
+                            state={{ item }}
+                            className={cn('flex flex-col rounded-sm border')}
+                            key={index}
+                        >
                             <Card
                                 name={item.name}
                                 imageUrl={item.imageUrl}

@@ -1,6 +1,6 @@
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { useEffect, useState, useRef, MutableRefObject } from 'react';
-import { cn } from '../utils/cn';
+import { cn } from '../lib/utils/cn';
 const MAX_WIDTH_IMAGE = 805;
 const ImageSlider = () => {
     const banners = [
