@@ -13,6 +13,7 @@
     "dependencies": {
         "@ant-design/icons": "^5.2.6",
         "@reduxjs/toolkit": "^1.9.7",
+        "@tippyjs/react": "^4.2.6",
         "autoprefixer": "^10.4.16",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.0.0",

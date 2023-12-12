@@ -6,6 +6,7 @@ import { cn } from '../../lib/utils/cn';
 import { useState } from 'react';
 import Card from '../../components/Card';
 import toHyphenString from '../../lib/toHyphenString';
+import HeadlessTippy from '../../components/HeadlessTippy';
 type NewsProps = {};
 
 const News = ({}: NewsProps) => {
@@ -179,7 +180,10 @@ const News = ({}: NewsProps) => {
                         </span>
                         <span>Lọc</span>
                     </span>
-                    <Button variant={'secondary'}>Toàn quốc</Button>
+                    <HeadlessTippy content={<button>Hello</button>}>
+                        <Button>Toàn quốc</Button>
+                    </HeadlessTippy>
+
                     <Button>Danh mục</Button>
                     <Button price='asc'>Giá</Button>
                     <span className='cursor-pointer text-3xl' onClick={() => setLayout(!layout)}>
