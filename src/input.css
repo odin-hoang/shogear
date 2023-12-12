@@ -81,4 +81,13 @@
         clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%);
         @apply py-1 pl-4 pr-2 text-sm;
     }
+    .price {
+        @apply font-bold text-primary-default;
+    }
+    .price::after {
+        content: '₫';
+    }
+    .icon-text {
+        @apply flex items-center gap-2 text-secondary-default;
+    }
 }

@@ -12,7 +12,7 @@ import {
 import { FaAngleRight } from 'react-icons/fa';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { cn } from '../../utils/cn';
+import { cn } from '../../lib/utils/cn';
 import { useAppDispatch } from '../../app/hook';
 import { active, inactive } from '../../features/blur/blur-slice';
 const SideBar = () => {

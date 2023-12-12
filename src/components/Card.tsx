@@ -1,4 +1,4 @@
-import { numberWithCommas } from '../utils/scripts';
+import { numberWithCommas } from '../lib/scripts';
 import { FaClockRotateLeft } from 'react-icons/fa6';
 import { MdLocationPin } from 'react-icons/md';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
@@ -55,10 +55,7 @@ const Card = ({
             <div className='flex flex-col gap-2 rounded-sm bg-white p-2'>
                 <p className='line-clamp-2 h-[40px] text-sm font-medium'>{name}</p>
                 <h3 className='flex items-center justify-between'>
-                    <span className='font-bold text-primary-default '>
-                        {numberWithCommas(price)}
-                        {'₫'}
-                    </span>
+                    <span className='price '>{numberWithCommas(price)}</span>
                 </h3>
                 <div className='flex items-center gap-4'>
                     <div className='avatar online h-10 w-10'>
