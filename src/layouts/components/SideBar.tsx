@@ -12,7 +12,9 @@ import {
 import { FaAngleRight } from 'react-icons/fa';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { cn } from '../../utils/cn';
+import { cn } from '../../lib/utils/cn';
+import { useAppDispatch } from '../../app/hook';
+import { active, inactive } from '../../features/blur/blur-slice';
 const SideBar = () => {
     const navLinks = [
         {
@@ -259,42 +261,50 @@ const SideBar = () => {
             ],
         },
     ];
+    const dispatch = useAppDispatch();
     const [activeIndex, setActiveIndex] = useState(-1);
     function handleMouseEnterItem(index: number) {
         setActiveIndex(index);
+        dispatch(active());
     }
     function handleMouseLeaveList() {
         setActiveIndex(-1);
+        dispatch(inactive());
     }
     return (
-        <div className='relative hidden rounded-md bg-white md:w-56 lg:block' onMouseLeave={handleMouseLeaveList}>
+        <div
+            className='relative z-20 hidden  shrink-0 rounded-md bg-white md:hidden lg:hidden xl:block '
+            onMouseLeave={handleMouseLeaveList}
+        >
             <ul className='flex flex-col font-sf text-xs'>
                 {navLinks.map((link, index) => (
                     <Link
                         to={link.url}
                         className={cn(
-                            'before:active-menu relative flex items-center justify-between px-4 py-[7px]  ',
+                            'before:active-menu relative flex items-center justify-between py-[7px] pl-4 pr-2  ',
                             !(index === activeIndex) && ' before:content-none',
                             index === activeIndex && ' bg-side-default text-white',
                         )}
                         key={index}
                         onMouseEnter={() => handleMouseEnterItem(index)}
                     >
-                        <div className={cn('flex items-center gap-3')}>
+                        <div className={cn('flex items-center gap-2')}>
                             <span className='h-4 w-5'>{link.icon}</span>
                             {link.label}
                         </div>
-                        <FaAngleRight />
+                        <span className='ml-2'>
+                            <FaAngleRight />
+                        </span>
                     </Link>
                 ))}
             </ul>
             {/* I will change the width later */}
-            <div className='absolute left-[100%] top-0 z-20  w-[calc(1200px-12rem)] pl-2 text-xs'>
+            <div className='absolute left-[100%] top-0 z-20  w-[calc(1200px-14rem)] pl-2 text-xs'>
                 <div className='h-full  w-full rounded-md bg-white'>
                     {navLinks.map(
                         (link, index) =>
                             !!(index === activeIndex) && (
-                                <div key={index} className='flex gap-20 px-4 py-4'>
+                                <div key={index} className='flex min-h-[270px] gap-20 px-4 py-4'>
                                     {link.children.map((child, index) => (
                                         <div className='flex flex-col gap-3 whitespace-nowrap' key={index}>
                                             <Link to={child.url} className=' font-bold text-primary-default'>
@@ -302,7 +312,11 @@ const SideBar = () => {
                                             </Link>
                                             <ul className='flex flex-col justify-start gap-3'>
                                                 {child.children.map((ch, index) => (
-                                                    <Link to={ch.url} key={index}>
+                                                    <Link
+                                                        to={ch.url}
+                                                        key={index}
+                                                        className='hover:text-primary-default'
+                                                    >
                                                         {ch.label}
                                                     </Link>
                                                 ))}

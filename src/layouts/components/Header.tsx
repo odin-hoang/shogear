@@ -25,7 +25,7 @@ const Header = () => {
         },
     ];
     return (
-        <div className='flex bg-primary-default p-3'>
+        <div className='flex   bg-primary-default p-3'>
             <div className='my-auto text-white '>
                 <FaBars className='h-6 w-6' />
             </div>
