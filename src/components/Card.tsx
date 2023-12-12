@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { numberWithCommas } from '../utils/scripts';
+import { numberWithCommas } from '../lib/scripts';
 import { FaClockRotateLeft } from 'react-icons/fa6';
 import { MdLocationPin } from 'react-icons/md';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
@@ -18,11 +17,11 @@ interface CardProps {
     draggable?: boolean;
     isUsed?: boolean;
     isSaved?: boolean;
-    onClick?: () => void;
 }
 const Card = ({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     id,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     quantity,
     imageUrl,
     username,
@@ -35,10 +34,9 @@ const Card = ({
     draggable = true,
     isUsed = true,
     isSaved = false,
-    onClick,
 }: CardProps) => {
     return (
-        <div className={` flex flex-col ${className}`} onClick={() => onClick && onClick()}>
+        <div className={` flex flex-col ${className}`}>
             <div className={`relative h-[200px] overflow-hidden ${className}`}>
                 <img
                     src={imageUrl}
@@ -63,14 +61,11 @@ const Card = ({
             <div className='flex flex-col gap-2 rounded-sm bg-white p-2'>
                 <p className='line-clamp-2 h-[40px] text-sm font-medium'>{name}</p>
                 <h3 className='flex items-center justify-between'>
-                    <span className='font-bold text-primary-default '>
-                        {numberWithCommas(price)}
-                        {'₫'}
-                    </span>
+                    <span className='price '>{numberWithCommas(price)}</span>
                 </h3>
                 <div className='flex items-center gap-4'>
                     <div className='avatar online h-10 w-10'>
-                        <img src={avatarUrl} alt='' className='rounded-full' draggable={draggable} />
+                        <img src={avatarUrl} alt='' className=' rounded-full' draggable={draggable} />
                     </div>
                     <div className=' flex flex-col items-baseline justify-start'>
                         <h2>{username}</h2>

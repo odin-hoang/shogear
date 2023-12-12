@@ -2,10 +2,10 @@ import Button from '../../components/Button';
 import { FaAngleDoubleDown, FaFilter, FaPaperPlane } from 'react-icons/fa';
 import { CiBoxList, CiGrid41 } from 'react-icons/ci';
 import { Link } from 'react-router-dom';
-import { cn } from '../../utils/cn';
+import { cn } from '../../lib/utils/cn';
 import { useState } from 'react';
-import { useAppDispatch } from '../../app/hook';
-import { addToCart } from '../../features/cart/cart-slice';
+
+import toHyphenString from '../../lib/toHyphenString';
 import Card from '../../components/Card';
 type NewsProps = object;
 
@@ -177,23 +177,6 @@ const News = ({}: NewsProps) => {
     ];
     // default layout = grid
     const [layout, setLayout] = useState(false);
-    const dispatch = useAppDispatch();
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    interface CartItem {
-        id: number;
-        name: string;
-        quantity: number;
-    }
-    const handleAddCart = (payload: CartItem) => {
-        const cartItem: CartItem = {
-            id: payload.id !== undefined ? payload.id : Date.now(),
-            name: payload.name,
-            quantity: payload.quantity,
-        };
-        dispatch(addToCart(cartItem));
-        console.log('handle');
-    };
 
     return (
         <div className='min-h-screen  rounded-md bg-white p-4'>
@@ -236,7 +219,6 @@ const News = ({}: NewsProps) => {
                                 zone={item.zone}
                                 isUsed={item.isUsed}
                                 className='w-[200px]'
-                                onClick={() => handleAddCart({ ...item, quantity: 1 })}
                             />
                             <div>
                                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellendus pariatur illo
@@ -250,7 +232,13 @@ const News = ({}: NewsProps) => {
                 // Grid
                 <div className='grid grid-cols-2 gap-4 sm:grid-cols-3  lg:grid-cols-5'>
                     {data.map((item, index) => (
-                        <Link to={'/'} className={cn('flex flex-col rounded-sm border')} key={index}>
+                        <Link
+                            to={`/products/${toHyphenString(item.name)}`}
+                            state={{ item }}
+                            className={cn('flex flex-col rounded-sm border')}
+                            key={index}
+                            preventScrollReset={false}
+                        >
                             <Card
                                 id={item.id}
                                 name={item.name}
@@ -261,7 +249,7 @@ const News = ({}: NewsProps) => {
                                 zone={item.zone}
                                 isUsed={item.isUsed}
                                 className='w-[200px]'
-                                onClick={() => handleAddCart({ ...item, quantity: 1 })}
+                                // onClick={() => handleAddCart({ ...item, quantity: 1 })}
                             />
                         </Link>
                     ))}

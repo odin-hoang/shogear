@@ -1,5 +1,5 @@
 import { FaBars } from 'react-icons/fa';
-import { numberWithCommas } from '../../utils/scripts';
+import { numberWithCommas } from '../../lib/scripts';
 import Icons from '../../assets/icons';
 import Action from './Action';
 import { useSelector } from 'react-redux';
