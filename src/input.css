@@ -166,4 +166,28 @@
     .card {
         position: relative;
     }
+    .breadcrumb-item a {
+        color: #777;
+    }
+
+    .breadcrumb-item a:hover,
+    .breadcrumb-item a:focus {
+        color: #fcb941;
+    }
+    /* .breadcrumb-item + .breadcrumb-item:before {
+        color: #999999;
+        content: '\f112';
+        font-family: 'molla';
+        padding-right: 0.7rem;
+        font-size: 1.1rem;
+        vertical-align: middle;
+        margin-top: -0.1rem;
+    } */
+    .breadcrumb-item {
+        font-weight: 300;
+        font-size: 1rem;
+        line-height: 1.5;
+        letter-spacing: 0;
+        text-transform: capitalize;
+    }
 }

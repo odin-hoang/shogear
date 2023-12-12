@@ -1,11 +1,10 @@
+// eslint-disable-next-line no-undef
 module.exports = {
-  plugins: {
-    // ...
-    tailwindcss: {},
-    autoprefixer: {},
-    require('tailwindcss'),
-    require('autoprefixer'),
-    // ...
-    'postcss-nesting': {},
-  }
-}  
+   plugins: {
+      // ...
+      tailwindcss: {},
+      autoprefixer: {},
+      // ...
+      "postcss-nesting": {},
+   },
+};

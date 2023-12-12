@@ -14,7 +14,7 @@ const DefaultLayout: React.FC<LayoutProps> = ({ children }) => {
             <Header></Header>
             <NavBar></NavBar>
             {/* Page */}
-            <div className='bg-bodyBg-default px-6 py-6 '>{children}</div>
+            <div>{children}</div>
             <Footer></Footer>
         </div>
     );

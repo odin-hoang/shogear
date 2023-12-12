@@ -1,8 +1,10 @@
 import { FaBars } from 'react-icons/fa';
+import { numberWithCommas } from '../utils/scripts';
 import Icons from '../assets/icons';
 import Action from './Actions';
 import { useSelector } from 'react-redux';
 import { RootState } from '../app/store';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
     // list product in cart
@@ -159,7 +161,7 @@ const Header = () => {
                                                                     />
                                                                 </span>
 
-                                                                <div className='ml-2 mr-2 flex-1'>
+                                                                <div className='ml-2 mr-2 flex flex-1 flex-col justify-between'>
                                                                     <a href='' className='product-name text-[14px]'>
                                                                         <label
                                                                             htmlFor=''
@@ -170,7 +172,10 @@ const Header = () => {
                                                                     </a>
                                                                     <div className='flex justify-between text-[12px]'>
                                                                         <span className='product-price'>
-                                                                            {product.price * product.quantity} VND
+                                                                            {numberWithCommas(
+                                                                                product.price * product.quantity,
+                                                                            )}{' '}
+                                                                            VND
                                                                         </span>
                                                                         <span className='product-quantity'>
                                                                             x{product.quantity}
@@ -182,9 +187,9 @@ const Header = () => {
                                                     ))}
                                                 </div>
                                                 <div className='mx-3 mb-2 flex items-center justify-between'>
-                                                    <div>{productsInCart.length} san pham</div>
+                                                    <div>{productsInCart.length} sản phẩm</div>
                                                     <button className='my-2 rounded-3xl bg-[blue] px-4 py-2 text-[white]'>
-                                                        Xem Giỏ Hàng
+                                                        <Link to='/cart'>Xem Giỏ Hàng</Link>
                                                     </button>
                                                 </div>
                                             </div>
