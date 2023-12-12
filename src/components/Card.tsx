@@ -55,10 +55,7 @@ const Card = ({
             <div className='flex flex-col gap-2 rounded-sm bg-white p-2'>
                 <p className='line-clamp-2 h-[40px] text-sm font-medium'>{name}</p>
                 <h3 className='flex items-center justify-between'>
-                    <span className='font-bold text-primary-default '>
-                        {numberWithCommas(price)}
-                        {'₫'}
-                    </span>
+                    <span className='price '>{numberWithCommas(price)}</span>
                 </h3>
                 <div className='flex items-center gap-4'>
                     <div className='avatar online h-10 w-10'>

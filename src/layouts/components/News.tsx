@@ -19,6 +19,8 @@ const News = ({}: NewsProps) => {
             zone: 'Hồ Chí Minh',
             name: 'Laptop gaming Acer Aspire 7 A715 76G 59MW',
             isUsed: false,
+            description:
+                'Máy main zin 64G \n Màn zin sọc sát mép cảm ứng ngon\n Mất face id. Pin thay.\nAe cần màn lcd + 300k',
         },
         {
             imageUrl:
@@ -29,6 +31,8 @@ const News = ({}: NewsProps) => {
             postedAt: '2 ngày trước',
             zone: 'Bà Rịa - Vũng Tàu',
             isUsed: true,
+            description:
+                'Máy main zin 64G \n Màn zin sọc sát mép cảm ứng ngon\n Mất face id. Pin thay.\nAe cần màn lcd + 300k',
         },
         {
             imageUrl:
@@ -39,6 +43,8 @@ const News = ({}: NewsProps) => {
             name: 'Laptop LG Gram 2023 14Z90R GAH53A5',
             zone: 'Thái Nguyên',
             isUsed: false,
+            description:
+                'Máy main zin 64G \n Màn zin sọc sát mép cảm ứng ngon\n Mất face id. Pin thay.\nAe cần màn lcd + 300k',
         },
         {
             imageUrl: 'https://down-vn.img.susercontent.com/file/bc3903834d250fcdadf0e5c6b5761310',
@@ -48,6 +54,8 @@ const News = ({}: NewsProps) => {
             name: '[Hàng chính hãng] Bàn phím Dell KB216',
             zone: 'Hà Nội',
             isUsed: true,
+            description:
+                'Máy main zin 64G \n Màn zin sọc sát mép cảm ứng ngon\n Mất face id. Pin thay.\nAe cần màn lcd + 300k',
         },
         {
             imageUrl:
@@ -58,6 +66,8 @@ const News = ({}: NewsProps) => {
             name: 'Chuột Rapoo Gaming VT200 RGB',
             zone: 'Đà Nẵng',
             isUsed: false,
+            description:
+                'Máy main zin 64G \n Màn zin sọc sát mép cảm ứng ngon\n Mất face id. Pin thay.\nAe cần màn lcd + 300k',
         },
         {
             imageUrl: 'https://picsum.photos/200/270',
@@ -169,7 +179,7 @@ const News = ({}: NewsProps) => {
                         </span>
                         <span>Lọc</span>
                     </span>
-                    <Button>Toàn quốc</Button>
+                    <Button variant={'secondary'}>Toàn quốc</Button>
                     <Button>Danh mục</Button>
                     <Button price='asc'>Giá</Button>
                     <span className='cursor-pointer text-3xl' onClick={() => setLayout(!layout)}>
@@ -210,6 +220,7 @@ const News = ({}: NewsProps) => {
                             state={{ item }}
                             className={cn('flex flex-col rounded-sm border')}
                             key={index}
+                            preventScrollReset={false}
                         >
                             <Card
                                 name={item.name}
