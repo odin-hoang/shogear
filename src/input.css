@@ -90,4 +90,7 @@
     .icon-text {
         @apply flex items-center gap-2 text-secondary-default;
     }
+    .active-button {
+        @apply !bg-primary-default font-medium text-white;
+    }
 }

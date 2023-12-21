@@ -6,7 +6,7 @@ import { FaRegClock } from 'react-icons/fa';
 import { FiPhoneCall } from 'react-icons/fi';
 import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
 import { BsCartPlusFill } from 'react-icons/bs';
-import { FaClockRotateLeft, FaLocationDot} from 'react-icons/fa6';
+import { FaClockRotateLeft, FaLocationDot } from 'react-icons/fa6';
 import { FireIcon } from '../components/Icons';
 interface ProductItem {
     imageUrl: string;
@@ -115,10 +115,10 @@ const ProductDetail = () => {
                             <li>ASUS</li>
                         </ul>
                         <div className='flex flex-col gap-2'>
-                            <Button variant={'buy'} size={'medium'} className='justify-center'>
+                            <Button variant={'fill'} size={'medium'} className='justify-center'>
                                 Mua ngay
                             </Button>
-                            <Button variant={'cart'} size={'medium'} className='justify-center'>
+                            <Button variant={'outline'} size={'medium'} className='justify-center'>
                                 <BsCartPlusFill />
                                 Thêm vào giỏ hàng
                             </Button>
@@ -139,11 +139,11 @@ const ProductDetail = () => {
                         </div>
 
                         <div className='flex flex-col items-center gap-2'>
-                            <Button variant={'phone'} className='flex'>
+                            <Button variant={'fillBlue'} className='flex'>
                                 <FiPhoneCall />
                                 Bấm để hiện số điện thoại
                             </Button>
-                            <Button variant={'chat'}>
+                            <Button variant={'outlineBlue'}>
                                 <IoChatbubbleEllipsesOutline /> Chat với người bán
                             </Button>
                         </div>

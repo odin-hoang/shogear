@@ -7,11 +7,11 @@ export const buttonVariants = cva('flex items-center px-2 py-1 gap-2 ', {
     variants: {
         variant: {
             default: 'bg-white hover:bg-secondary-default/20 rounded-3xl border gap-1',
-            secondary: 'bg-primary-default',
-            cart: 'border rounded-md text-primary-900 border-2 font-medium',
-            buy: ' bg-primary-default text-white rounded-md font-bold',
-            phone: 'bg-sub-default text-bold text-white rounded-md',
-            chat: ' rounded-md ring w-full',
+            basic: 'rounded-3xl border bg-bodyBg-default',
+            outline: 'border rounded-md text-primary-900 border-2 font-medium',
+            fill: ' bg-primary-default text-white rounded-md font-bold',
+            fillBlue: 'bg-sub-default text-bold text-white rounded-md',
+            outlineBlue: ' rounded-md ring w-full',
         },
         size: {
             default: '',
@@ -23,19 +23,28 @@ export const buttonVariants = cva('flex items-center px-2 py-1 gap-2 ', {
         size: 'default',
     },
 });
-export interface ButtonProps extends ButtonVariantProps {
+export interface ButtonProps extends ButtonVariantProps, React.ComponentPropsWithRef<'button'> {
     children: React.ReactNode;
     price?: string | null;
-    className?: string;
 }
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-    ({ children, price = null, variant = 'default', size = 'default', className }: ButtonProps, ref) => {
+    ({ children, price = null, variant = 'default', size = 'default', className, ...rest }: ButtonProps, ref) => {
         return (
-            <button ref={ref} className={cn(buttonVariants({ variant, size, className }))}>
+            <button ref={ref} className={cn(buttonVariants({ variant, size, className }))} {...rest}>
                 {children}
                 {!!(variant === 'default') && (
                     <span className='h-5 w-5  text-lg'>
-                        {price ? price === 'asc' ? <FaSortAmountUp /> : <FaSortAmountDown /> : <FaCaretDown />}
+                        {price ? (
+                            price === 'asc' ? (
+                                <FaSortAmountUp />
+                            ) : price === 'desc' ? (
+                                <FaSortAmountDown />
+                            ) : (
+                                ''
+                            )
+                        ) : (
+                            <FaCaretDown />
+                        )}
                     </span>
                 )}
             </button>

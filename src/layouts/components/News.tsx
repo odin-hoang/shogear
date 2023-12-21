@@ -7,8 +7,13 @@ import { useState } from 'react';
 import Card from '../../components/Card';
 import toHyphenString from '../../lib/toHyphenString';
 import HeadlessTippy from '../../components/HeadlessTippy';
+import { TbBrandProducthunt, TbBuildingCommunity } from 'react-icons/tb';
 type NewsProps = {};
-
+type InitialFilterer = {
+    byZone?: string | null;
+    byProductTag: string[];
+    byPrice?: 'asc' | 'desc';
+};
 const News = ({}: NewsProps) => {
     const data = [
         {
@@ -161,8 +166,51 @@ const News = ({}: NewsProps) => {
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
     ];
+    const productTags = [
+        'Laptop',
+        'Laptop Gaming',
+        'Ổ cứng, RAM, Thẻ nhớ',
+        'Apple',
+        'Màn hình',
+        'Bàn phím',
+        'Tai nghe - Loa',
+        'Phụ kiện',
+        'Chuột + Lót chuột',
+    ];
+    const zoneTags = ['TP Hồ Chí Minh', 'Đà Nẵng', 'Cao Bằng', 'Hà Nội', 'Long An', 'Kiên Giang'];
     // default layout = grid
     const [layout, setLayout] = useState(false);
+
+    const [filterer, setFilterer] = useState<InitialFilterer>({
+        byZone: null,
+        byProductTag: [],
+        byPrice: 'asc',
+    });
+    function handleFilter(e: React.MouseEvent<HTMLButtonElement, MouseEvent>, filter: 'byZone' | 'byProductTag') {
+        const payloadParser = e.target as HTMLElement;
+        const payload = payloadParser.innerHTML;
+        if (filter === 'byZone') {
+            setFilterer((prev) => (prev.byZone !== payload ? { ...prev, byZone: payload } : { ...prev, byZone: null }));
+        }
+        if (filter === 'byProductTag') {
+            if (filterer.byProductTag.includes(payload)) {
+                setFilterer((prev) => ({
+                    ...prev,
+                    byProductTag: [...prev.byProductTag.filter((tag) => tag !== payload)],
+                }));
+            } else {
+                setFilterer((prev) => ({ ...prev, byProductTag: [...prev.byProductTag, payload] }));
+            }
+        }
+    }
+    function handlePrice() {
+        if (filterer.byPrice === 'asc') {
+            setFilterer((prev) => ({ ...prev, byPrice: 'desc' }));
+        } else if (filterer.byPrice === 'desc') {
+            setFilterer((prev) => ({ ...prev, byPrice: 'asc' }));
+        }
+    }
+    console.log(filterer);
     return (
         <div className='min-h-screen  rounded-md bg-white p-4'>
             {/* username and filterer */}
@@ -180,12 +228,74 @@ const News = ({}: NewsProps) => {
                         </span>
                         <span>Lọc</span>
                     </span>
-                    <HeadlessTippy content={<button>Hello</button>}>
+                    <HeadlessTippy
+                        content={
+                            <div className='w-96'>
+                                <div className='icon-text'>
+                                    <TbBuildingCommunity /> Tìm kiếm theo khu vực
+                                </div>
+                                <div className='my-4 flex flex-wrap gap-2'>
+                                    {zoneTags.map((zone, index) => (
+                                        <Button
+                                            variant={'basic'}
+                                            onClick={(e) => handleFilter(e, 'byZone')}
+                                            key={index}
+                                            className={cn(zone === filterer.byZone && 'active-button')}
+                                        >
+                                            {zone}
+                                        </Button>
+                                    ))}
+                                </div>
+                                {/* <div className='flex items-center justify-end gap-2 '>
+                                    <Button variant={'fill'} className='w-1/2 justify-center shadow-custom'>
+                                        Áp dụng
+                                    </Button>
+                                    <Button variant={'outline'} className='w-1/2 justify-center '>
+                                        Xoá lọc
+                                    </Button>
+                                </div> */}
+                            </div>
+                        }
+                    >
                         <Button>Toàn quốc</Button>
                     </HeadlessTippy>
-
-                    <Button>Danh mục</Button>
-                    <Button price='asc'>Giá</Button>
+                    {/* product list */}
+                    <HeadlessTippy
+                        content={
+                            <div className='w-96'>
+                                <div className='icon-text'>
+                                    <TbBrandProducthunt /> Tìm kiếm theo danh mục sản phẩm
+                                </div>
+                                <div className='my-4 flex flex-wrap gap-2'>
+                                    {productTags.map((productTag) => (
+                                        <Button
+                                            variant={'basic'}
+                                            onClick={(e) => handleFilter(e, 'byProductTag')}
+                                            key={productTag}
+                                            className={cn(
+                                                filterer.byProductTag.includes(productTag) && 'active-button',
+                                            )}
+                                        >
+                                            {productTag}
+                                        </Button>
+                                    ))}
+                                </div>
+                                {/* <div className='flex items-center justify-end gap-2 '>
+                                    <Button variant={'fill'} className='w-1/2 justify-center shadow-custom'>
+                                        Áp dụng
+                                    </Button>
+                                    <Button variant={'outline'} className='w-1/2 justify-center '>
+                                        Xoá lọc
+                                    </Button>
+                                </div> */}
+                            </div>
+                        }
+                    >
+                        <Button>Danh mục</Button>
+                    </HeadlessTippy>
+                    <Button price={filterer.byPrice} onClick={handlePrice}>
+                        Giá
+                    </Button>
                     <span className='cursor-pointer text-3xl' onClick={() => setLayout(!layout)}>
                         {layout ? <CiGrid41 /> : <CiBoxList />}
                     </span>
