@@ -7,84 +7,11 @@ import { RootState } from '../../app/store';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
-    // list product in cart
-    const data = [
-        {
-            id: 1,
-            imageUrl:
-                'https://product.hstatic.net/200000722513/product/km086w_facd6092154b4d769a04f1859a0c4b8e_medium.png',
-            username: 'David Smith',
-            price: 120000,
-            postedAt: '1 phút trước',
-            zone: 'Hồ Chí Minh',
-            name: 'Laptop gaming Acer Aspire 7 A715 76G 59MW',
-            isUsed: false,
-        },
-        {
-            id: 2,
-            imageUrl:
-                'https://product.hstatic.net/200000722513/product/latitude-3520-p108f001-70280538-fix_83b4c85f06d145199d87d838dc9eca04_medium.png',
-            username: 'Todo Smith',
-            price: 20890000,
-            name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
-            postedAt: '2 ngày trước',
-            zone: 'Bà Rịa - Vũng Tàu',
-            isUsed: true,
-        },
-        {
-            id: 3,
-            imageUrl:
-                'https://product.hstatic.net/200000722513/product/lg-gram-2023-fix_28f08b20a1724869a1d5da4920697371_medium.png',
-            username: 'Kelvin Smith',
-            price: 35490000,
-            postedAt: '5 phút trước',
-            name: 'Laptop LG Gram 2023 14Z90R GAH53A5',
-            zone: 'Thái Nguyên',
-            isUsed: false,
-        },
-        {
-            id: 4,
-            imageUrl: 'https://down-vn.img.susercontent.com/file/bc3903834d250fcdadf0e5c6b5761310',
-            username: 'Kelvin Smith',
-            price: 340000000,
-            postedAt: '2 giờ trước',
-            name: '[Hàng chính hãng] Bàn phím Dell KB216',
-            zone: 'Hà Nội',
-            isUsed: true,
-        },
-        {
-            id: 5,
-            imageUrl:
-                'https://product.hstatic.net/200000722513/product/vt200_1_compressed_c0a3639b9b2948bb89d600ce0640ba0d_08706b04e66d45aeb746128bfca9a29d_grande.jpg',
-            username: 'Kelvin Smith',
-            price: 120000,
-            postedAt: '1 tuần trước',
-            name: 'Chuột Rapoo Gaming VT200 RGB',
-            zone: 'Đà Nẵng',
-            isUsed: false,
-        },
-        {
-            id: 6,
-            imageUrl: 'https://picsum.photos/200/270',
-            username: 'Kelvin Smith',
-            price: 120000,
-            name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
-            postedAt: '1 tuần trước',
-            zone: 'Đà Nẵng',
-            isUsed: false,
-        },
-    ];
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
-    const productsInCart = data
-        .filter((product) => cartItems.some((item) => item.id === product.id))
-        .map((product) => ({
-            ...product,
-            quantity: cartItems.find((item) => item.id === product.id)?.quantity || 0,
-        }));
-
-    console.log(productsInCart.length);
+    // console.log(cartItems);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const cartQuantity = useSelector((state: RootState) => state.cart.quantityTotal);
-    const numberProduct = cartQuantity;
+    // console.log(cartQuantity);
     const listActions = [
         {
             icon: Icons.headphone,
@@ -105,7 +32,7 @@ const Header = () => {
             icon: Icons.shopcart,
             name1: 'Giỏ',
             name2: 'hàng',
-            count: numberProduct,
+            count: cartItems.length,
         },
     ];
     return (
@@ -150,7 +77,7 @@ const Header = () => {
                                             <div className='products-in-cart'>
                                                 <div className='mx-3 mt-3'>Giỏ Hàng</div>
                                                 <div className='product-container mb-2 ml-2 mr-2 max-h-[300px] overflow-y-auto'>
-                                                    {productsInCart.map((product, index) => (
+                                                    {cartItems.map((product, index) => (
                                                         <div key={index} className='product-item'>
                                                             <div className='product-detail mb-4'>
                                                                 <span className='min-h-[60px] min-w-[60px] rounded-lg border border-gray-200 border-opacity-40'>
@@ -187,7 +114,7 @@ const Header = () => {
                                                     ))}
                                                 </div>
                                                 <div className='mx-3 mb-2 flex items-center justify-between'>
-                                                    <div>{productsInCart.length} sản phẩm</div>
+                                                    <div>{cartItems.length} sản phẩm</div>
                                                     <button className='my-2 rounded-3xl bg-[blue] px-4 py-2 text-[white]'>
                                                         <Link to='/cart'>Xem Giỏ Hàng</Link>
                                                     </button>

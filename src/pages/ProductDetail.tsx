@@ -31,6 +31,8 @@ const ProductDetail = () => {
         id: number;
         name: string;
         quantity: number;
+        price: number;
+        imageUrl: string;
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const handleAddCart = (payload: CartItem) => {
@@ -38,6 +40,8 @@ const ProductDetail = () => {
             id: payload.id !== undefined ? payload.id : Date.now(),
             name: payload.name,
             quantity: payload.quantity,
+            price: payload.price,
+            imageUrl: payload.imageUrl,
         };
         dispatch(addToCart(cartItem));
         //show cart after add success
@@ -46,6 +50,8 @@ const ProductDetail = () => {
         setTimeout(() => {
             cartElement?.classList.remove('show-cart');
         }, 2000);
+        //cart auto
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         // notice
         console.log('add product success');
     };
