@@ -118,19 +118,19 @@ const ProductDetail = () => {
                             <div className='price mb-2 text-2xl'>{numberWithCommas(product.price)}</div>
                             <div className='flex w-full items-center'>
                                 {product.isUsed ? (
-                                    <span className='flex flex-1 items-center bg-white/50 backdrop-blur-sm'>
+                                    <span className='bg-white/50 flex flex-1 items-center backdrop-blur-sm'>
                                         <span className='tag-used rounded-tl-md'>Đã qua sử dụng</span>
                                         <span className='tag-time-used'>12 năm</span>
                                     </span>
                                 ) : (
-                                    <span className='tag-like-new flex items-center gap-2 rounded-tl-md'>
+                                    <span className='tag-like-new rounded-tl-md flex items-center gap-2'>
                                         <FireIcon />
                                         Like new 99%
                                     </span>
                                 )}
                             </div>
 
-                            <p className='relative mb-4 whitespace-pre-line rounded-md rounded-tl-none border p-2 text-lg shadow-lg shadow-bodyBg-default'>
+                            <p className='rounded-md rounded-tl-none shadow-lg relative mb-4 whitespace-pre-line border p-2 text-lg shadow-bodyBg-default'>
                                 {product.description}
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro vitae similique culpa
                                 magni excepturi molestiae consequuntur obcaecati nostrum ea aliquam. Dolorum nihil eos
@@ -150,15 +150,10 @@ const ProductDetail = () => {
                                 <li>ASUS</li>
                             </ul>
                             <div className='flex flex-col gap-2'>
-                                <Button variant={'buy'} size={'medium'} className='justify-center'>
+                                <Button variant={'fill'} size={'medium'} className='justify-center'>
                                     Mua ngay
                                 </Button>
-                                <Button
-                                    variant={'cart'}
-                                    size={'medium'}
-                                    className='justify-center'
-                                    onclick={() => handleAddCart({ ...product, quantity: 1 })}
-                                >
+                                <Button variant={'outline'} size={'medium'} className='justify-center'>
                                     <BsCartPlusFill />
                                     Thêm vào giỏ hàng
                                 </Button>
@@ -179,11 +174,11 @@ const ProductDetail = () => {
                             </div>
 
                             <div className='flex flex-col items-center gap-2'>
-                                <Button variant={'phone'} className='flex'>
+                                <Button variant={'fillBlue'} className='flex'>
                                     <FiPhoneCall />
                                     Bấm để hiện số điện thoại
                                 </Button>
-                                <Button variant={'chat'}>
+                                <Button variant={'outlineBlue'}>
                                     <IoChatbubbleEllipsesOutline /> Chat với người bán
                                 </Button>
                             </div>

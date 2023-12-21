@@ -7,8 +7,14 @@ import { useState } from 'react';
 
 import toHyphenString from '../../lib/toHyphenString';
 import Card from '../../components/Card';
+import HeadlessTippy from '../../components/HeadlessTippy';
+import { TbBrandProducthunt, TbBuildingCommunity } from 'react-icons/tb';
 type NewsProps = object;
-
+type InitialFilterer = {
+    byZone?: string | null;
+    byProductTag: string[];
+    byPrice?: 'asc' | 'desc';
+};
 // eslint-disable-next-line no-empty-pattern
 const News = ({}: NewsProps) => {
     const data = [
@@ -175,28 +181,136 @@ const News = ({}: NewsProps) => {
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
     ];
+    const productTags = [
+        'Laptop',
+        'Laptop Gaming',
+        'Ổ cứng, RAM, Thẻ nhớ',
+        'Apple',
+        'Màn hình',
+        'Bàn phím',
+        'Tai nghe - Loa',
+        'Phụ kiện',
+        'Chuột + Lót chuột',
+    ];
+    const zoneTags = ['TP Hồ Chí Minh', 'Đà Nẵng', 'Cao Bằng', 'Hà Nội', 'Long An', 'Kiên Giang'];
     // default layout = grid
     const [layout, setLayout] = useState(false);
+
+    const [filterer, setFilterer] = useState<InitialFilterer>({
+        byZone: null,
+        byProductTag: [],
+        byPrice: 'asc',
+    });
+    function handleFilter(e: React.MouseEvent<HTMLButtonElement, MouseEvent>, filter: 'byZone' | 'byProductTag') {
+        const payloadParser = e.target as HTMLElement;
+        const payload = payloadParser.innerHTML;
+        if (filter === 'byZone') {
+            setFilterer((prev) => (prev.byZone !== payload ? { ...prev, byZone: payload } : { ...prev, byZone: null }));
+        }
+        if (filter === 'byProductTag') {
+            if (filterer.byProductTag.includes(payload)) {
+                setFilterer((prev) => ({
+                    ...prev,
+                    byProductTag: [...prev.byProductTag.filter((tag) => tag !== payload)],
+                }));
+            } else {
+                setFilterer((prev) => ({ ...prev, byProductTag: [...prev.byProductTag, payload] }));
+            }
+        }
+    }
+    function handlePrice() {
+        if (filterer.byPrice === 'asc') {
+            setFilterer((prev) => ({ ...prev, byPrice: 'desc' }));
+        } else if (filterer.byPrice === 'desc') {
+            setFilterer((prev) => ({ ...prev, byPrice: 'asc' }));
+        }
+    }
+    console.log(filterer);
     return (
-        <div className='min-h-screen  rounded-md bg-white p-4'>
+        <div className='rounded-md  bg-white min-h-screen p-4'>
             {/* username and filterer */}
             <div className='mb-4 flex items-center justify-between'>
                 <h1 className='inline-block text-lg font-bold'>
-                    <span className='inline-block text-primary-default'>
+                    <span className='text-primary-default inline-block'>
                         <FaPaperPlane />
                     </span>
                     <span className='ml-2'>Bài đăng mới</span>
                 </h1>
                 <div className='flex gap-3 '>
-                    <span className='flex items-center gap-1 text-primary-900'>
+                    <span className='text-primary-900 flex items-center gap-1'>
                         <span className=''>
                             <FaFilter />
                         </span>
                         <span>Lọc</span>
                     </span>
-                    <Button>Toàn quốc</Button>
-                    <Button>Danh mục</Button>
-                    <Button price='asc'>Giá</Button>
+                    <HeadlessTippy
+                        content={
+                            <div className='w-96'>
+                                <div className='icon-text'>
+                                    <TbBuildingCommunity /> Tìm kiếm theo khu vực
+                                </div>
+                                <div className='my-4 flex flex-wrap gap-2'>
+                                    {zoneTags.map((zone, index) => (
+                                        <Button
+                                            variant={'basic'}
+                                            onClick={(e) => handleFilter(e, 'byZone')}
+                                            key={index}
+                                            className={cn(zone === filterer.byZone && 'active-button')}
+                                        >
+                                            {zone}
+                                        </Button>
+                                    ))}
+                                </div>
+                                {/* <div className='flex items-center justify-end gap-2 '>
+                                    <Button variant={'fill'} className='w-1/2 justify-center shadow-custom'>
+                                        Áp dụng
+                                    </Button>
+                                    <Button variant={'outline'} className='w-1/2 justify-center '>
+                                        Xoá lọc
+                                    </Button>
+                                </div> */}
+                            </div>
+                        }
+                    >
+                        <Button>Toàn quốc</Button>
+                    </HeadlessTippy>
+                    {/* product list */}
+                    <HeadlessTippy
+                        content={
+                            <div className='w-96'>
+                                <div className='icon-text'>
+                                    <TbBrandProducthunt /> Tìm kiếm theo danh mục sản phẩm
+                                </div>
+                                <div className='my-4 flex flex-wrap gap-2'>
+                                    {productTags.map((productTag) => (
+                                        <Button
+                                            variant={'basic'}
+                                            onClick={(e) => handleFilter(e, 'byProductTag')}
+                                            key={productTag}
+                                            className={cn(
+                                                filterer.byProductTag.includes(productTag) && 'active-button',
+                                            )}
+                                        >
+                                            {productTag}
+                                        </Button>
+                                    ))}
+                                </div>
+                                {/* <div className='flex items-center justify-end gap-2 '>
+                                    <Button variant={'fill'} className='w-1/2 justify-center shadow-custom'>
+                                        Áp dụng
+                                    </Button>
+                                    <Button variant={'outline'} className='w-1/2 justify-center '>
+                                        Xoá lọc
+                                    </Button>
+                                </div> */}
+                            </div>
+                        }
+                    >
+                        <Button>Danh mục</Button>
+                    </HeadlessTippy>
+                    <Button price={filterer.byPrice} onClick={handlePrice}>
+                        Giá
+                    </Button>
                     <span className='cursor-pointer text-3xl' onClick={() => setLayout(!layout)}>
                         {layout ? <CiGrid41 /> : <CiBoxList />}
                     </span>
@@ -207,7 +321,7 @@ const News = ({}: NewsProps) => {
                 // List
                 <div className='flex flex-col gap-2'>
                     {data.map((item, index) => (
-                        <div className={cn(' flex gap-4 rounded-sm border p-2')} key={index}>
+                        <div className={cn(' rounded-sm flex gap-4 border p-2')} key={index}>
                             <Card
                                 id={item.id}
                                 name={item.name}
@@ -234,7 +348,7 @@ const News = ({}: NewsProps) => {
                         <Link
                             to={`/products/${toHyphenString(item.name)}`}
                             state={{ item }}
-                            className={cn('flex flex-col rounded-sm border')}
+                            className={cn('rounded-sm flex flex-col border')}
                             key={index}
                             preventScrollReset={false}
                         >
