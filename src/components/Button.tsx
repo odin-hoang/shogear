@@ -26,10 +26,11 @@ export interface ButtonProps extends ButtonVariantProps {
     children: React.ReactNode;
     price?: string | null;
     className?: string;
+    onclick?: () => void;
 }
-const Button = ({ children, price = null, variant = 'default', size = 'default', className }: ButtonProps) => {
+const Button = ({ children, price = null, variant = 'default', size = 'default', className, onclick }: ButtonProps) => {
     return (
-        <button className={cn(buttonVariants({ variant, size, className }))}>
+        <button className={cn(buttonVariants({ variant, size, className }))} onClick={() => onclick && onclick()}>
             {children}
             {!!(variant === 'default') && (
                 <span className='h-5 w-5  text-lg'>

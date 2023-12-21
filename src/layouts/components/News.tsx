@@ -4,13 +4,16 @@ import { CiBoxList, CiGrid41 } from 'react-icons/ci';
 import { Link } from 'react-router-dom';
 import { cn } from '../../lib/utils/cn';
 import { useState } from 'react';
-import Card from '../../components/Card';
-import toHyphenString from '../../lib/toHyphenString';
-type NewsProps = {};
 
+import toHyphenString from '../../lib/toHyphenString';
+import Card from '../../components/Card';
+type NewsProps = object;
+
+// eslint-disable-next-line no-empty-pattern
 const News = ({}: NewsProps) => {
     const data = [
         {
+            id: 1,
             imageUrl:
                 'https://product.hstatic.net/200000722513/product/km086w_facd6092154b4d769a04f1859a0c4b8e_medium.png',
             username: 'David Smith',
@@ -19,10 +22,9 @@ const News = ({}: NewsProps) => {
             zone: 'Hồ Chí Minh',
             name: 'Laptop gaming Acer Aspire 7 A715 76G 59MW',
             isUsed: false,
-            description:
-                'Máy main zin 64G \n Màn zin sọc sát mép cảm ứng ngon\n Mất face id. Pin thay.\nAe cần màn lcd + 300k',
         },
         {
+            id: 2,
             imageUrl:
                 'https://product.hstatic.net/200000722513/product/latitude-3520-p108f001-70280538-fix_83b4c85f06d145199d87d838dc9eca04_medium.png',
             username: 'Todo Smith',
@@ -31,10 +33,9 @@ const News = ({}: NewsProps) => {
             postedAt: '2 ngày trước',
             zone: 'Bà Rịa - Vũng Tàu',
             isUsed: true,
-            description:
-                'Máy main zin 64G \n Màn zin sọc sát mép cảm ứng ngon\n Mất face id. Pin thay.\nAe cần màn lcd + 300k',
         },
         {
+            id: 3,
             imageUrl:
                 'https://product.hstatic.net/200000722513/product/lg-gram-2023-fix_28f08b20a1724869a1d5da4920697371_medium.png',
             username: 'Kelvin Smith',
@@ -43,10 +44,9 @@ const News = ({}: NewsProps) => {
             name: 'Laptop LG Gram 2023 14Z90R GAH53A5',
             zone: 'Thái Nguyên',
             isUsed: false,
-            description:
-                'Máy main zin 64G \n Màn zin sọc sát mép cảm ứng ngon\n Mất face id. Pin thay.\nAe cần màn lcd + 300k',
         },
         {
+            id: 4,
             imageUrl: 'https://down-vn.img.susercontent.com/file/bc3903834d250fcdadf0e5c6b5761310',
             username: 'Kelvin Smith',
             price: 340000000,
@@ -54,10 +54,9 @@ const News = ({}: NewsProps) => {
             name: '[Hàng chính hãng] Bàn phím Dell KB216',
             zone: 'Hà Nội',
             isUsed: true,
-            description:
-                'Máy main zin 64G \n Màn zin sọc sát mép cảm ứng ngon\n Mất face id. Pin thay.\nAe cần màn lcd + 300k',
         },
         {
+            id: 5,
             imageUrl:
                 'https://product.hstatic.net/200000722513/product/vt200_1_compressed_c0a3639b9b2948bb89d600ce0640ba0d_08706b04e66d45aeb746128bfca9a29d_grande.jpg',
             username: 'Kelvin Smith',
@@ -66,94 +65,110 @@ const News = ({}: NewsProps) => {
             name: 'Chuột Rapoo Gaming VT200 RGB',
             zone: 'Đà Nẵng',
             isUsed: false,
-            description:
-                'Máy main zin 64G \n Màn zin sọc sát mép cảm ứng ngon\n Mất face id. Pin thay.\nAe cần màn lcd + 300k',
         },
         {
+            id: 6,
             imageUrl: 'https://picsum.photos/200/270',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
+            postedAt: '1 tuần trước',
+            zone: 'Đà Nẵng',
+            isUsed: false,
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/280',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/281',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/282',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/283',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/284',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/285',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/286',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/221',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/222',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/223',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/401',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/223',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/401',
             username: 'Kelvin Smith',
             price: 120000,
             name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
         },
         {
+            id: 5,
             imageUrl: 'https://picsum.photos/200/223',
             username: 'Kelvin Smith',
             price: 120000,
@@ -179,7 +194,7 @@ const News = ({}: NewsProps) => {
                         </span>
                         <span>Lọc</span>
                     </span>
-                    <Button variant={'secondary'}>Toàn quốc</Button>
+                    <Button>Toàn quốc</Button>
                     <Button>Danh mục</Button>
                     <Button price='asc'>Giá</Button>
                     <span className='cursor-pointer text-3xl' onClick={() => setLayout(!layout)}>
@@ -194,6 +209,7 @@ const News = ({}: NewsProps) => {
                     {data.map((item, index) => (
                         <div className={cn(' flex gap-4 rounded-sm border p-2')} key={index}>
                             <Card
+                                id={item.id}
                                 name={item.name}
                                 imageUrl={item.imageUrl}
                                 price={item.price}
@@ -223,6 +239,7 @@ const News = ({}: NewsProps) => {
                             preventScrollReset={false}
                         >
                             <Card
+                                id={item.id}
                                 name={item.name}
                                 imageUrl={item.imageUrl}
                                 price={item.price}
@@ -230,6 +247,8 @@ const News = ({}: NewsProps) => {
                                 postedAt={item.postedAt}
                                 zone={item.zone}
                                 isUsed={item.isUsed}
+                                className='w-[200px]'
+                                // onClick={() => handleAddCart({ ...item, quantity: 1 })}
                             />
                         </Link>
                     ))}
