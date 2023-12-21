@@ -4,30 +4,29 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../app/store';
 import Icons from '../assets/icons';
 import { numberWithCommas } from '../lib/scripts';
-import { useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { removeFromCart, updateCartItemQuantity, updateShippingFee } from '../features/cart/cart-slice';
 
 const Cart = () => {
     const dispatch = useDispatch();
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+    // const cart = useSelector((state: RootState) => state.cart.shippingFee);
     const [Items, setItems] = useState(cartItems);
     const [idRemove, setIdRemove] = useState(-1);
     const savedShippingOption = localStorage.getItem('selectedShippingOption');
     const initialShippingOption = savedShippingOption ? parseInt(savedShippingOption) : -1;
     const [selectedOption, setSelectedOption] = useState<number>(initialShippingOption);
 
-    const topRef = useRef(null);
-
-    // Function to scroll to the top when the link is clicked
-    const scrollToTop = () => {
-        if (topRef.current) {
-            (topRef.current as HTMLDivElement).scrollIntoView({ behavior: 'smooth' });
-        }
-    };
     // tong gia tri gio hang
     const sumTotal = cartItems.reduce((total, item) => {
         return total + item.price * item.quantity;
     }, 0);
+    const calculateTotal = () => {
+        if (cartItems.length === 0 || selectedOption === -1) {
+            return sumTotal;
+        }
+        return sumTotal + selectedOption;
+    };
 
     const handleIncrement = (index: number) => {
         const updatedCartItems = [...Items];
@@ -60,6 +59,20 @@ const Cart = () => {
     };
 
     //total cost
+    useEffect(() => {
+        if (cartItems.length === 0) {
+            setSelectedOption(-1);
+            dispatch(updateShippingFee(-1));
+            localStorage.removeItem('selectedShippingOption');
+        }
+        const clearLocalStorageOnRefresh = () => {
+            localStorage.clear();
+        };
+        window.addEventListener('beforeunload', clearLocalStorageOnRefresh);
+        return () => {
+            window.removeEventListener('beforeunload', clearLocalStorageOnRefresh);
+        };
+    }, [cartItems.length, dispatch]);
     const handleRadioChange = (option: number) => {
         if (cartItems.length > 0) {
             setSelectedOption(option);
@@ -67,12 +80,6 @@ const Cart = () => {
             //luu giu trang thai
             localStorage.setItem('selectedShippingOption', option.toString());
         }
-    };
-    const calculateTotal = () => {
-        if (cartItems.length === 0) {
-            return sumTotal;
-        }
-        return sumTotal + selectedOption;
     };
 
     return (
@@ -142,7 +149,6 @@ const Cart = () => {
                                                                     onChange={(e) =>
                                                                         handleQuantityChange(index, e.target.value)
                                                                     }
-                                                                    // onChange={(e) => e.target.value}
                                                                 />
 
                                                                 <img
@@ -171,7 +177,6 @@ const Cart = () => {
                                                                     modalElement.showModal();
                                                                 }
                                                                 setIdRemove(item.id);
-                                                                console.log(item.id);
                                                             }}
                                                         />
                                                     </td>
@@ -275,7 +280,6 @@ const Cart = () => {
                                 <Link
                                     to='/checkout'
                                     className='proceed-checkout mb-[1rem] block w-[100%] border-[0.1rem] border-[#fcb941] p-[0.5rem] text-center text-[#fcb941]'
-                                    onClick={scrollToTop}
                                 >
                                     PROCEED TO CHECKOUT
                                 </Link>

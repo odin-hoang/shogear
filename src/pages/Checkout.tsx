@@ -8,10 +8,13 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../app/store';
 import { apiGetPublicProvinces, apiGetPublicDistrict, apiGetPublicWard } from '../services/app';
 import { Province, District, Ward } from '../services/app';
+import { useAppDispatch } from '../app/hook';
+import { updateShippingFee } from '../features/cart/cart-slice';
 
 const Checkout = () => {
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
     const cart = useSelector((state: RootState) => state.cart.shippingFee);
+    const dispatch = useAppDispatch();
     const [discountCode, setDiscountCode] = useState('');
     const [isLabelVisible, setLabelVisibility] = useState(true);
     const [provinces, setProvinces] = useState<Province[]>([]);
@@ -33,6 +36,12 @@ const Checkout = () => {
     const sumTotal = cartItems.reduce((total, item) => {
         return total + item.price * item.quantity;
     }, 0);
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (cartItems.length === 0) {
+            dispatch(updateShippingFee(-1));
+        }
+    }, []);
 
     const calculateTotal = () => {
         return cartItems.length === 0 ? sumTotal : cart === -1 ? sumTotal : sumTotal + cart;
