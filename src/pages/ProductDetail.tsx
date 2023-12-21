@@ -8,7 +8,10 @@ import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
 import { BsCartPlusFill } from 'react-icons/bs';
 import { FaClockRotateLeft, FaLocationDot } from 'react-icons/fa6';
 import { FireIcon } from '../components/Icons';
+import { useAppDispatch } from '../app/hook';
+import { addToCart } from '../features/cart/cart-slice';
 interface ProductItem {
+    id: number;
     imageUrl: string;
     username: string;
     price: number;
@@ -21,6 +24,37 @@ interface ProductItem {
 const ProductDetail = () => {
     const { state } = useLocation();
     const product: ProductItem = state.item;
+    // add product to cart
+    const dispatch = useAppDispatch();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    interface CartItem {
+        id: number;
+        name: string;
+        quantity: number;
+        price: number;
+        imageUrl: string;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const handleAddCart = (payload: CartItem) => {
+        const cartItem: CartItem = {
+            id: payload.id !== undefined ? payload.id : Date.now(),
+            name: payload.name,
+            quantity: payload.quantity,
+            price: payload.price,
+            imageUrl: payload.imageUrl,
+        };
+        dispatch(addToCart(cartItem));
+        //show cart after add success
+        const cartElement = document.querySelector('.products-in-cart');
+        cartElement?.classList.add('show-cart');
+        setTimeout(() => {
+            cartElement?.classList.remove('show-cart');
+        }, 2000);
+        //cart auto
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // notice
+        console.log('add product success');
+    };
     // TODO: Call api to get detail information of user and product
     const banners = [
         {
@@ -59,93 +93,95 @@ const ProductDetail = () => {
         },
     ];
     return (
-        <div className='mx-auto max-w-[1200px]'>
-            <div className=' breadcrumbs -mt-6'>
-                <ul>
-                    <li>
-                        <Link to={'/'}>Home</Link>
-                    </li>
-                    <li>
-                        <Link to={'/'}>Documents</Link>
-                    </li>
-                    <li>{product.name}</li>
-                </ul>
-            </div>
-            {/* Main */}
-            <div className=' rounded-md bg-white p-4'>
-                <div className='flex gap-6'>
-                    <div className='sticky top-2 h-min'>
-                        <ImageSlider images={banners} />
-                    </div>
-                    {/* product information */}
-                    <div className='mt-4 grow'>
-                        <h1 className='mb-2 text-xl font-bold'>{product.name}</h1>
-                        <div className='price mb-2 text-2xl'>{numberWithCommas(product.price)}</div>
-                        <div className='flex w-full items-center'>
-                            {product.isUsed ? (
-                                <span className='flex flex-1 items-center bg-white/50 backdrop-blur-sm'>
-                                    <span className='tag-used rounded-tl-md'>Đã qua sử dụng</span>
-                                    <span className='tag-time-used'>12 năm</span>
-                                </span>
-                            ) : (
-                                <span className='tag-like-new flex items-center gap-2 rounded-tl-md'>
-                                    <FireIcon />
-                                    Like new 99%
-                                </span>
-                            )}
+        <div className='bg-bodyBg-default px-6 py-6 '>
+            <div className='mx-auto max-w-[1200px]'>
+                <div className=' breadcrumbs -mt-6'>
+                    <ul>
+                        <li>
+                            <Link to={'/'}>Home</Link>
+                        </li>
+                        <li>
+                            <Link to={'/'}>Documents</Link>
+                        </li>
+                        <li>{product.name}</li>
+                    </ul>
+                </div>
+                {/* Main */}
+                <div className=' rounded-md bg-white p-4'>
+                    <div className='flex gap-6'>
+                        <div className='sticky top-2 h-min'>
+                            <ImageSlider images={banners} />
                         </div>
-
-                        <p className='relative mb-4 whitespace-pre-line rounded-md rounded-tl-none border p-2 text-lg shadow-lg shadow-bodyBg-default'>
-                            {product.description}
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro vitae similique culpa magni
-                            excepturi molestiae consequuntur obcaecati nostrum ea aliquam. Dolorum nihil eos molestias
-                            vitae cupiditate laboriosam illo sed nesciunt! Lorem ipsum dolor sit amet consectetur
-                            adipisicing elit. Voluptas, nesciunt quis unde optio iusto dolores harum repellendus quo
-                            dolorum voluptatum id quod eveniet, ipsam veniam enim perferendis. Voluptatum,
-                            necessitatibus provident.
-                        </p>
-                        <div className='icon-text'>
-                            <FaLocationDot /> {product.zone}
-                        </div>
-                        <div className='icon-text'>
-                            <FaClockRotateLeft /> Đăng {product.postedAt}
-                        </div>
-                        {/* Tags will be added here */}
-                        <ul className='mb-10'>
-                            <li>ASUS</li>
-                        </ul>
-                        <div className='flex flex-col gap-2'>
-                            <Button variant={'fill'} size={'medium'} className='justify-center'>
-                                Mua ngay
-                            </Button>
-                            <Button variant={'outline'} size={'medium'} className='justify-center'>
-                                <BsCartPlusFill />
-                                Thêm vào giỏ hàng
-                            </Button>
-                        </div>
-                    </div>
-                    <div className='sticky top-2 h-min shrink-0'>
-                        {/* seller info */}
-                        <div className='mb-2 flex items-center gap-2'>
-                            <div className='avatar offline relative h-16 w-16 '>
-                                <img src={'https://picsum.photos/200'} alt='' className='rounded-full' />
+                        {/* product information */}
+                        <div className='mt-4 grow'>
+                            <h1 className='mb-2 text-xl font-bold'>{product.name}</h1>
+                            <div className='price mb-2 text-2xl'>{numberWithCommas(product.price)}</div>
+                            <div className='flex w-full items-center'>
+                                {product.isUsed ? (
+                                    <span className='bg-white/50 flex flex-1 items-center backdrop-blur-sm'>
+                                        <span className='tag-used rounded-tl-md'>Đã qua sử dụng</span>
+                                        <span className='tag-time-used'>12 năm</span>
+                                    </span>
+                                ) : (
+                                    <span className='tag-like-new rounded-tl-md flex items-center gap-2'>
+                                        <FireIcon />
+                                        Like new 99%
+                                    </span>
+                                )}
                             </div>
-                            <div>
-                                <div className='font-bold'>{product.username}</div>
-                                <div className='flex items-center gap-1'>
-                                    <FaRegClock /> 1 phút trước
+
+                            <p className='rounded-md rounded-tl-none shadow-lg relative mb-4 whitespace-pre-line border p-2 text-lg shadow-bodyBg-default'>
+                                {product.description}
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro vitae similique culpa
+                                magni excepturi molestiae consequuntur obcaecati nostrum ea aliquam. Dolorum nihil eos
+                                molestias vitae cupiditate laboriosam illo sed nesciunt! Lorem ipsum dolor sit amet
+                                consectetur adipisicing elit. Voluptas, nesciunt quis unde optio iusto dolores harum
+                                repellendus quo dolorum voluptatum id quod eveniet, ipsam veniam enim perferendis.
+                                Voluptatum, necessitatibus provident.
+                            </p>
+                            <div className='icon-text'>
+                                <FaLocationDot /> {product.zone}
+                            </div>
+                            <div className='icon-text'>
+                                <FaClockRotateLeft /> Đăng {product.postedAt}
+                            </div>
+                            {/* Tags will be added here */}
+                            <ul className='mb-10'>
+                                <li>ASUS</li>
+                            </ul>
+                            <div className='flex flex-col gap-2'>
+                                <Button variant={'fill'} size={'medium'} className='justify-center'>
+                                    Mua ngay
+                                </Button>
+                                <Button variant={'outline'} size={'medium'} className='justify-center'>
+                                    <BsCartPlusFill />
+                                    Thêm vào giỏ hàng
+                                </Button>
+                            </div>
+                        </div>
+                        <div className='sticky top-2 h-min shrink-0'>
+                            {/* seller info */}
+                            <div className='mb-2 flex items-center gap-2'>
+                                <div className='avatar offline relative h-16 w-16 '>
+                                    <img src={'https://picsum.photos/200'} alt='' className='rounded-full' />
+                                </div>
+                                <div>
+                                    <div className='font-bold'>{product.username}</div>
+                                    <div className='flex items-center gap-1'>
+                                        <FaRegClock /> 1 phút trước
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className='flex flex-col items-center gap-2'>
-                            <Button variant={'fillBlue'} className='flex'>
-                                <FiPhoneCall />
-                                Bấm để hiện số điện thoại
-                            </Button>
-                            <Button variant={'outlineBlue'}>
-                                <IoChatbubbleEllipsesOutline /> Chat với người bán
-                            </Button>
+                            <div className='flex flex-col items-center gap-2'>
+                                <Button variant={'fillBlue'} className='flex'>
+                                    <FiPhoneCall />
+                                    Bấm để hiện số điện thoại
+                                </Button>
+                                <Button variant={'outlineBlue'}>
+                                    <IoChatbubbleEllipsesOutline /> Chat với người bán
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </div>

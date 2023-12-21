@@ -26,11 +26,20 @@ export const buttonVariants = cva('flex items-center px-2 py-1 gap-2 ', {
 export interface ButtonProps extends ButtonVariantProps, React.ComponentPropsWithRef<'button'> {
     children: React.ReactNode;
     price?: string | null;
+    onclick?: () => void;
 }
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-    ({ children, price = null, variant = 'default', size = 'default', className, ...rest }: ButtonProps, ref) => {
+    (
+        { children, price = null, variant = 'default', size = 'default', className, onclick, ...rest }: ButtonProps,
+        ref,
+    ) => {
         return (
-            <button ref={ref} className={cn(buttonVariants({ variant, size, className }))} {...rest}>
+            <button
+                ref={ref}
+                className={cn(buttonVariants({ variant, size, className }))}
+                {...rest}
+                onClick={() => onclick && onclick()}
+            >
                 {children}
                 {!!(variant === 'default') && (
                     <span className='h-5 w-5  text-lg'>
