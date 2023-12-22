@@ -177,7 +177,6 @@ const News = ({}: NewsProps) => {
     ];
     // default layout = grid
     const [layout, setLayout] = useState(false);
-
     return (
         <div className='min-h-screen  rounded-md bg-white p-4'>
             {/* username and filterer */}
