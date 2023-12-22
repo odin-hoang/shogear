@@ -4,13 +4,21 @@ import Icons from '../../assets/icons';
 import Action from './Action';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import React, { useState } from 'react';
 
+type InitialSearchState = {
+    isSearching: boolean;
+    query: string;
+};
 const Header = () => {
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+    const navigate = useNavigate();
+    const [_, setSearchParams] = useSearchParams({ q: '' });
+    // const q = searchParams.get('q');
     // console.log(cartItems);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const cartQuantity = useSelector((state: RootState) => state.cart.quantityTotal);
+    // const cartQuantity = useSelector((state: RootState) => state.cart.quantityTotal);
     // console.log(cartQuantity);
     const listActions = [
         {
@@ -35,13 +43,79 @@ const Header = () => {
             count: cartItems.length,
         },
     ];
+    const [search, setSearch] = useState<InitialSearchState>({
+        isSearching: false,
+        query: '',
+    });
+    // TODO: call query API  --> search result
+    const searchResult = [
+        {
+            imageUrl: 'https://picsum.photos/200',
+            heading: 'Laptop MSI Mordern 15',
+            price: 15990000,
+            zone: 'TP Hồ Chí Minh',
+        },
+        {
+            imageUrl: 'https://picsum.photos/200',
+            heading: 'Laptop MSI Mordern 15',
+            price: 15990000,
+            zone: 'TP Hồ Chí Minh',
+        },
+        {
+            imageUrl: 'https://picsum.photos/200',
+            heading: 'Laptop MSI Mordern 15',
+            price: 15990000,
+            zone: 'TP Hồ Chí Minh',
+        },
+        {
+            imageUrl: 'https://picsum.photos/200',
+            heading: 'Laptop MSI Mordern 15',
+            price: 15990000,
+            zone: 'TP Hồ Chí Minh',
+        },
+        {
+            imageUrl: 'https://picsum.photos/200',
+            heading: 'Laptop MSI Mordern 15',
+            price: 15990000,
+            zone: 'TP Hồ Chí Minh',
+        },
+        {
+            imageUrl: 'https://picsum.photos/200',
+            heading: 'Laptop MSI Mordern 15',
+            price: 15990000,
+            zone: 'TP Hồ Chí Minh',
+        },
+        {
+            imageUrl: 'https://picsum.photos/200',
+            heading: 'Laptop MSI Mordern 15',
+            price: 15990000,
+            zone: 'TP Hồ Chí Minh',
+        },
+        {
+            imageUrl: 'https://picsum.photos/200',
+            heading: 'Laptop MSI Mordern 15',
+            price: 15990000,
+            zone: 'TP Hồ Chí Minh',
+        },
+    ];
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setSearch((prev) => ({ ...prev, query: e.target.value, isSearching: !!e.target.value }));
+    }
+
+    function handleSearch(e: any, type: 'click' | 'enter') {
+        if (e.key === 'Enter' || type === 'click') {
+            setSearchParams({ q: search.query });
+            navigate(`/search?q=${search.query}`);
+            setSearch((prev) => ({ ...prev, query: '', isSearching: false }));
+        }
+    }
     return (
-        <div className='justify-center bg-primary-default'>
+        <header className='relative z-50 justify-center bg-primary-default'>
             <div className='mx-auto my-auto flex justify-center bg-primary-default px-4 py-3 lg:mx-auto lg:max-w-[1200px] xl:px-0'>
                 <div className='my-auto text-white '>
                     <FaBars className='h-6 w-6' />
                 </div>
-                <div className='logo my-auto ml-4'>
+                <Link to={'/'} className='logo my-auto ml-4'>
                     <img
                         src='https://file.hstatic.net/200000636033/file/logo_fd11946b31524fbe98765f34f3de0628.svg'
                         className=' hidden w-[140px] lg:inline-block'
@@ -50,21 +124,52 @@ const Header = () => {
                         src='https://file.hstatic.net/200000636033/file/logo-mobile_1e5b7fc485b24cf985b3d63cfa1f88be.svg'
                         className=' w-[40px] lg:hidden'
                     ></img>
-                </div>
-                <div className='search ml-4 flex h-10 w-[60%] rounded border bg-white sm:w-[80%] md:w-[35%] lg:w-[45%]'>
-                    <input
-                        className='font-italic w-full pl-2 font-sf text-sm text-placeholder outline-none placeholder:text-placeholder'
-                        placeholder='Bạn cần tìm gì?'
-                    ></input>
-                    <span>
-                        <img src={Icons.search} alt='search' className='mx-2 h-full w-[16px]' />
-                    </span>
+                </Link>
+                <div className='search ml-4 flex h-10 w-[60%] rounded border bg-white ring-slate-100 focus-within:ring-2 sm:w-[80%] md:w-[35%] lg:w-[45%]'>
+                    <div className='relative w-full '>
+                        <input
+                            className='font-italic h-full w-full rounded-sm pl-2 font-sf text-base text-placeholder outline-none placeholder:text-placeholder '
+                            placeholder='Bạn cần tìm gì?'
+                            onFocus={() => setSearch((prev) => ({ ...prev, isSearching: !!prev.query }))}
+                            onBlur={() => setSearch((prev) => ({ ...prev, isSearching: false }))}
+                            onChange={(e) => handleChange(e)}
+                            onKeyDown={(e) => handleSearch(e, 'enter')}
+                            value={search.query}
+                        />
+                        {!!search.isSearching && (
+                            <div className='absolute top-11 z-20 max-h-[500px] w-[calc(100%+16px+24px)] overflow-auto rounded-sm bg-white py-2 shadow-overflow'>
+                                {searchResult.map((item) => (
+                                    <>
+                                        <div className='  flex cursor-pointer items-center justify-between gap-2 hover:bg-gray-100'>
+                                            <div className='ml-2'>
+                                                <h3 className='line-clamp-1'>{item.heading}</h3>
+                                                <p>
+                                                    <span className='price mr-2 '>{numberWithCommas(item.price)} </span>
+                                                    • <span className='ml-2'>{item.zone}</span>
+                                                </p>
+                                            </div>
+                                            <div className='mr-2 p-2'>
+                                                <img src={item.imageUrl} alt='' className='h-16 w-16 object-cover' />
+                                            </div>
+                                        </div>
+                                        <div className='divider m-0 ml-2 h-0 w-[calc(100%-24px)] text-center after:h-[1px]'></div>
+                                    </>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                    <div
+                        className='flex  cursor-pointer items-center justify-center p-3 hover:bg-gray-100'
+                        onClick={(e) => handleSearch(e, 'click')}
+                    >
+                        <img src={Icons.search} alt='search' className='h-4 w-4' />
+                    </div>
                 </div>
                 <div className='actions ml-3 flex w-auto align-bottom'>
                     <div className='flex items-center justify-between gap-2 '>
                         {listActions.map((item, index) => {
                             return (
-                                <>
+                                <React.Fragment key={index}>
                                     {item.count !== undefined ? (
                                         <div className='product-cart'>
                                             <Action
@@ -80,7 +185,7 @@ const Header = () => {
                                                     {cartItems.map((product, index) => (
                                                         <div key={index} className='product-item'>
                                                             <div className='product-detail mb-4'>
-                                                                <span className='min-h-[60px] min-w-[60px] rounded-lg border border-gray-200 border-opacity-40'>
+                                                                <span className='min-h-[60px] min-w-[60px] rounded-lg border border-gray-200 border-opacity-40 '>
                                                                     <img
                                                                         src={product.imageUrl}
                                                                         alt={product.name}
@@ -130,7 +235,7 @@ const Header = () => {
                                             count={item.count}
                                         />
                                     )}
-                                </>
+                                </React.Fragment>
                             );
                         })}
                     </div>
@@ -156,7 +261,7 @@ const Header = () => {
                     {/* test cart */}
                 </div>
             </div>
-        </div>
+        </header>
     );
 };
 export default Header;

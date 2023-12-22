@@ -80,6 +80,7 @@ export default {
       },
       boxShadow: {
         custom: "0px 4px 20px rgba(22, 19, 69, 0.13)",
+        overflow: "0px 5px 15px rgba(0, 0, 0, 0.35)",
       },
       borderRadius: {
         custom: "10px",
