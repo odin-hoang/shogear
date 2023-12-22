@@ -4,6 +4,8 @@ import { MdLocationPin } from 'react-icons/md';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { FireIcon } from './Icons';
 interface CardProps {
+    id?: number;
+    quantity?: number;
     imageUrl: string;
     name: string;
     username: string;
@@ -17,6 +19,10 @@ interface CardProps {
     isSaved?: boolean;
 }
 const Card = ({
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    id,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    quantity,
     imageUrl,
     username,
     avatarUrl = 'https://picsum.photos/200',

@@ -1,4 +1,6 @@
 import DefaultLayout from './layouts/DefaultLayout';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { publicRoutes } from './routes';
 import React from 'react';
@@ -29,6 +31,7 @@ const App = () => {
                     })}
                 </Routes>
             </div>
+            <ToastContainer />
         </Router>
     );
 };
