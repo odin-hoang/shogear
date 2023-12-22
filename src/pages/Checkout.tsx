@@ -33,16 +33,16 @@ const Checkout = () => {
     const [wardError, setWardError] = useState<string | null>(null);
     const [streetError, setStreetError] = useState<string | null>(null);
 
-    const sumTotal = cartItems.reduce((total, item) => {
-        return total + item.price * item.quantity;
-    }, 0);
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         if (cartItems.length === 0) {
             dispatch(updateShippingFee(-1));
         }
-    }, []);
+    }, [cartItems.length, dispatch]);
 
+    const sumTotal = cartItems.reduce((total, item) => {
+        return total + item.price * item.quantity;
+    }, 0);
     const calculateTotal = () => {
         return cartItems.length === 0 ? sumTotal : cart === -1 ? sumTotal : sumTotal + cart;
     };
@@ -61,6 +61,7 @@ const Checkout = () => {
                 break;
         }
     };
+    // input code
     const handleInputChange = (event: { target: { value: SetStateAction<string> } }) => {
         setDiscountCode(event.target.value);
     };
@@ -69,6 +70,7 @@ const Checkout = () => {
             setLabelVisibility(true);
         }
     };
+
     // xu li address
     // fetch province
     useEffect(() => {
@@ -98,7 +100,6 @@ const Checkout = () => {
             console.error('Error fetching districts:', error);
         }
     };
-
     const handleProvinceChange = (event: ChangeEvent<HTMLSelectElement>) => {
         const provinceId = event.target.value;
         setSelectedProvince(provinceId);
@@ -106,7 +107,6 @@ const Checkout = () => {
         setSelectedWard('');
         fetchDistricts(Number(provinceId));
     };
-
     const handleDistrictChange = (event: ChangeEvent<HTMLSelectElement>) => {
         const districtId = event.target.value;
         setSelectedDistrict(districtId);
@@ -123,7 +123,6 @@ const Checkout = () => {
         setNameError(null);
         return true;
     };
-
     const validatePhone = (value: string) => {
         const numericValue = value.replace(/\D/g, '');
 
@@ -468,7 +467,7 @@ const Checkout = () => {
                                 </Link>
                             </div>
                             <Link
-                                to='/checkout'
+                                to='/'
                                 className='continue-shopping m-auto flex w-[60%] justify-center border-[0.1rem] border-solid border-[#d7d7d7] px-4 py-2'
                                 onClick={() => handleSubmit()}
                             >
