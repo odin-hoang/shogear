@@ -91,12 +91,6 @@ const Header = () => {
             price: 15990000,
             zone: 'TP Hồ Chí Minh',
         },
-        {
-            imageUrl: 'https://picsum.photos/200',
-            heading: 'Laptop MSI Mordern 15',
-            price: 15990000,
-            zone: 'TP Hồ Chí Minh',
-        },
     ];
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         setSearch((prev) => ({ ...prev, query: e.target.value, isSearching: !!e.target.value }));
@@ -125,10 +119,10 @@ const Header = () => {
                         className=' w-[40px] lg:hidden'
                     ></img>
                 </Link>
-                <div className='search ml-4 flex h-10 w-[60%] rounded border bg-white ring-slate-100 focus-within:ring-2 sm:w-[80%] md:w-[35%] lg:w-[45%]'>
-                    <div className='relative w-full '>
+                <div className='search relative ml-4 flex h-10 w-[60%] rounded-sm  bg-white ring-slate-100 focus-within:shadow-overflow sm:w-[80%] md:w-[35%] lg:w-[45%]'>
+                    <div className='relative z-10 w-full overflow-hidden rounded-sm'>
                         <input
-                            className='font-italic h-full w-full rounded-sm pl-2 font-sf text-base text-placeholder outline-none placeholder:text-placeholder '
+                            className='font-italic z-10 h-full w-full rounded-sm rounded-bl-none border-none pl-4 font-sf text-base text-placeholder outline-none placeholder:text-placeholder'
                             placeholder='Bạn cần tìm gì?'
                             onFocus={() => setSearch((prev) => ({ ...prev, isSearching: !!prev.query }))}
                             onBlur={() => setSearch((prev) => ({ ...prev, isSearching: false }))}
@@ -136,34 +130,34 @@ const Header = () => {
                             onKeyDown={(e) => handleSearch(e, 'enter')}
                             value={search.query}
                         />
-                        {!!search.isSearching && (
-                            <div className='absolute top-11 z-20 max-h-[500px] w-[calc(100%+16px+24px)] overflow-auto rounded-sm bg-white py-2 shadow-overflow'>
-                                {searchResult.map((item) => (
-                                    <>
-                                        <div className='  flex cursor-pointer items-center justify-between gap-2 hover:bg-gray-100'>
-                                            <div className='ml-2'>
-                                                <h3 className='line-clamp-1'>{item.heading}</h3>
-                                                <p>
-                                                    <span className='price mr-2 '>{numberWithCommas(item.price)} </span>
-                                                    • <span className='ml-2'>{item.zone}</span>
-                                                </p>
-                                            </div>
-                                            <div className='mr-2 p-2'>
-                                                <img src={item.imageUrl} alt='' className='h-16 w-16 object-cover' />
-                                            </div>
-                                        </div>
-                                        <div className='divider m-0 ml-2 h-0 w-[calc(100%-24px)] text-center after:h-[1px]'></div>
-                                    </>
-                                ))}
-                            </div>
-                        )}
                     </div>
                     <div
-                        className='flex  cursor-pointer items-center justify-center p-3 hover:bg-gray-100'
+                        className='relative z-10 flex cursor-pointer items-center justify-center rounded-sm bg-white p-4 hover:bg-gray-100'
                         onClick={(e) => handleSearch(e, 'click')}
                     >
                         <img src={Icons.search} alt='search' className='h-4 w-4' />
                     </div>
+                    {!!search.isSearching && (
+                        <div className='smart-search-wrapper'>
+                            {searchResult.map((item) => (
+                                <>
+                                    <div className='  flex cursor-pointer items-center justify-between gap-2 hover:bg-gray-100'>
+                                        <div className='ml-4'>
+                                            <h3 className='line-clamp-1'>{item.heading}</h3>
+                                            <p>
+                                                <span className='price mr-2 '>{numberWithCommas(item.price)} </span>•{' '}
+                                                <span className='ml-2'>{item.zone}</span>
+                                            </p>
+                                        </div>
+                                        <div className='mr-2 p-2'>
+                                            <img src={item.imageUrl} alt='' className='h-16 w-16 object-cover' />
+                                        </div>
+                                    </div>
+                                    <div className='divider m-0 ml-2 h-0 w-[calc(100%-24px)] text-center after:h-[1px]'></div>
+                                </>
+                            ))}
+                        </div>
+                    )}
                 </div>
                 <div className='actions ml-3 flex w-auto align-bottom'>
                     <div className='flex items-center justify-between gap-2 '>

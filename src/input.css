@@ -285,3 +285,23 @@
         color: #999;
     }
 }
+/* smart search */
+@layer components {
+    .smart-search-wrapper {
+        @apply absolute left-0 top-9 z-[1] max-h-[500px] w-full overflow-auto rounded-sm bg-white py-2 shadow-overflow;
+    }
+    .smart-search-wrapper::-webkit-scrollbar {
+        width: 2px;
+        height: 2px;
+    }
+    .smart-search-wrapper::-webkit-scrollbar-thumb {
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+        background: rgba(105, 105, 105, 0.2);
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+    }
+    .smart-search-wrapper::-webkit-scrollbar-track {
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+    }
+}
