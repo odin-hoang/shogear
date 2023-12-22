@@ -21,20 +21,18 @@ interface ProductItem {
     isUsed: boolean;
     description: string;
 }
+interface CartItem {
+    id: number;
+    name: string;
+    quantity: number;
+    price: number;
+    imageUrl: string;
+}
 const ProductDetail = () => {
     const { state } = useLocation();
     const product: ProductItem = state.item;
     // add product to cart
     const dispatch = useAppDispatch();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    interface CartItem {
-        id: number;
-        name: string;
-        quantity: number;
-        price: number;
-        imageUrl: string;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const handleAddCart = (payload: CartItem) => {
         const cartItem: CartItem = {
             id: payload.id !== undefined ? payload.id : Date.now(),
@@ -153,7 +151,12 @@ const ProductDetail = () => {
                                 <Button variant={'fill'} size={'medium'} className='justify-center'>
                                     Mua ngay
                                 </Button>
-                                <Button variant={'outline'} size={'medium'} className='justify-center'>
+                                <Button
+                                    variant={'outline'}
+                                    size={'medium'}
+                                    onClick={() => handleAddCart({ ...product, quantity: 1 })}
+                                    className='justify-center'
+                                >
                                     <BsCartPlusFill />
                                     Thêm vào giỏ hàng
                                 </Button>
