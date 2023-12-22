@@ -93,13 +93,15 @@ const Header = () => {
         },
     ];
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        if (e.target.value.startsWith(' ')) return;
         setSearch((prev) => ({ ...prev, query: e.target.value, isSearching: !!e.target.value }));
     }
 
     function handleSearch(e: any, type: 'click' | 'enter') {
         if (e.key === 'Enter' || type === 'click') {
-            setSearchParams({ q: search.query });
-            navigate(`/search?q=${search.query}`);
+            const query = search.query.trim().replace(/\s+/g, ' ');
+            setSearchParams({ q: query });
+            navigate(`/search?q=${query}`);
             setSearch((prev) => ({ ...prev, query: '', isSearching: false }));
         }
     }
