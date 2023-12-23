@@ -6,6 +6,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import React, { useState } from 'react';
+import Button from '../../components/Button';
+import Login from './auth-forms/Login';
+import Signup from './auth-forms/Signup';
 
 type InitialSearchState = {
     isSearching: boolean;
@@ -105,6 +108,15 @@ const Header = () => {
             setSearch((prev) => ({ ...prev, query: '', isSearching: false }));
         }
     }
+    function handleDialog() {
+        const modalElement = document.getElementById('modal_login') as HTMLDialogElement | null;
+        modalElement?.showModal();
+        setIsLoginModal(true);
+    }
+    const [isLoginModal, setIsLoginModal] = useState(true);
+    const handleLoginModal = () => {
+        setIsLoginModal(!isLoginModal);
+    };
     return (
         <header className='relative z-50 justify-center bg-primary-default'>
             <div className='mx-auto my-auto flex justify-center bg-primary-default px-4 py-3 lg:mx-auto lg:max-w-[1200px] xl:px-0'>
@@ -140,7 +152,7 @@ const Header = () => {
                         <img src={Icons.search} alt='search' className='h-4 w-4' />
                     </div>
                     {!!search.isSearching && (
-                        <div className='smart-search-wrapper'>
+                        <div className='smart-search-wrapper custom-scrollbar'>
                             {searchResult.map((item) => (
                                 <>
                                     <div className='  flex cursor-pointer items-center justify-between gap-2 hover:bg-gray-100'>
@@ -168,16 +180,20 @@ const Header = () => {
                                 <React.Fragment key={index}>
                                     {item.count !== undefined ? (
                                         <div className='product-cart'>
-                                            <Action
-                                                name1={item.name1}
-                                                name2={item.name2}
-                                                icon={item.icon}
-                                                key={index}
-                                                count={item.count}
-                                            />
-                                            <div className='products-in-cart'>
-                                                <div className='mx-3 mt-3'>Giỏ Hàng</div>
-                                                <div className='product-container mb-2 ml-2 mr-2 max-h-[300px] overflow-y-auto'>
+                                            <Link to={'/cart'}>
+                                                <Action
+                                                    name1={item.name1}
+                                                    name2={item.name2}
+                                                    icon={item.icon}
+                                                    key={index}
+                                                    count={item.count}
+                                                />
+                                            </Link>
+                                            <div className='products-in-cart shadow-overflow'>
+                                                <div className='mx-3 mt-3 text-sm font-bold text-secondary-default '>
+                                                    Giỏ hàng
+                                                </div>
+                                                <div className='product-container mb-2 ml-2 mr-2 max-h-[300px] overflow-y-auto '>
                                                     {cartItems.map((product, index) => (
                                                         <div key={index} className='product-item'>
                                                             <div className='product-detail mb-4'>
@@ -199,11 +215,10 @@ const Header = () => {
                                                                         </label>
                                                                     </a>
                                                                     <div className='flex justify-between text-[12px]'>
-                                                                        <span className='product-price'>
+                                                                        <span className='product-price price'>
                                                                             {numberWithCommas(
                                                                                 product.price * product.quantity,
-                                                                            )}{' '}
-                                                                            VND
+                                                                            )}
                                                                         </span>
                                                                         <span className='product-quantity'>
                                                                             x{product.quantity}
@@ -215,10 +230,12 @@ const Header = () => {
                                                     ))}
                                                 </div>
                                                 <div className='mx-3 mb-2 flex items-center justify-between'>
-                                                    <div>{cartItems.length} sản phẩm</div>
-                                                    <button className='my-2 rounded-3xl bg-[blue] px-4 py-2 text-[white]'>
-                                                        <Link to='/cart'>Xem Giỏ Hàng</Link>
-                                                    </button>
+                                                    <p className='text-sm text-secondary-default'>
+                                                        {cartItems.length} sản phẩm
+                                                    </p>
+                                                    <Button variant={'fillBlue'}>
+                                                        <Link to='/cart'>Xem giỏ hàng</Link>
+                                                    </Button>
                                                 </div>
                                             </div>
                                         </div>
@@ -245,7 +262,10 @@ const Header = () => {
                             hàng
                         </p>
                     </div>
-                    <div className='shopcart my-auto ml-4 flex h-10 w-auto items-center justify-center gap-2 rounded p-2 md:bg-primary-900 '>
+                    <div
+                        className='shopcart my-auto ml-4 flex h-10 w-auto cursor-pointer items-center justify-center gap-2 rounded p-2 md:bg-primary-900'
+                        onClick={handleDialog}
+                    >
                         <div className='shrink-0'>
                             <img src={Icons.user} className='mx-auto my-auto h-[36px] w-[18px]' />
                         </div>
@@ -257,6 +277,19 @@ const Header = () => {
                     {/* test cart */}
                 </div>
             </div>
+            <dialog id='modal_login' className=' modal'>
+                <div className=' custom-scrollbar modal-box'>
+                    {/* Close button */}
+                    <form method='dialog'>
+                        <button className='btn-sm absolute right-4 top-4 outline-none'>✕</button>
+                    </form>
+                    {isLoginModal ? (
+                        <Login onLoginModal={handleLoginModal} />
+                    ) : (
+                        <Signup onLoginModal={handleLoginModal} />
+                    )}
+                </div>
+            </dialog>
         </header>
     );
 };

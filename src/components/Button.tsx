@@ -9,8 +9,8 @@ export const buttonVariants = cva('flex items-center px-2 py-1 gap-2 ', {
             default: 'bg-white hover:bg-secondary-default/20 rounded-3xl border gap-1',
             basic: 'rounded-3xl border bg-bodyBg-default',
             outline: 'border rounded-md text-primary-900 border-2 font-medium',
-            fill: ' bg-primary-default text-white rounded-md font-bold',
-            fillBlue: 'bg-sub-default text-bold text-white rounded-md',
+            fill: ' bg-primary-default text-white rounded-md font-medium',
+            fillBlue: 'bg-sub-default font-medium text-white rounded-md',
             outlineBlue: ' rounded-md ring w-full',
         },
         size: {
