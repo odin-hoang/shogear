@@ -1,5 +1,5 @@
 import Button from '../components/Button';
-import { FaAngleDoubleDown, FaFilter, FaPaperPlane } from 'react-icons/fa';
+import { FaAngleDoubleDown, FaCaretDown, FaFilter, FaSortAmountUpAlt, FaSortAmountDownAlt } from 'react-icons/fa';
 import { CiBoxList, CiGrid41 } from 'react-icons/ci';
 import { Link, useSearchParams } from 'react-router-dom';
 import { cn } from '../lib/utils/cn';
@@ -9,6 +9,7 @@ import toHyphenString from '../lib/toHyphenString';
 import Card from '../components/Card';
 import HeadlessTippy from '../components/HeadlessTippy';
 import { TbBrandProducthunt, TbBuildingCommunity } from 'react-icons/tb';
+import { FaRankingStar } from 'react-icons/fa6';
 
 type InitialFilterer = {
     byZone?: string | null;
@@ -203,6 +204,7 @@ const SearchResult = () => {
         byProductTag: [],
         byPrice: 'asc',
     });
+
     function handleFilter(e: React.MouseEvent<HTMLButtonElement, MouseEvent>, filter: 'byZone' | 'byProductTag') {
         const payloadParser = e.target as HTMLElement;
         const payload = payloadParser.innerHTML;
@@ -227,22 +229,25 @@ const SearchResult = () => {
             setFilterer((prev) => ({ ...prev, byPrice: 'asc' }));
         }
     }
-    console.log(q);
+    const handleApplyFilter = () => {
+        // TODO: send request filter to server
+        console.log(filterer);
+    };
+    const handleDeleteFilter = (type: 'byZone' | 'byProductTag') => {
+        if (type === 'byZone') setFilterer((prev) => ({ ...prev, byZone: null }));
+        if (type === 'byProductTag') setFilterer((prev) => ({ ...prev, byProductTag: [] }));
+        handleApplyFilter();
+    };
     return (
         <div className='bg-bodyBg-default px-6 py-6 '>
             <div className='mx-auto  max-w-[1200px] '>
                 <div className='min-h-screen  rounded-md bg-white p-4'>
                     {/* username and filterer */}
                     <div className='mb-4 flex items-center justify-between'>
-                        <h1 className='inline-block text-lg '>
-                            <span className='inline-block text-primary-default'>
-                                <FaPaperPlane />
-                            </span>
-                            <span className='ml-2'>
-                                Kết quả tìm kiếm: <span className=' ml-2 font-bold text-title-default'>{q}</span>
-                            </span>
-                        </h1>
                         <div className='flex gap-3 '>
+                            <span className='cursor-pointer text-3xl' onClick={() => setLayout(!layout)}>
+                                {layout ? <CiGrid41 /> : <CiBoxList />}
+                            </span>
                             <span className='flex items-center gap-1 text-primary-900'>
                                 <span className=''>
                                     <FaFilter />
@@ -267,18 +272,28 @@ const SearchResult = () => {
                                                 </Button>
                                             ))}
                                         </div>
-                                        {/* <div className='flex items-center justify-end gap-2 '>
-                                            <Button variant={'fill'} className='w-1/2 justify-center shadow-custom'>
+                                        <div className='flex items-center justify-end gap-2 '>
+                                            <Button
+                                                variant={'fill'}
+                                                className='w-1/2 justify-center shadow-custom'
+                                                onClick={handleApplyFilter}
+                                            >
                                                 Áp dụng
                                             </Button>
-                                            <Button variant={'outline'} className='w-1/2 justify-center '>
+                                            <Button
+                                                variant={'outline'}
+                                                className='w-1/2 justify-center '
+                                                onClick={() => handleDeleteFilter('byZone')}
+                                            >
                                                 Xoá lọc
                                             </Button>
-                                        </div> */}
+                                        </div>
                                     </div>
                                 }
                             >
-                                <Button>Toàn quốc</Button>
+                                <Button>
+                                    Toàn quốc <FaCaretDown />
+                                </Button>
                             </HeadlessTippy>
                             {/* product list */}
                             <HeadlessTippy
@@ -301,26 +316,42 @@ const SearchResult = () => {
                                                 </Button>
                                             ))}
                                         </div>
-                                        {/* <div className='flex items-center justify-end gap-2 '>
-                                            <Button variant={'fill'} className='w-1/2 justify-center shadow-custom'>
+                                        <div className='flex items-center justify-end gap-2 '>
+                                            <Button
+                                                variant={'fill'}
+                                                className='w-1/2 justify-center shadow-custom'
+                                                onClick={handleApplyFilter}
+                                            >
                                                 Áp dụng
                                             </Button>
-                                            <Button variant={'outline'} className='w-1/2 justify-center '>
+                                            <Button
+                                                variant={'outline'}
+                                                className='w-1/2 justify-center '
+                                                onClick={() => handleDeleteFilter('byProductTag')}
+                                            >
                                                 Xoá lọc
                                             </Button>
-                                        </div> */}
+                                        </div>
                                     </div>
                                 }
                             >
-                                <Button>Danh mục</Button>
+                                <Button>
+                                    Danh mục <FaCaretDown />
+                                </Button>
                             </HeadlessTippy>
-                            <Button price={filterer.byPrice} onClick={handlePrice}>
-                                Giá
+                            <Button onClick={handlePrice}>
+                                Giá {filterer.byPrice === 'asc' ? <FaSortAmountUpAlt /> : <FaSortAmountDownAlt />}
                             </Button>
-                            <span className='cursor-pointer text-3xl' onClick={() => setLayout(!layout)}>
-                                {layout ? <CiGrid41 /> : <CiBoxList />}
-                            </span>
                         </div>
+                        <h1 className=' inline-block text-left text-lg lg:w-1/2'>
+                            <span className='inline-block text-primary-default'>
+                                <FaRankingStar />
+                            </span>
+                            <span className='ml-2 '>
+                                Tìm kiếm theo:{' '}
+                                <span className='ml-2 line-clamp-1  font-bold text-title-default'>{q}</span>
+                            </span>
+                        </h1>
                     </div>
                     {/* layout */}
                     {layout ? (

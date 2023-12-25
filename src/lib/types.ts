@@ -29,7 +29,7 @@ export const signupSchema = z
 export type TSignupSchema = z.infer<typeof signupSchema>;
 
 export const loginSchema = z.object({
-    email: z.string(),
+    email: z.string().min(1, 'Tài khoản không được bỏ trống.'),
     password: z.string().min(8, 'Mật khẩu phải bao gồm ít nhất 8 ký tự.'),
 });
 export type TLoginSchema = z.infer<typeof loginSchema>;

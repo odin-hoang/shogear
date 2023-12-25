@@ -153,8 +153,8 @@ const Header = () => {
                     </div>
                     {!!search.isSearching && (
                         <div className='smart-search-wrapper custom-scrollbar'>
-                            {searchResult.map((item) => (
-                                <>
+                            {searchResult.map((item, index) => (
+                                <React.Fragment key={index}>
                                     <div className='  flex cursor-pointer items-center justify-between gap-2 hover:bg-gray-100'>
                                         <div className='ml-4'>
                                             <h3 className='line-clamp-1'>{item.heading}</h3>
@@ -168,7 +168,7 @@ const Header = () => {
                                         </div>
                                     </div>
                                     <div className='divider m-0 ml-2 h-0 w-[calc(100%-24px)] text-center after:h-[1px]'></div>
-                                </>
+                                </React.Fragment>
                             ))}
                         </div>
                     )}

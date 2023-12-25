@@ -78,7 +78,7 @@ const Signup = ({ onLoginModal }: SignupFormProps) => {
                     {...register('confirmPassword')}
                     type='password'
                     placeholder='Nhập lại mật khẩu *'
-                    className='input mb-4 w-full bg-gray-100'
+                    className='input mb-2 w-full bg-gray-100'
                 />
                 {errors.confirmPassword && (
                     <p className='mb-4 text-state-error'>{`*${errors.confirmPassword?.message}`}</p>
@@ -87,7 +87,7 @@ const Signup = ({ onLoginModal }: SignupFormProps) => {
                     {...register('address')}
                     type='textarea'
                     placeholder='Địa chỉ'
-                    className='input mb-2  w-full bg-gray-100'
+                    className='input mb-4  w-full bg-gray-100'
                 />
                 {errors.address && <p className='mb-4 text-state-error'>{`*${errors.address.message}`}</p>}
                 <Button
