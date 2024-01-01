@@ -1,76 +1,357 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    :root {
+        --background: 0 0% 100%;
+        --foreground: 222.2 84% 4.9%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
- 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
- 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
- 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
- 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
- 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
- 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+        --card: 0 0% 100%;
+        --card-foreground: 222.2 84% 4.9%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
- 
-    --radius: 0.5rem;
-  }
- 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
- 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
- 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
- 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
- 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
- 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
- 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
- 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
- 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-  }
+        --popover: 0 0% 100%;
+        --popover-foreground: 222.2 84% 4.9%;
+
+        --primary: 222.2 47.4% 11.2%;
+        --primary-foreground: 210 40% 98%;
+
+        --secondary: 210 40% 96.1%;
+        --secondary-foreground: 222.2 47.4% 11.2%;
+
+        --muted: 210 40% 96.1%;
+        --muted-foreground: 215.4 16.3% 46.9%;
+
+        --accent: 210 40% 96.1%;
+        --accent-foreground: 222.2 47.4% 11.2%;
+
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 210 40% 98%;
+
+        --border: 214.3 31.8% 91.4%;
+        --input: 214.3 31.8% 91.4%;
+        --ring: 222.2 84% 4.9%;
+
+        --radius: 0.5rem;
+    }
+
+    .dark {
+        --background: 222.2 84% 4.9%;
+        --foreground: 210 40% 98%;
+
+        --card: 222.2 84% 4.9%;
+        --card-foreground: 210 40% 98%;
+
+        --popover: 222.2 84% 4.9%;
+        --popover-foreground: 210 40% 98%;
+
+        --primary: 210 40% 98%;
+        --primary-foreground: 222.2 47.4% 11.2%;
+
+        --secondary: 217.2 32.6% 17.5%;
+        --secondary-foreground: 210 40% 98%;
+
+        --muted: 217.2 32.6% 17.5%;
+        --muted-foreground: 215 20.2% 65.1%;
+
+        --accent: 217.2 32.6% 17.5%;
+        --accent-foreground: 210 40% 98%;
+
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 210 40% 98%;
+
+        --border: 217.2 32.6% 17.5%;
+        --input: 217.2 32.6% 17.5%;
+        --ring: 212.7 26.8% 83.9%;
+    }
+    @font-face {
+        font-family: 'SF-Pro';
+        font-weight: 400;
+        src: url('/src/assets/fonts/SF-Pro-Display-Regular.otf');
+    }
+    @font-face {
+        font-family: 'SF-Pro';
+        font-weight: 600;
+        src: url('/src/assets/fonts/SF-Pro-Display-Semibold.otf');
+    }
+    @font-face {
+        font-family: 'SF-Pro';
+        font-weight: 500;
+        src: url('/src/assets/fonts/SF-Pro-Display-Medium.otf');
+    }
+    @font-face {
+        font-family: 'SF-Pro';
+        font-weight: 700;
+        src: url('/src/assets/fonts/SF-Pro-Display-Bold.otf');
+    }
+    @font-face {
+        font-family: 'SF-Pro';
+        font-weight: 900;
+        src: url('/src/assets/fonts/SF-Pro-Display-Black.otf');
+    }
+    @font-face {
+        font-family: 'SF-Pro';
+        font-weight: 900;
+        font-style: italic;
+        src: url('/src/assets/fonts/SF-Pro-Display-BlackItalic.otf');
+    }
+    html {
+        @apply font-sf;
+    }
 }
- 
+@layer components {
+    .active-menu {
+        right: -32px;
+        border-top: 16px solid transparent;
+        border-left: 16px solid;
+        @apply text-side-default;
+        border-bottom: 15px solid transparent;
+        border-right: 16px solid transparent;
+        z-index: 100;
+        position: absolute;
+        top: 0;
+        margin: auto;
+        content: '';
+    }
+    .flash {
+        content: '';
+        background-image: url("data:image/svg+xml,%3Csvg width='20' height='36' viewBox='0 0 20 36' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18.5035 15.4361H12.7737L12.769 15.4448H11.7322L18.6819 0L0.876617 19.807H7.67327L7.30312 20.7819L1.53845 36L18.5035 15.4361Z' fill='%23FFC306'/%3E%3Cpath d='M0.87663 19.807L0 20.7819H7.30314L7.67329 19.807H0.87663Z' fill='%23FFAD00'/%3E%3Cpath d='M12.769 15.4448L12.7737 15.4361H12.769L18.6819 0L11.7322 15.4448H12.769Z' fill='%23FFAD00'/%3E%3Cpath d='M20 15.4361H18.5035L1.53845 36L20 15.4361Z' fill='%23FFAD00'/%3E%3Cpath d='M17.6491 1.61224C17.6491 1.61224 2.40319 18.456 1.9086 19.3774C1.90939 19.3774 15.8681 4.08133 17.6491 1.61224Z' fill='%23FFEE12'/%3E%3Cpath d='M12.0802 15.6871C12.0802 15.6871 15.2491 15.444 17.7529 15.6871C17.7521 15.6871 14.8987 15.8964 12.0802 15.6871Z' fill='%23FFEE12'/%3E%3C/svg%3E%0A");
+        background-repeat: no-repeat;
+        background-size: 70%;
+        background-position: center;
+        border-radius: 100%;
+        display: block;
+        left: 4px;
+        width: 20px;
+        height: 36px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        @apply animate-pulse;
+    }
+    .tag-like-new {
+        clip-path: polygon(0 0, 100% 0%, 90% 100%, 0% 100%);
+        @apply bg-primary-default py-1 pl-2 pr-4 text-sm font-medium text-white;
+    }
+    .tag-used {
+        clip-path: polygon(0 0, 100% 0%, 90% 100%, 0% 100%);
+        @apply bg-secondary-default py-1 pl-2 pr-4 text-sm text-white;
+    }
+    .tag-time-used {
+        clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%);
+        @apply py-1 pl-4 pr-2 text-sm;
+    }
+    .price {
+        @apply text-primary-default font-bold;
+    }
+    .price::after {
+        content: '₫';
+    }
+    .icon-text {
+        @apply text-secondary-default flex items-center gap-2;
+    }
+    .active-button {
+        @apply !bg-primary-default font-medium text-white;
+    }
+}
+/* cart page */
+@layer components {
+    .header {
+        max-width: 1220px;
+    }
+    .product-cart {
+        position: relative;
+    }
+    .products-in-cart {
+        display: none;
+        position: absolute;
+        top: 50px;
+        left: -185px;
+        background-color: white;
+        border: 2px solid white;
+        box-shadow:
+            rgba(0, 39, 102, 0.08) 0px 0px 24px -4px,
+            rgba(0, 39, 102, 0.03) 0px 0px 8px -4px;
+        border-radius: 1rem;
+        width: 335px;
+        max-height: 450px;
+        z-index: 30;
+    }
+    .products-in-cart::before {
+        content: '';
+        position: absolute;
+        top: -30px;
+        left: 0;
+        width: 100%;
+        height: 40px;
+        z-index: -1;
+    }
+    .products-in-cart::after {
+        content: '';
+        position: absolute;
+        top: -12px;
+        width: 20px;
+        height: 20px;
+        z-index: 30;
+        background-color: white;
+        right: 100px;
+        border: inherit;
+        display: block;
+        border-radius: 0px 0px 0px 4px;
+        transform: rotate(135deg);
+    }
+
+    .product-cart:hover .products-in-cart,
+    .show-cart {
+        display: block !important;
+    }
+    .product-container {
+        margin: 1rem;
+    }
+    .product-detail {
+        display: flex;
+    }
+    .product-image {
+        width: 60px;
+        height: 60px;
+        border: 0.8px solid var(--gray-200);
+        border-radius: 12px;
+        padding: 6px 5px;
+    }
+    .count-holder {
+        display: inline-block;
+        vertical-align: top;
+        background: #fdd835;
+        border: 2px solid #fff;
+        color: #111111;
+        font-size: 9px;
+        font-weight: 600;
+        text-align: center;
+        position: absolute;
+        left: 7px;
+        top: 0px;
+        padding: 0 3px;
+        width: fit-content;
+        height: fit-content;
+        line-height: 13px;
+        border-radius: 50%;
+    }
+    .card {
+        position: relative;
+    }
+    .breadcrumb-item .text-link:hover {
+        color: #fcb941;
+    }
+    .breadcrumb-item {
+        font-weight: 300;
+        font-size: 1rem;
+        line-height: 1.5;
+        letter-spacing: 0;
+        text-transform: capitalize;
+    }
+    .table-cart thead tr th {
+        border-bottom: 0.1rem solid #ebebeb;
+        padding-bottom: 1.4rem;
+        padding-top: 1rem;
+        font-size: 1rem;
+        font-weight: lighter;
+        color: #999;
+        text-align: left;
+    }
+    .table-cart td {
+        padding: 2.5rem 0;
+        border-bottom: 0.1rem solid #ebebeb;
+    }
+    .minus-icon:hover {
+        filter: invert(62%) sepia(5%) saturate(2324%) hue-rotate(334deg) brightness(94%) contrast(96%);
+    }
+
+    .plus-icon:hover {
+        filter: invert(75%) sepia(11%) saturate(3430%) hue-rotate(287deg) brightness(89%) contrast(88%);
+    }
+    .table-summary tbody tr td {
+        font-size: 1.2rem;
+        font-weight: normal;
+        vertical-align: center;
+    }
+    .table-summary tbody .summary-ship td {
+        font-size: 1rem;
+        padding: 0.5rem 0;
+    }
+    .table-summary tbody .summary-ship .last-td {
+        font-size: 1rem;
+        padding-bottom: 1rem;
+        padding-top: 0.5rem;
+    }
+    .proceed-checkout:hover,
+    .view-cart:hover {
+        color: white;
+        background-color: #fcb941;
+        transition: all 0.3s;
+    }
+    .continue-shopping:hover {
+        color: #fcb941;
+    }
+    .continue-shopping:hover .refresh-icon {
+        filter: invert(62%) sepia(5%) saturate(2324%) hue-rotate(334deg) brightness(94%) contrast(96%);
+    }
+    .modal-action .btn-no:hover {
+        color: white;
+        background-color: blue;
+    }
+    .modal-action .btn-yes:hover {
+        color: white;
+        background-color: #e30005;
+    }
+}
+/* checkout */
+@layer components {
+    .checkout-discount label {
+        transform: translateY(-50%);
+    }
+    #checkout-discount-input:focus {
+        outline: none;
+        border-color: #fcb941;
+        color: #999;
+    }
+    .checkout .button {
+        color: #fff;
+        background-color: #fcb941;
+        border-color: #fcb941;
+        box-shadow: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 0.85rem 1.5rem;
+        font-weight: 400;
+        font-size: 1rem;
+        line-height: 1.5;
+        letter-spacing: -0.01em;
+        min-width: 170px;
+        border-radius: 0;
+        white-space: normal;
+        transition: all 0.3s;
+    }
+
+    .billing textarea:focus {
+        outline: none;
+        border-color: #fcb941;
+        color: #999;
+    }
+    .billing input:focus {
+        outline: none;
+        border-color: #fcb941;
+        color: #999;
+    }
+}
+
 @layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
 }
