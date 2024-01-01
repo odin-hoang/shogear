@@ -33,9 +33,9 @@ const Header = () => {
         },
     ];
     return (
-        <div className='bg-primary-default justify-center'>
-            <div className='bg-primary-default mx-auto my-auto flex justify-center px-4 py-3 lg:mx-auto lg:max-w-[1200px] xl:px-0'>
-                <div className='text-white my-auto '>
+        <div className='justify-center bg-primary-default'>
+            <div className='mx-auto my-auto flex justify-center bg-primary-default px-4 py-3 lg:mx-auto lg:max-w-[1200px] xl:px-0'>
+                <div className='my-auto text-white '>
                     <FaBars className='h-6 w-6' />
                 </div>
                 <div className='logo my-auto ml-4'>
@@ -48,7 +48,7 @@ const Header = () => {
                         className=' w-[40px] lg:hidden'
                     ></img>
                 </div>
-                <div className='search rounded bg-white ml-4 flex h-10 w-[60%] border sm:w-[80%] md:w-[35%] lg:w-[45%]'>
+                <div className='search ml-4 flex h-10 w-[60%] rounded border bg-white sm:w-[80%] md:w-[35%] lg:w-[45%]'>
                     <input
                         className='font-italic w-full pl-2 font-sf text-sm text-placeholder outline-none placeholder:text-placeholder'
                         placeholder='Bạn cần tìm gì?'
@@ -77,7 +77,7 @@ const Header = () => {
                                                     {cartItems.map((product, index) => (
                                                         <div key={index} className='product-item'>
                                                             <div className='product-detail mb-4'>
-                                                                <span className='rounded-lg border-gray-200 min-h-[60px] min-w-[60px] border border-opacity-40'>
+                                                                <span className='min-h-[60px] min-w-[60px] rounded-lg border border-gray-200 border-opacity-40'>
                                                                     <img
                                                                         src={product.imageUrl}
                                                                         alt={product.name}
@@ -112,7 +112,7 @@ const Header = () => {
                                                 </div>
                                                 <div className='mx-3 mb-2 flex items-center justify-between'>
                                                     <div>{cartItems.length} sản phẩm</div>
-                                                    <button className='rounded-3xl my-2 bg-[blue] px-4 py-2 text-[white]'>
+                                                    <button className='my-2 rounded-3xl bg-[blue] px-4 py-2 text-[white]'>
                                                         <Link to='/cart'>Xem Giỏ Hàng</Link>
                                                     </button>
                                                 </div>
@@ -132,20 +132,20 @@ const Header = () => {
                         })}
                     </div>
                     {/* responesive mobile */}
-                    <div className='shopcart rounded my-auto ml-4 flex h-10 w-auto items-center justify-center gap-2 p-2 md:hidden '>
+                    <div className='shopcart my-auto ml-4 flex h-10 w-auto items-center justify-center gap-2 rounded p-2 md:hidden '>
                         <div className='shrink-0'>
                             <img src={Icons.shopcart} className='mx-auto my-auto h-[36px] w-[18px]' />
                         </div>
-                        <p className='text-white  hidden w-full flex-col font-sf  text-xs font-semibold md:block'>
+                        <p className='hidden  w-full flex-col font-sf text-xs  font-semibold text-white md:block'>
                             Giỏ <br />
                             hàng
                         </p>
                     </div>
-                    <div className='shopcart rounded md:bg-primary-900 my-auto ml-4 flex h-10 w-auto items-center justify-center gap-2 p-2 '>
+                    <div className='shopcart my-auto ml-4 flex h-10 w-auto items-center justify-center gap-2 rounded p-2 md:bg-primary-900 '>
                         <div className='shrink-0'>
                             <img src={Icons.user} className='mx-auto my-auto h-[36px] w-[18px]' />
                         </div>
-                        <p className='text-white  hidden w-full flex-col font-sf  text-xs font-semibold md:block'>
+                        <p className='hidden  w-full flex-col font-sf text-xs  font-semibold text-white md:block'>
                             Đăng <br />
                             nhập
                         </p>

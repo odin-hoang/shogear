@@ -1,5 +1,12 @@
 import Button from '../../components/Button';
-import { FaAngleDoubleDown, FaFilter, FaPaperPlane } from 'react-icons/fa';
+import {
+    FaAngleDoubleDown,
+    FaCaretDown,
+    FaFilter,
+    FaPaperPlane,
+    FaSortAmountDownAlt,
+    FaSortAmountUpAlt,
+} from 'react-icons/fa';
 import { CiBoxList, CiGrid41 } from 'react-icons/ci';
 import { Link } from 'react-router-dom';
 import { cn } from '../../lib/utils/cn';
@@ -17,6 +24,7 @@ type InitialFilterer = {
 };
 // eslint-disable-next-line no-empty-pattern
 const News = ({}: NewsProps) => {
+    // Data
     const data = [
         {
             id: 1,
@@ -201,6 +209,7 @@ const News = ({}: NewsProps) => {
         byProductTag: [],
         byPrice: 'asc',
     });
+
     function handleFilter(e: React.MouseEvent<HTMLButtonElement, MouseEvent>, filter: 'byZone' | 'byProductTag') {
         const payloadParser = e.target as HTMLElement;
         const payload = payloadParser.innerHTML;
@@ -225,19 +234,27 @@ const News = ({}: NewsProps) => {
             setFilterer((prev) => ({ ...prev, byPrice: 'asc' }));
         }
     }
-    console.log(filterer);
+    const handleApplyFilter = () => {
+        // TODO: send request filter to server
+        console.log(filterer);
+    };
+    const handleDeleteFilter = (type: 'byZone' | 'byProductTag') => {
+        if (type === 'byZone') setFilterer((prev) => ({ ...prev, byZone: null }));
+        if (type === 'byProductTag') setFilterer((prev) => ({ ...prev, byProductTag: [] }));
+        handleApplyFilter();
+    };
     return (
-        <div className='rounded-md  bg-white min-h-screen p-4'>
+        <div className='min-h-screen  rounded-md bg-white p-4'>
             {/* username and filterer */}
             <div className='mb-4 flex items-center justify-between'>
                 <h1 className='inline-block text-lg font-bold'>
-                    <span className='text-primary-default inline-block'>
+                    <span className='inline-block text-primary-default'>
                         <FaPaperPlane />
                     </span>
                     <span className='ml-2'>Bài đăng mới</span>
                 </h1>
                 <div className='flex gap-3 '>
-                    <span className='text-primary-900 flex items-center gap-1'>
+                    <span className='flex items-center gap-1 text-primary-900'>
                         <span className=''>
                             <FaFilter />
                         </span>
@@ -261,18 +278,28 @@ const News = ({}: NewsProps) => {
                                         </Button>
                                     ))}
                                 </div>
-                                {/* <div className='flex items-center justify-end gap-2 '>
-                                    <Button variant={'fill'} className='w-1/2 justify-center shadow-custom'>
+                                <div className='flex items-center justify-end gap-2 '>
+                                    <Button
+                                        variant={'fill'}
+                                        className='w-1/2 justify-center shadow-custom'
+                                        onClick={handleApplyFilter}
+                                    >
                                         Áp dụng
                                     </Button>
-                                    <Button variant={'outline'} className='w-1/2 justify-center '>
+                                    <Button
+                                        variant={'outline'}
+                                        className='w-1/2 justify-center '
+                                        onClick={() => handleDeleteFilter('byZone')}
+                                    >
                                         Xoá lọc
                                     </Button>
-                                </div> */}
+                                </div>
                             </div>
                         }
                     >
-                        <Button>Toàn quốc</Button>
+                        <Button>
+                            Toàn quốc <FaCaretDown />
+                        </Button>
                     </HeadlessTippy>
                     {/* product list */}
                     <HeadlessTippy
@@ -295,21 +322,31 @@ const News = ({}: NewsProps) => {
                                         </Button>
                                     ))}
                                 </div>
-                                {/* <div className='flex items-center justify-end gap-2 '>
-                                    <Button variant={'fill'} className='w-1/2 justify-center shadow-custom'>
+                                <div className='flex items-center justify-end gap-2 '>
+                                    <Button
+                                        variant={'fill'}
+                                        className='w-1/2 justify-center shadow-custom'
+                                        onClick={handleApplyFilter}
+                                    >
                                         Áp dụng
                                     </Button>
-                                    <Button variant={'outline'} className='w-1/2 justify-center '>
+                                    <Button
+                                        variant={'outline'}
+                                        className='w-1/2 justify-center '
+                                        onClick={() => handleDeleteFilter('byProductTag')}
+                                    >
                                         Xoá lọc
                                     </Button>
-                                </div> */}
+                                </div>
                             </div>
                         }
                     >
-                        <Button>Danh mục</Button>
+                        <Button>
+                            Danh mục <FaCaretDown />
+                        </Button>
                     </HeadlessTippy>
-                    <Button price={filterer.byPrice} onClick={handlePrice}>
-                        Giá
+                    <Button onClick={handlePrice}>
+                        Giá {filterer.byPrice === 'asc' ? <FaSortAmountUpAlt /> : <FaSortAmountDownAlt />}
                     </Button>
                     <span className='cursor-pointer text-3xl' onClick={() => setLayout(!layout)}>
                         {layout ? <CiGrid41 /> : <CiBoxList />}
@@ -321,7 +358,7 @@ const News = ({}: NewsProps) => {
                 // List
                 <div className='flex flex-col gap-2'>
                     {data.map((item, index) => (
-                        <div className={cn(' rounded-sm flex gap-4 border p-2')} key={index}>
+                        <div className={cn(' flex gap-4 rounded-sm border p-2')} key={index}>
                             <Card
                                 id={item.id}
                                 name={item.name}
@@ -348,7 +385,7 @@ const News = ({}: NewsProps) => {
                         <Link
                             to={`/products/${toHyphenString(item.name)}`}
                             state={{ item }}
-                            className={cn('rounded-sm flex flex-col border')}
+                            className={cn('flex flex-col rounded-sm border')}
                             key={index}
                             preventScrollReset={false}
                         >
@@ -361,7 +398,6 @@ const News = ({}: NewsProps) => {
                                 postedAt={item.postedAt}
                                 zone={item.zone}
                                 isUsed={item.isUsed}
-                                className='w-[200px]'
                                 // onClick={() => handleAddCart({ ...item, quantity: 1 })}
                             />
                         </Link>

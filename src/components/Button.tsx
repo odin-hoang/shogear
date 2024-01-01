@@ -1,4 +1,3 @@
-import { FaCaretDown, FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../lib/utils/cn';
 import { forwardRef } from 'react';
@@ -9,8 +8,8 @@ export const buttonVariants = cva('flex items-center px-2 py-1 gap-2 ', {
             default: 'bg-white hover:bg-secondary-default/20 rounded-3xl border gap-1',
             basic: 'rounded-3xl border bg-bodyBg-default',
             outline: 'border rounded-md text-primary-900 border-2 font-medium',
-            fill: ' bg-primary-default text-white rounded-md font-bold',
-            fillBlue: 'bg-sub-default text-bold text-white rounded-md',
+            fill: ' bg-primary-default text-white rounded-md font-medium',
+            fillBlue: 'bg-sub-default font-medium text-white rounded-md',
             outlineBlue: ' rounded-md ring w-full',
         },
         size: {
@@ -25,28 +24,12 @@ export const buttonVariants = cva('flex items-center px-2 py-1 gap-2 ', {
 });
 export interface ButtonProps extends ButtonVariantProps, React.ComponentPropsWithRef<'button'> {
     children: React.ReactNode;
-    price?: string | null;
 }
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-    ({ children, price = null, variant = 'default', size = 'default', className, ...rest }: ButtonProps, ref) => {
+    ({ children, variant = 'default', size = 'default', className, ...rest }: ButtonProps, ref) => {
         return (
             <button ref={ref} className={cn(buttonVariants({ variant, size, className }))} {...rest}>
                 {children}
-                {!!(variant === 'default') && (
-                    <span className='h-5 w-5  text-lg'>
-                        {price ? (
-                            price === 'asc' ? (
-                                <FaSortAmountUp />
-                            ) : price === 'desc' ? (
-                                <FaSortAmountDown />
-                            ) : (
-                                ''
-                            )
-                        ) : (
-                            <FaCaretDown />
-                        )}
-                    </span>
-                )}
             </button>
         );
     },
