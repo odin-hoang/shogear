@@ -1,93 +1,76 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+ 
 @layer base {
-    @font-face {
-        font-family: 'SF-Pro';
-        font-weight: 400;
-        src: url('/src/assets/fonts/SF-Pro-Display-Regular.otf');
-    }
-    @font-face {
-        font-family: 'SF-Pro';
-        font-weight: 600;
-        src: url('/src/assets/fonts/SF-Pro-Display-Semibold.otf');
-    }
-    @font-face {
-        font-family: 'SF-Pro';
-        font-weight: 500;
-        src: url('/src/assets/fonts/SF-Pro-Display-Medium.otf');
-    }
-    @font-face {
-        font-family: 'SF-Pro';
-        font-weight: 700;
-        src: url('/src/assets/fonts/SF-Pro-Display-Bold.otf');
-    }
-    @font-face {
-        font-family: 'SF-Pro';
-        font-weight: 900;
-        src: url('/src/assets/fonts/SF-Pro-Display-Black.otf');
-    }
-    @font-face {
-        font-family: 'SF-Pro';
-        font-weight: 900;
-        font-style: italic;
-        src: url('/src/assets/fonts/SF-Pro-Display-BlackItalic.otf');
-    }
-    html {
-        @apply font-sf;
-    }
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+ 
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+ 
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+ 
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+ 
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+ 
+    --radius: 0.5rem;
+  }
+ 
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+ 
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+ 
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+ 
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+ 
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+ 
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+ 
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+ 
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
 }
-@layer components {
-    .active-menu {
-        right: -32px;
-        border-top: 16px solid transparent;
-        border-left: 16px solid;
-        @apply text-side-default;
-        border-bottom: 15px solid transparent;
-        border-right: 16px solid transparent;
-        z-index: 100;
-        position: absolute;
-        top: 0;
-        margin: auto;
-        content: '';
-    }
-    .flash {
-        content: '';
-        background-image: url("data:image/svg+xml,%3Csvg width='20' height='36' viewBox='0 0 20 36' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18.5035 15.4361H12.7737L12.769 15.4448H11.7322L18.6819 0L0.876617 19.807H7.67327L7.30312 20.7819L1.53845 36L18.5035 15.4361Z' fill='%23FFC306'/%3E%3Cpath d='M0.87663 19.807L0 20.7819H7.30314L7.67329 19.807H0.87663Z' fill='%23FFAD00'/%3E%3Cpath d='M12.769 15.4448L12.7737 15.4361H12.769L18.6819 0L11.7322 15.4448H12.769Z' fill='%23FFAD00'/%3E%3Cpath d='M20 15.4361H18.5035L1.53845 36L20 15.4361Z' fill='%23FFAD00'/%3E%3Cpath d='M17.6491 1.61224C17.6491 1.61224 2.40319 18.456 1.9086 19.3774C1.90939 19.3774 15.8681 4.08133 17.6491 1.61224Z' fill='%23FFEE12'/%3E%3Cpath d='M12.0802 15.6871C12.0802 15.6871 15.2491 15.444 17.7529 15.6871C17.7521 15.6871 14.8987 15.8964 12.0802 15.6871Z' fill='%23FFEE12'/%3E%3C/svg%3E%0A");
-        background-repeat: no-repeat;
-        background-size: 70%;
-        background-position: center;
-        border-radius: 100%;
-        display: block;
-        left: 4px;
-        width: 20px;
-        height: 36px;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        margin: auto;
-        @apply animate-pulse;
-    }
-    .tag-like-new {
-        clip-path: polygon(0 0, 100% 0%, 90% 100%, 0% 100%);
-        @apply bg-primary-default py-1 pl-2 pr-4 text-sm font-medium text-white;
-    }
-    .tag-used {
-        clip-path: polygon(0 0, 100% 0%, 90% 100%, 0% 100%);
-        @apply bg-secondary-default py-1 pl-2 pr-4 text-sm text-white;
-    }
-    .tag-time-used {
-        clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%);
-        @apply py-1 pl-4 pr-2 text-sm;
-    }
-    .price {
-        @apply font-bold text-primary-default;
-    }
-    .price::after {
-        content: '₫';
-    }
-    .icon-text {
-        @apply flex items-center gap-2 text-secondary-default;
-    }
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
