@@ -13,7 +13,7 @@ const HeadlessTippy: React.FC<HeadlessTippyProps> = ({ children, content }) => {
             placement='bottom'
             trigger='click'
             render={(attributes) => (
-                <div tabIndex={-1} {...attributes} className='shadow-overflow rounded-md border bg-white px-4 py-2'>
+                <div tabIndex={-1} {...attributes} className='rounded-md bg-white border px-4 py-2 shadow-overflow'>
                     {content}
                 </div>
             )}
