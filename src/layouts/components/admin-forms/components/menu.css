@@ -1,0 +1,9 @@
+.dropdown-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+.dropdown-container:hover {
+    border-color: rgb(195, 195, 195);
+}
