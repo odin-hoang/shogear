@@ -2,8 +2,8 @@ import { z } from 'zod';
 // Schema for validation using zod
 export const signupSchema = z
     .object({
-        firstname: z.string().min(1, 'Tên không được bỏ trống.'),
-        lastname: z.string(),
+        firstName: z.string().min(1, 'Tên không được bỏ trống.'),
+        lastName: z.string(),
         username: z.string().min(1, 'Tên đăng nhập không được bỏ trống.'),
         phone: z
             .string()
@@ -19,7 +19,7 @@ export const signupSchema = z
             .regex(/^(?=.*\d)/, 'Mật khẩu gồm ít nhất một số.')
             .regex(/^(?=.*[@$!%*?&])/, 'Mật khẩu gồm ít nhất một ký tự đặc biệt'),
         confirmPassword: z.string(),
-        address: z.string(),
+        address: z.string().min(1, 'Địa chỉ không được bỏ trống.'),
     })
     .refine((data) => data.confirmPassword === data.password, {
         message: 'Mật khẩu không trùng khớp.',

@@ -4,12 +4,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
 import { numberWithCommas } from '../lib/scripts';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../app/store';
 import { apiGetPublicProvinces, apiGetPublicDistrict, apiGetPublicWard } from '../services/app';
 import { Province, District, Ward } from '../services/app';
 import { createOrder } from '../services/orderService';
 import { useUserContext } from '../utils/authContext';
+import { updateShippingFee } from '../features/cart/cart-slice';
 
 const Checkout = () => {
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
@@ -85,10 +86,16 @@ const Checkout = () => {
         }
     };
 
+    const dispatch = useDispatch();
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (cartItems.length === 0) {
+            dispatch(updateShippingFee(-1));
+        }
+    }, []);
     const sumTotal = cartItems.reduce((total, item) => {
         return total + item.price * item.quantity;
     }, 0);
-
     const calculateTotal = () => {
         return cartItems.length === 0 ? sumTotal : cart === -1 ? sumTotal : sumTotal + cart;
     };
@@ -494,8 +501,9 @@ const Checkout = () => {
                                     <span className=''>VIEW CART</span>
                                 </Link>
                             </div>
+                            {/* Chuyển hướng sau khi đặt hàng */}
                             <Link
-                                to='/checkout'
+                                to='/'
                                 className='continue-shopping m-auto flex w-[60%] justify-center border-[0.1rem] border-solid border-[#d7d7d7] px-4 py-2'
                                 onClick={() => handleSubmit()}
                             >
