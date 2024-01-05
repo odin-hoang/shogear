@@ -1,4 +1,4 @@
-import { apiRequest } from './request';
+import apiRequest from './request';
 
 export async function login(username_or_email: string, password: string) {
     try {

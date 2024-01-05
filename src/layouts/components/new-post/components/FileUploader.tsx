@@ -4,7 +4,7 @@ import Button from '../../../../components/Button';
 
 type FileUploaderProps = {
     fieldChange: Function;
-    field: FileWithPath[];
+    field: any;
 };
 const FileUploader = ({ fieldChange, field }: FileUploaderProps) => {
     type FileUploaderProps = {
@@ -12,12 +12,9 @@ const FileUploader = ({ fieldChange, field }: FileUploaderProps) => {
         field: FileWithPath[]; // Change Array<any>[] to FileWithPath[]
     };
 
-    const onDrop = (acceptedFiles: FileWithPath[]) => {
-        console.log(acceptedFiles);
-        const update = field;
-        console.log(update);
-        update.push(acceptedFiles[0]);
-        fieldChange(update);
+    const onDrop = (acceptedFiles: any) => {
+        const updateFiles = [...field, ...acceptedFiles];
+        fieldChange(updateFiles);
     };
     const { getRootProps, getInputProps } = useDropzone({
         onDrop,

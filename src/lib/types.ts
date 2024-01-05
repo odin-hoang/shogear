@@ -50,6 +50,6 @@ export const productSchema = z.object({
     count: z.number(),
     createDate: z.date(),
     status: z.string(),
-    images: z.custom().array(),
+    // images: z.custom().array(),
 });
 export type TLoginSchema = z.infer<typeof loginSchema>;
