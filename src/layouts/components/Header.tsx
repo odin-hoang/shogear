@@ -5,11 +5,13 @@ import Action from './Action';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import Button from '../../components/Button';
 import Login from './auth-forms/Login';
 import Signup from './auth-forms/Signup';
 import { useUserContext } from '../../utils/authContext';
+import apiRequest from '../../services/request';
+import { debounce } from 'lodash';
 
 type InitialSearchState = {
     isSearching: boolean;
@@ -52,50 +54,37 @@ const Header = () => {
         query: '',
     });
     // TODO: call query API  --> search result
-    const searchResult = [
-        {
-            imageUrl: 'https://picsum.photos/200',
-            heading: 'Laptop MSI Mordern 15',
-            price: 15990000,
-            zone: 'TP Hồ Chí Minh',
-        },
-        {
-            imageUrl: 'https://picsum.photos/200',
-            heading: 'Laptop MSI Mordern 15',
-            price: 15990000,
-            zone: 'TP Hồ Chí Minh',
-        },
-        {
-            imageUrl: 'https://picsum.photos/200',
-            heading: 'Laptop MSI Mordern 15',
-            price: 15990000,
-            zone: 'TP Hồ Chí Minh',
-        },
-        {
-            imageUrl: 'https://picsum.photos/200',
-            heading: 'Laptop MSI Mordern 15',
-            price: 15990000,
-            zone: 'TP Hồ Chí Minh',
-        },
-        {
-            imageUrl: 'https://picsum.photos/200',
-            heading: 'Laptop MSI Mordern 15',
-            price: 15990000,
-            zone: 'TP Hồ Chí Minh',
-        },
-        {
-            imageUrl: 'https://picsum.photos/200',
-            heading: 'Laptop MSI Mordern 15',
-            price: 15990000,
-            zone: 'TP Hồ Chí Minh',
-        },
-        {
-            imageUrl: 'https://picsum.photos/200',
-            heading: 'Laptop MSI Mordern 15',
-            price: 15990000,
-            zone: 'TP Hồ Chí Minh',
-        },
-    ];
+    type Post = {
+        id: number;
+        imageUrl: string;
+        heading: string;
+        price: number;
+    };
+    const [posts, setPosts] = useState<Post[]>([]);
+    const debouncedSearch = debounce((query: string) => {
+        apiRequest.get(`/products/?q=${query}`).then((response) => {
+            const datas: Post[] = [];
+            for (const post of response.data.results) {
+                const data: Post = {
+                    id: post.id,
+                    imageUrl: 'https://picsum.photos/200',
+                    heading: post.name,
+                    price: post.price,
+                };
+                datas.push(data);
+            }
+            setPosts(() => {
+                return [...datas];
+            });
+        });
+    }, 500); // delay of 500ms
+
+    useLayoutEffect(() => {
+        if (search.query) {
+            debouncedSearch(search.query);
+        }
+    }, [search.query]);
+
     const { getUser, logOut } = useUserContext();
     const user = getUser();
     console.log(user);
@@ -162,14 +151,14 @@ const Header = () => {
                     </div>
                     {!!search.isSearching && (
                         <div className='smart-search-wrapper custom-scrollbar'>
-                            {searchResult.map((item, index) => (
+                            {posts.map((item, index) => (
                                 <React.Fragment key={index}>
                                     <div className='  flex cursor-pointer items-center justify-between gap-2 hover:bg-gray-100'>
                                         <div className='ml-4'>
                                             <h3 className='line-clamp-1'>{item.heading}</h3>
                                             <p>
                                                 <span className='price mr-2 '>{numberWithCommas(item.price)} </span>•{' '}
-                                                <span className='ml-2'>{item.zone}</span>
+                                                {/* <span className='ml-2'>{item.zone}</span> */}
                                             </p>
                                         </div>
                                         <div className='mr-2 p-2'>
