@@ -12,6 +12,7 @@ import Signup from './auth-forms/Signup';
 import { useUserContext } from '../../utils/authContext';
 import apiRequest from '../../services/request';
 import { debounce } from 'lodash';
+import HeadlessTippy from '../../components/HeadlessTippy';
 
 type InitialSearchState = {
     isSearching: boolean;
@@ -105,9 +106,6 @@ const Header = () => {
         const modalElement = document.getElementById('modal_login') as HTMLDialogElement | null;
         console.log(user);
         if (!user) modalElement?.showModal();
-        else {
-            logOut();
-        }
         setIsLoginModal(true);
     }
     const [isLoginModal, setIsLoginModal] = useState(true);
@@ -260,6 +258,7 @@ const Header = () => {
                             hàng
                         </p>
                     </div>
+
                     <div
                         className='shopcart my-auto ml-4 flex h-10 w-auto cursor-pointer items-center justify-center gap-2 rounded p-4 md:bg-primary-900'
                         onClick={handleDialog}
@@ -268,10 +267,21 @@ const Header = () => {
                             <img src={Icons.user} className='mx-auto my-auto h-[36px] w-[18px]' />
                         </div>
                         {user && user.id != -1 ? (
-                            <p className='hidden  w-full flex-col font-sf text-xs  font-semibold text-white md:block'>
-                                Hi <br />
-                                {user?.username}
-                            </p>
+                            <HeadlessTippy
+                                content={
+                                    <div className=' '>
+                                        <Link to={'/new/product'}>Tạo bài đăng</Link>
+                                        <Button variant={'fill'} className='mt-2' onClick={() => logOut()}>
+                                            Đăng xuất
+                                        </Button>
+                                    </div>
+                                }
+                            >
+                                <p className='hidden  w-full flex-col font-sf text-xs  font-semibold text-white md:block'>
+                                    Hi <br />
+                                    {user?.username}
+                                </p>
+                            </HeadlessTippy>
                         ) : (
                             <p className='hidden  w-full flex-col font-sf text-xs  font-semibold text-white md:block'>
                                 Đăng <br />
@@ -279,6 +289,7 @@ const Header = () => {
                             </p>
                         )}
                     </div>
+
                     {/* test cart */}
                 </div>
             </div>
