@@ -1,5 +1,13 @@
 import axios from 'axios';
 
-export const apiRequest = axios.create({
-    baseURL: 'http://127.0.0.1:8000',
+const apiRequest = axios.create({
+    baseURL: 'https://api-shopgear.onrender.com/',
 });
+// apiRequest.interceptors.request.use((config) => {
+//     const token = localStorage.getItem('userToken');
+//     if (token) {
+//         config.headers['token'] = `Bearer ${token}`;
+//     }
+//     return config;
+// });
+export default apiRequest;

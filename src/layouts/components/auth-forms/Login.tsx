@@ -8,11 +8,13 @@ import { cn } from '../../../lib/utils/cn';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TLoginSchema, loginSchema } from '../../../lib/types';
+import { login } from '../../../services/loginService';
+import { useUserContext } from '../../../utils/authContext';
 interface LoginFormProps extends React.ComponentPropsWithRef<'form'> {
     onLoginModal: () => void;
 }
-
 const Login = ({ onLoginModal }: LoginFormProps) => {
+    const { logIn } = useUserContext();
     const {
         register,
         handleSubmit,
@@ -23,8 +25,10 @@ const Login = ({ onLoginModal }: LoginFormProps) => {
     });
     const onSubmit = async (data: TLoginSchema) => {
         // TODO: submit to server
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log(data);
+        const user = await login(data.email, data.password);
+        if (user) {
+            logIn(user);
+        }
         reset();
     };
     return (
@@ -37,14 +41,14 @@ const Login = ({ onLoginModal }: LoginFormProps) => {
                     placeholder='Tên đăng nhập hoặc email'
                     className='input mb-2  w-full bg-gray-100'
                 />
-                {errors.email && <p className='mb-4 text-state-error'>{`*${errors.email.message}`}</p>}
+                {errors.email && <p className='text-state-error mb-4'>{`*${errors.email.message}`}</p>}
                 <input
                     {...register('password')}
                     type='password'
                     placeholder='Mật khẩu'
                     className='input mb-4 w-full bg-gray-100'
                 />
-                {errors.password && <p className='mb-4 text-state-error'>{`*${errors.password?.message}`}</p>}
+                {errors.password && <p className='text-state-error mb-4'>{`*${errors.password?.message}`}</p>}
                 <Link to={'/'} className='float-right mb-4 underline'>
                     Quên mật khẩu?
                 </Link>
