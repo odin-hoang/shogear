@@ -3,7 +3,7 @@ import apiRequest from './request';
 export async function getCategories() {
     return new Promise(async (res, rej) => {
         try {
-            const categories = await apiRequest.get('/api/categories');
+            const categories = await apiRequest.get('/categories');
             console.log(categories);
             res(categories.data);
         } catch (err) {

@@ -43,7 +43,7 @@ export const categoryConfigSchema = z.object({
     ),
 });
 export const productSchema = z.object({
-    category_id: z.string(),
+    category: z.string(),
     name: z.string().min(1, 'Trường này là bắt buộc'),
     description: z.string().min(1, 'Trường này là bắt buộc'),
     price: z.number(),
@@ -53,10 +53,13 @@ export const productSchema = z.object({
     fields: z.array(
         z
             .object({
-                field: z.string().nullable(),
-                value: z.string().nullable(),
+                field: z.string(),
+                value: z.string(),
             })
-            .nullable(),
+            .refine((data) => {
+                if (data.value != '') return true;
+                else return false;
+            }),
     ),
     // images: z.custom().array(),
 });
