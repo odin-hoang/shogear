@@ -214,20 +214,7 @@ const News = ({}: NewsProps) => {
         isUsed?: boolean;
     };
     const [urls, setUrls] = useState('');
-    const [posts, setPosts] = useState<Post[]>([
-        {
-            id: 1,
-            imageUrl:
-                'https://product.hstatic.net/200000722513/product/km086w_facd6092154b4d769a04f1859a0c4b8e_medium.png',
-            username: 'David Smith',
-            description: 'Description',
-            price: 120000,
-            postedAt: '1 phút trước',
-            zone: 'Hồ Chí Minh',
-            name: 'Laptop gaming Acer Aspire 7 A715 76G 59MW',
-            isUsed: false,
-        },
-    ]);
+    const [posts, setPosts] = useState<Post[]>([]);
     useEffect(() => {
         apiRequest.get('/posts').then((response) => {
             const datas: Post[] = [];
