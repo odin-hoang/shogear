@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import Button from '../../../components/Button';
-import React from 'react';
+import React, { useState } from 'react';
 import { LuLogIn } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
@@ -18,14 +18,19 @@ const Login = ({ onLoginModal }: LoginFormProps) => {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors },
         reset,
     } = useForm<TLoginSchema>({
         resolver: zodResolver(loginSchema),
     });
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const onSubmit = async (data: TLoginSchema) => {
         // TODO: submit to server
+        setIsSubmitting(true);
         const user = await login(data.email, data.password);
+        console.log(user);
+        setIsSubmitting(false);
         if (user) {
             logIn(user);
         }
@@ -41,14 +46,14 @@ const Login = ({ onLoginModal }: LoginFormProps) => {
                     placeholder='Tên đăng nhập hoặc email'
                     className='input mb-2  w-full bg-gray-100'
                 />
-                {errors.email && <p className='text-state-error mb-4'>{`*${errors.email.message}`}</p>}
+                {errors.email && <p className='mb-4 text-state-error'>{`*${errors.email.message}`}</p>}
                 <input
                     {...register('password')}
                     type='password'
                     placeholder='Mật khẩu'
                     className='input mb-4 w-full bg-gray-100'
                 />
-                {errors.password && <p className='text-state-error mb-4'>{`*${errors.password?.message}`}</p>}
+                {errors.password && <p className='mb-4 text-state-error'>{`*${errors.password?.message}`}</p>}
                 <Link to={'/'} className='float-right mb-4 underline'>
                     Quên mật khẩu?
                 </Link>

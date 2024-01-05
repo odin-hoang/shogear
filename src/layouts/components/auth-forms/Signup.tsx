@@ -9,6 +9,8 @@ import { AiOutlineLoading } from 'react-icons/ai';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TSignupSchema, signupSchema } from '../../../lib/types';
+import { registerUser } from '../../../services/loginService';
+
 interface SignupFormProps extends React.ComponentPropsWithRef<'form'> {
     onLoginModal: () => void;
 }
@@ -24,28 +26,30 @@ const Signup = ({ onLoginModal }: SignupFormProps) => {
     });
     const onSubmit = async (data: TSignupSchema) => {
         // TODO: submit to server
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log(data);
-        reset();
+        const user = await registerUser(data);
+        if (user) {
+            onLoginModal();
+            reset();
+        }
     };
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <h1 className=' mb-10'>Đăng ký tài khoản SHOGEAR</h1>
                 <input
-                    {...register('lastname')}
+                    {...register('lastName')}
                     type='text'
                     placeholder='Họ và tên đệm'
                     className='input mb-2 w-1/2 bg-gray-100'
                 />
-                {errors.lastname && <p className='mb-4 text-state-error'>{`*${errors.lastname.message}`}</p>}
+                {errors.lastName && <p className='mb-4 text-state-error'>{`*${errors.lastName.message}`}</p>}
                 <input
-                    {...register('firstname')}
+                    {...register('firstName')}
                     type='text'
                     placeholder='Tên *'
                     className='input float-right mb-2 w-[calc(50%-16px)] bg-gray-100'
                 />
-                {errors.firstname && <p className='mb-4 text-state-error'>{`*${errors.firstname.message}`}</p>}
+                {errors.firstName && <p className='mb-4 text-state-error'>{`*${errors.firstName.message}`}</p>}
                 <input
                     {...register('username')}
                     type='text'
