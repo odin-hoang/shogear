@@ -1,13 +1,15 @@
 import bgImage from '../assets/images/page-cart-bg.jpg';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
 import { numberWithCommas } from '../lib/scripts';
 import { useSelector } from 'react-redux';
 import { RootState } from '../app/store';
 import { apiGetPublicProvinces, apiGetPublicDistrict, apiGetPublicWard } from '../services/app';
 import { Province, District, Ward } from '../services/app';
+import { createOrder } from '../services/orderService';
+import { useUserContext } from '../utils/authContext';
 
 const Checkout = () => {
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
@@ -30,14 +32,15 @@ const Checkout = () => {
     const [districtError, setDistrictError] = useState<string | null>(null);
     const [wardError, setWardError] = useState<string | null>(null);
     const [streetError, setStreetError] = useState<string | null>(null);
-    const handleSubmit = () => {
+    const { getUser } = useUserContext();
+    const navigate = useNavigate();
+    const handleSubmit = async () => {
         const isNameValid = validateName(name);
         const isPhoneValid = validatePhoneForm(phone);
         const isProvinceValid = validateProvince(selectedProvince);
         const isDistrictValid = validateDistrict(selectedDistrict);
         const isWardValid = validateWard(selectedWard);
         const isStreetValid = validateStreet(street);
-
         if (
             isNameValid &&
             isPhoneValid &&
@@ -50,16 +53,32 @@ const Checkout = () => {
             toast.success('Form has validation success');
             //send request here
             console.log(cartItems);
+            const provinceName = provinces.filter((item) => item.province_id == parseInt(selectedProvince));
+            const districtName = districts.filter((item) => item.district_id == parseInt(selectedDistrict));
+            const wardName = wards.filter((item) => item.ward_id == parseInt(selectedWard));
+            let items = cartItems.map((item) => ({
+                product_id: item.id,
+                quantity: item.quantity,
+            }));
+            console.log(getUser());
             const data = {
-                fullName: name,
-                phoneNumber: phone,
-                ward: selectedWard,
-                district: selectedDistrict,
-                province: selectedProvince,
+                user: '2',
+                total_price: 100000,
+                full_name: name,
+                phone_number: phone,
+                ward: wardName?.[0]?.ward_name,
+                district: provinceName?.[0]?.province_name,
+                province: districtName?.[0].district_name,
                 discountCode: discountCode,
                 email: email,
-                items: cartItems,
+                items: items,
             };
+            const order: any = await createOrder(data);
+            if (order?.data) {
+                console.log(order);
+                // navigate(order?.data?.orderUrl);
+                window.location = order?.data?.orderUrl;
+            }
             console.log(JSON.stringify(data));
         } else {
             toast.error('Form has validation errors');
