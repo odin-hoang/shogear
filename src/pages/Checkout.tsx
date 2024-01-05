@@ -25,11 +25,47 @@ const Checkout = () => {
     const [name, setName] = useState<string>('');
     const [nameError, setNameError] = useState<string | null>(null);
     const [phone, setPhone] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
     const [phoneError, setPhoneError] = useState<string | null>(null);
     const [provinceError, setProvinceError] = useState<string | null>(null);
     const [districtError, setDistrictError] = useState<string | null>(null);
     const [wardError, setWardError] = useState<string | null>(null);
     const [streetError, setStreetError] = useState<string | null>(null);
+    const handleSubmit = () => {
+        const isNameValid = validateName(name);
+        const isPhoneValid = validatePhoneForm(phone);
+        const isProvinceValid = validateProvince(selectedProvince);
+        const isDistrictValid = validateDistrict(selectedDistrict);
+        const isWardValid = validateWard(selectedWard);
+        const isStreetValid = validateStreet(street);
+
+        if (
+            isNameValid &&
+            isPhoneValid &&
+            isProvinceValid &&
+            isDistrictValid &&
+            isWardValid &&
+            isStreetValid &&
+            cart !== -1
+        ) {
+            toast.success('Form has validation success');
+            //send request here
+            console.log(cartItems);
+            const data = {
+                fullName: name,
+                phoneNumber: phone,
+                ward: selectedWard,
+                district: selectedDistrict,
+                province: selectedProvince,
+                discountCode: discountCode,
+                email: email,
+                items: cartItems,
+            };
+            console.log(JSON.stringify(data));
+        } else {
+            toast.error('Form has validation errors');
+        }
+    };
 
     const dispatch = useDispatch();
     useEffect(() => {
@@ -145,6 +181,7 @@ const Checkout = () => {
         const phoneRegex = /^(03|05|07|08|09)\d{8}$/;
         if (!phoneRegex.test(numericValue)) {
             setPhoneError('Invalid phone number format!');
+
             return false;
         }
         return true;
@@ -162,7 +199,6 @@ const Checkout = () => {
             setDistrictError('District is required!');
             return false;
         }
-
         setDistrictError(null);
         return true;
     };
@@ -181,28 +217,6 @@ const Checkout = () => {
         }
         setStreetError(null);
         return true;
-    };
-    const handleSubmit = () => {
-        const isNameValid = validateName(name);
-        const isPhoneValid = validatePhoneForm(phone);
-        const isProvinceValid = validateProvince(selectedProvince);
-        const isDistrictValid = validateDistrict(selectedDistrict);
-        const isWardValid = validateWard(selectedWard);
-        const isStreetValid = validateStreet(street);
-
-        if (
-            isNameValid &&
-            isPhoneValid &&
-            isProvinceValid &&
-            isDistrictValid &&
-            isWardValid &&
-            isStreetValid &&
-            cart !== -1
-        ) {
-            toast.success('Form has validation success');
-        } else {
-            toast.error('Form has validation errors');
-        }
     };
     return (
         <div className='checkout bg-white px-6 py-6'>
@@ -292,6 +306,9 @@ const Checkout = () => {
                                         className='mb-4 flex h-[40px] w-[100%] flex-col rounded-sm border-[0.05rem] border-solid border-[#d7d7d7] px-4'
                                         type='text'
                                         name='email'
+                                        onChange={(e) => {
+                                            setEmail(e.target.value);
+                                        }}
                                     />
                                 </div>
                             </div>
