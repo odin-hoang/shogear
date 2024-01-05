@@ -32,4 +32,24 @@ export const loginSchema = z.object({
     email: z.string().min(1, 'Tài khoản không được bỏ trống.'),
     password: z.string().min(8, 'Mật khẩu phải bao gồm ít nhất 8 ký tự.'),
 });
+export const categoryConfigSchema = z.object({
+    categoryName: z.string().min(1, 'Bạn chưa chọn loại sản phẩm'),
+    fields: z.array(
+        z.object({
+            fieldName: z.string().min(1, 'Tên trường không được để trống'),
+            fieldType: z.string().min(1, 'Loại trường không được để trống'),
+            options: z.custom(),
+        }),
+    ),
+});
+export const productSchema = z.object({
+    category_id: z.string(),
+    name: z.string().min(1, 'Trường này là bắt buộc'),
+    description: z.string().min(1, 'Trường này là bắt buộc'),
+    price: z.number(),
+    count: z.number(),
+    createDate: z.date(),
+    status: z.string(),
+    // images: z.custom().array(),
+});
 export type TLoginSchema = z.infer<typeof loginSchema>;

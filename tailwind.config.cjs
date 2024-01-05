@@ -2,7 +2,11 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires, no-undef
 const defaultTheme = require("tailwindcss/defaultTheme");
 export default {
-  content: ["./index.html", "./src/**/*.{html,js,ts,tsx}"],
+  content: [
+    "./index.html",
+    "./src/**/*.{html,js,ts,tsx}",
+    "./node_modules/react-tailwindcss-select/dist/index.esm.js",
+  ],
   theme: {
     // Define your custom CSS variables as Tailwind CSS classes
     extend: {
