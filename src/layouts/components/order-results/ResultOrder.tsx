@@ -11,7 +11,10 @@ const ResultOrder = () => {
         const fetch = async () => {
             try {
                 console.log('fetch status');
-                const bookingResult = await getOrderResult(paymentId);
+                const order: any = localStorage.getItem('order');
+                console.log(order);
+                const bookingResult = await getOrderResult(paymentId, order?.orderId);
+                console.log();
                 console.log(bookingResult);
             } catch (err) {
                 console.log(err);

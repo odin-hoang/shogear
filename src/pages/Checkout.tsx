@@ -78,6 +78,7 @@ const Checkout = () => {
             if (order?.data) {
                 console.log(order);
                 // navigate(order?.data?.orderUrl);
+                localStorage.setItem('order', JSON.stringify(order?.data));
                 window.location = order?.data?.orderUrl;
             }
             console.log(JSON.stringify(data));
@@ -502,13 +503,12 @@ const Checkout = () => {
                                 </Link>
                             </div>
                             {/* Chuyển hướng sau khi đặt hàng */}
-                            <Link
-                                to='/'
+                            <div
                                 className='continue-shopping m-auto flex w-[60%] justify-center border-[0.1rem] border-solid border-[#d7d7d7] px-4 py-2'
                                 onClick={() => handleSubmit()}
                             >
                                 <span className=''>PLACE ORDER</span>
-                            </Link>
+                            </div>
                         </aside>
                     </div>
                 </div>

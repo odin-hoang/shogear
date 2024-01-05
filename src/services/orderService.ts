@@ -24,11 +24,12 @@ export async function createOrder(data: any) {
     });
 }
 
-export async function getOrderResult(transId: any) {
+export async function getOrderResult(transId: any, orderId: any) {
     return new Promise(async (res, rej) => {
         try {
             const orderResult = await apiRequest.post('/payment/query', {
                 app_trans_id: transId,
+                order_id: orderId,
             });
             res(orderResult.data);
         } catch (err: any) {
