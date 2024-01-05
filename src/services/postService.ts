@@ -25,7 +25,7 @@ export async function uploadImage(images: any) {
                 },
             });
             console.log(data);
-            // res(result.data);
+            res(data.data);
         } catch (err: any) {
             console.log(err?.response);
             rej(err);
@@ -36,8 +36,12 @@ export async function uploadImage(images: any) {
 export async function postProduct(data: any) {
     return new Promise(async (res, rej) => {
         try {
-            const result = await apiRequest.post('/', data);
-
+            console.log(JSON.stringify(data));
+            const result = await apiRequest.post('/posts/create', {
+                ...data,
+                user: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA0NDMyMzY4LCJpYXQiOjE3MDQ0Mjg3NjgsImp0aSI6IjMzOTQyNjc0YTEzZTRlOTM4YjQ1OGEzMjM3NzA3NTc5IiwidXNlciI6MTR9.scnqCh2BA73T7-fhk1_yUQU18KJGSYy24y0TgXHl2zI',
+            });
+            console.log(result.data);
             res(result.data);
         } catch (err: any) {
             console.log(err?.response);
