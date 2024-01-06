@@ -1,10 +1,22 @@
 /** @type {import('tailwindcss').Config} */
+// eslint-disable-next-line @typescript-eslint/no-var-requires, no-undef
 const defaultTheme = require("tailwindcss/defaultTheme");
 export default {
-  content: ["./index.html", "./src/**/*.{html,js,ts,tsx}"],
+  content: [
+    "./index.html",
+    "./src/**/*.{html,js,ts,tsx}",
+    "./node_modules/react-tailwindcss-select/dist/index.esm.js",
+  ],
   theme: {
     // Define your custom CSS variables as Tailwind CSS classes
     extend: {
+      screens: {
+        min: "400px",
+        sm: "640px", // Đặt mức độ cho breakpoint sm
+        md: "768px", // Đặt mức độ cho breakpoint md
+        lg: "1024px", // Đặt mức độ cho breakpoint lg
+        xl: "1280px", // Đặt mức độ cho breakpoint xl
+      },
       fontFamily: {
         sf: ["SF-Pro", "Arial", "sans-serif", ...defaultTheme.fontFamily.sans],
       },
@@ -72,6 +84,7 @@ export default {
       },
       boxShadow: {
         custom: "0px 4px 20px rgba(22, 19, 69, 0.13)",
+        overflow: "0px 5px 15px rgba(0, 0, 0, 0.35)",
       },
       borderRadius: {
         custom: "10px",
@@ -102,6 +115,7 @@ export default {
       },
     },
   },
+  // eslint-disable-next-line no-undef
   plugins: [require("daisyui")],
 };
 
