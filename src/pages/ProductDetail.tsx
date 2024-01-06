@@ -1,10 +1,10 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ImageSlider from '../components/ImageSlider';
 import { numberWithCommas } from '../lib/scripts';
 import Button from '../components/Button';
 import { FaRegClock } from 'react-icons/fa';
 import { FiPhoneCall } from 'react-icons/fi';
-import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
+// import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
 import { BsCartPlusFill } from 'react-icons/bs';
 import { FaClockRotateLeft, FaLocationDot } from 'react-icons/fa6';
 import { FireIcon } from '../components/Icons';
@@ -35,6 +35,7 @@ const ProductDetail = () => {
     const product: ProductItem = state.item;
     // add product to cart
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const handleAddCart = (payload: CartItem) => {
         const cartItem: CartItem = {
             id: payload.id !== undefined ? payload.id : Date.now(),
@@ -59,14 +60,15 @@ const ProductDetail = () => {
     const banners = [
         {
             alt: 'Vui lễ lớn giảm nhiều hơn',
-            imageUrl:
-                'https://product.hstatic.net/200000722513/product/zero_msi_-_3_7723ef0bfeaa45c88b40cc0216973eb8_grande.png',
+            imageUrl: `${product.imageUrl}`,
             imageUrlMobile:
                 'https://cdn.nhathuoclongchau.com.vn/unsafe/1080x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/Banner_Web_Mobi640x320_e80f26f0ce.png',
         },
         {
             alt: 'Tiêm chủng vắc xin',
-            imageUrl: `${product.imageUrl}`,
+
+            imageUrl:
+                'https://product.hstatic.net/200000722513/product/zero_msi_-_3_7723ef0bfeaa45c88b40cc0216973eb8_grande.png',
             imageUrlMobile:
                 'https://cdn.nhathuoclongchau.com.vn/unsafe/1080x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/640x320_47f588ca90.jpg',
         },
@@ -92,10 +94,16 @@ const ProductDetail = () => {
                 'https://cdn.nhathuoclongchau.com.vn/unsafe/1080x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/Banner_Web_Mobi_640x320_b409a3d39c.png',
         },
     ];
+    type Tag = {
+        tag: string;
+        value: string;
+    };
+    const [tags, setTags] = useState<Tag[]>([]);
     const [phoneNumber, setPhoneNumber] = useState('0');
     useEffect(() => {
         apiRequest.get(`/products/${product.id}`).then((response) => {
-            console.log(response.data.user);
+            console.log({ field: response.data.fieldValues });
+            setTags(response.data.fieldValues);
             apiRequest.get(`/users/${response.data.user}`).then((response) => {
                 setPhoneNumber(response.data.phone);
             });
@@ -152,11 +160,26 @@ const ProductDetail = () => {
                                 <FaClockRotateLeft /> Đăng {product.postedAt}
                             </div>
                             {/* Tags will be added here */}
-                            <ul className='mb-10'>
-                                <li>ASUS</li>
-                            </ul>
+                            <table className='table'>
+                                <tbody>
+                                    {tags.map((tag) => (
+                                        <tr>
+                                            <td>{tag.tag}</td>
+                                            <td>{tag.value}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                             <div className='flex flex-col gap-2'>
-                                <Button variant={'fill'} size={'medium'} className='justify-center'>
+                                <Button
+                                    variant={'fill'}
+                                    size={'medium'}
+                                    className='justify-center'
+                                    onClick={() => {
+                                        handleAddCart({ ...product, quantity: 1 });
+                                        navigate('/cart');
+                                    }}
+                                >
                                     Mua ngay
                                 </Button>
                                 <Button
@@ -189,9 +212,9 @@ const ProductDetail = () => {
                                     <FiPhoneCall />
                                     Bấm để hiện số điện thoại
                                 </Button>
-                                <Button variant={'outlineBlue'}>
+                                {/* <Button variant={'outlineBlue'}>
                                     <IoChatbubbleEllipsesOutline /> Chat với người bán
-                                </Button>
+                                </Button> */}
                             </div>
                         </div>
                     </div>

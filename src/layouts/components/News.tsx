@@ -259,9 +259,10 @@ const News = ({}: NewsProps) => {
                             </div>
                         }
                     >
-                        <Button>
+                        <div></div>
+                        {/* <Button>
                             Danh mục <FaCaretDown />
-                        </Button>
+                        </Button> */}
                     </HeadlessTippy>
                     <Button onClick={handlePrice}>
                         Giá {filterer.byPrice === 'asc' ? <FaSortAmountUpAlt /> : <FaSortAmountDownAlt />}
