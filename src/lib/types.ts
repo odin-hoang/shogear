@@ -46,10 +46,10 @@ export const productSchema = z.object({
     category: z.string(),
     name: z.string().min(1, 'Trường này là bắt buộc'),
     description: z.string().min(1, 'Trường này là bắt buộc'),
-    price: z.number(),
-    count: z.number(),
+    price: z.number().min(1, 'Trường này là bắt buộc'),
+    count: z.number().min(1, 'Trường này là bắt buộc'),
     createDate: z.date(),
-    status: z.string(),
+    status: z.string().min(1, 'Trường này là bắt buộc'),
     fields: z.array(
         z
             .object({

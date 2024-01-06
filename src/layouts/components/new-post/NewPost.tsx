@@ -12,6 +12,9 @@ import FileUploader from './components/FileUploader';
 import { getCategories, postProduct, uploadImage } from '../../../services/postService';
 
 import { CloseSquareFilled } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const NewPost = () => {
     const form = useForm<z.infer<typeof productSchema>>({
         resolver: zodResolver(productSchema),
@@ -22,6 +25,7 @@ const NewPost = () => {
     const [category, setCategory] = useState<any>();
     const [fields, setFields] = useState<any>([]);
     const [fieldValues, setFieldsValue] = useState<any>([]);
+    const navigate = useNavigate();
     useEffect(() => {
         const fetch = async function () {
             const data = await getCategories();
@@ -53,16 +57,19 @@ const NewPost = () => {
                     file: item,
                     file_type: 'Photo',
                 }));
-                const product = await postProduct({
+                postProduct({
                     product: { ...values, is_available: true },
                     fields: values.fields,
-                    attatchments: [...newImages],
+                    attachments: [...newImages],
                     post_zone: 'HCM',
                     post_description: 'hehe',
-                });
-                if (product) {
-                    console.log(product);
-                }
+                })
+                    .then((data) => {
+                        toast.success('Thêm sản phẩm thành công');
+                    })
+                    .catch((err) => {
+                        toast.error('Đã có lỗi xảy ra');
+                    });
             }
         });
         //     console.log(values);
@@ -283,7 +290,7 @@ const NewPost = () => {
                                         }}
                                     />
                                     <img
-                                        className='h-[140px] object-cover'
+                                        className='h-[110px] object-cover'
                                         src={URL.createObjectURL(item)}
                                         alt='image'
                                     />
