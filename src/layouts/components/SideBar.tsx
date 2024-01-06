@@ -10,11 +10,12 @@ import {
     RamIcon,
 } from '../../components/Icons';
 import { FaAngleRight } from 'react-icons/fa';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '../../lib/utils/cn';
 import { useAppDispatch } from '../../app/hook';
 import { active, inactive } from '../../features/blur/blur-slice';
+import apiRequest from '../../services/request';
 const SideBar = () => {
     const navLinks = [
         {
@@ -271,6 +272,11 @@ const SideBar = () => {
         setActiveIndex(-1);
         dispatch(inactive());
     }
+    useEffect(() => {
+        apiRequest.get('/categories').then((response) => {
+            console.log(response.data);
+        });
+    }, []);
     return (
         <div
             className='relative z-20 hidden  shrink-0 rounded-md bg-white md:hidden lg:hidden xl:block '

@@ -1,8 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { cn } from '../lib/utils/cn';
 import { Link } from 'react-router-dom';
 import Card from './Card';
+import { Post } from '../layouts/components/News';
+import apiRequest from '../services/request';
 const Carousel = () => {
     const data = [
         {
@@ -99,12 +101,37 @@ const Carousel = () => {
             carouselRef.current.scrollLeft += side * cardRef.current?.offsetWidth;
         }
     };
+    const [posts, setPosts] = useState<Post[]>([]);
+    useEffect(() => {
+        apiRequest.get('/posts').then((response) => {
+            const datas: Post[] = [];
+            for (const post of response.data.results) {
+                const data: Post = {
+                    id: post.id,
+                    imageUrl: post.attachments.length
+                        ? post.attachments[0].file
+                        : 'https://product.hstatic.net/200000722513/product/km086w_facd6092154b4d769a04f1859a0c4b8e_medium.png',
+                    description: post.description,
+                    username: post.user,
+                    price: post.product.price,
+                    postedAt: post.updatedAt,
+                    zone: post.zone,
+                    name: post.product.name,
+                };
+                datas.push(data);
+            }
+            setPosts((prev) => {
+                const newPosts = [...prev, ...datas];
+                return newPosts.filter((post, index, self) => index === self.findIndex((p) => p.id === post.id));
+            });
+        });
+    }, []);
     return (
         // I will change this width
         <div className='relative px-6'>
             <div
                 className={cn(
-                    ' grid snap-x snap-mandatory auto-cols-[calc(100%/2-9px)] grid-flow-col items-center gap-4 overflow-hidden scroll-smooth md:auto-cols-[calc(100%/3-12px)] lg:auto-cols-[calc(100%/4-12px)]',
+                    ' grid snap-x snap-mandatory auto-cols-[calc(100%/2-9px)] grid-flow-col items-center gap-4 overflow-hidden scroll-smooth md:auto-cols-[calc(100%/3-12px)] lg:auto-cols-[calc(100%/5-12px)]',
                     cursor.isDragging && ' scroll-auto',
                 )}
                 onMouseMove={handleMouseMove}
@@ -112,7 +139,7 @@ const Carousel = () => {
                 onMouseUp={handleMouseUp}
                 ref={carouselRef}
             >
-                {data.map((item, index) => (
+                {posts.map((item, index) => (
                     <Link
                         to={'/'}
                         className={cn(
