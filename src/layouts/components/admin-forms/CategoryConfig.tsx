@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import InputFielldConfig from './components/InputFielldConfig';
 import { useForm } from 'react-hook-form';
 import { categoryConfigSchema } from '../../../lib/types';
@@ -79,7 +79,7 @@ const CategoryConfig = () => {
                     </Button>
                 </div>
 
-                {fieldConfigs.map((item: any, index: number) => {
+                {fieldConfigs.map((index: number) => {
                     return (
                         <>
                             <InputFielldConfig

@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { getOrderResult } from '../../../services/orderService';
 import OrderResultItem from './OrderResultItem';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../app/store';
+import { useDispatch } from 'react-redux';
+
 import { removeAllItems } from '../../../features/cart/cart-slice';
 
 const ResultOrder = () => {
     const params = useParams();
     const [result, setResult] = useState<any>();
-    const cartItems = useSelector((state: RootState) => state.cart.cartItems);
     const dispatch = useDispatch();
     useEffect(() => {
         const paymentId = params.paymentId;

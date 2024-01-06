@@ -1,5 +1,4 @@
-import { ReactNode, useContext, createContext, useState, useEffect, SetStateAction } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ReactNode, useContext, createContext, useState } from 'react';
 export const INITIAL_USER = {
     id: -1,
     username: '',
@@ -35,17 +34,10 @@ export const AuthContext = createContext<IContextType>({
         isAdmin: false,
     },
     isLoading: false,
-    setUser: function (value: SetStateAction<IUser>): void {
-        throw new Error('Function not implemented.');
-    },
+    setUser: () => {},
     isAuthenticated: false,
-    setIsAuthenticated: function (value: SetStateAction<boolean>): void {
-        throw new Error('Function not implemented.');
-    },
-    logIn: function (values: any): void {
-        console.log('hehehe');
-        throw new Error('Function not implemented.');
-    },
+    setIsAuthenticated: () => {},
+    logIn: () => {},
     logOut: function (): void {
         throw new Error('Function not implemented.');
     },

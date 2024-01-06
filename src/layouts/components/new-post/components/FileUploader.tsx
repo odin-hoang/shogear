@@ -1,16 +1,14 @@
-import React, { useCallback, useState } from 'react';
-import { useDropzone, FileWithPath } from 'react-dropzone';
-import Button from '../../../../components/Button';
+import { useDropzone } from 'react-dropzone';
 
 type FileUploaderProps = {
     fieldChange: Function;
     field: any;
 };
 const FileUploader = ({ fieldChange, field }: FileUploaderProps) => {
-    type FileUploaderProps = {
-        fieldChange: Function;
-        field: FileWithPath[]; // Change Array<any>[] to FileWithPath[]
-    };
+    // type FileUploaderProps = {
+    //     fieldChange: Function;
+    //     field: FileWithPath[]; // Change Array<any>[] to FileWithPath[]
+    // };
 
     const onDrop = (acceptedFiles: any) => {
         const updateFiles = [...field, ...acceptedFiles];

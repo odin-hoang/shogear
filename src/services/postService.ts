@@ -1,7 +1,7 @@
 import axios from 'axios';
 import apiRequest from './request';
 
-export async function getFields(category_id: any) {
+export async function getFields() {
     try {
         await apiRequest.get('/product');
     } catch (err) {
@@ -55,7 +55,7 @@ export async function postProduct(data: any) {
 }
 
 export async function getCategories() {
-    return new Promise(async (res, rej) => {
+    return new Promise(async (res) => {
         try {
             const categories = await apiRequest.get('/categories');
             console.log(categories.data);
@@ -65,4 +65,3 @@ export async function getCategories() {
         }
     });
 }
-

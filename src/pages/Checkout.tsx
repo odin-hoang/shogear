@@ -1,7 +1,7 @@
 import bgImage from '../assets/images/page-cart-bg.jpg';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
 import { numberWithCommas } from '../lib/scripts';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,7 +34,6 @@ const Checkout = () => {
     const [wardError, setWardError] = useState<string | null>(null);
     const [streetError, setStreetError] = useState<string | null>(null);
     const { getUser } = useUserContext();
-    const navigate = useNavigate();
     const handleSubmit = async () => {
         const isNameValid = validateName(name);
         const isPhoneValid = validatePhoneForm(phone);
