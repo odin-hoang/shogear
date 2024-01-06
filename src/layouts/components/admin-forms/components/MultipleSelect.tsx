@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Select from 'react-tailwindcss-select';
+// import Select from 'react-tailwindcss-select';
 import { Option } from 'react-tailwindcss-select/dist/components/type';
 import { MultiSelect } from 'react-multi-select-component';
 

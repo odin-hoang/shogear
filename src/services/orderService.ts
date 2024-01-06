@@ -1,7 +1,7 @@
 import apiRequest from './request';
 
 export async function getCategories() {
-    return new Promise(async (res, rej) => {
+    return new Promise(async (res) => {
         try {
             const categories = await apiRequest.get('/categories');
             console.log(categories);
@@ -13,7 +13,7 @@ export async function getCategories() {
 }
 
 export async function createOrder(data: any) {
-    return new Promise(async (res, rej) => {
+    return new Promise(async (res) => {
         try {
             console.log(JSON.stringify(data));
             const newOrder = await apiRequest.post('/payment/create-order', data);
@@ -38,5 +38,3 @@ export async function getOrderResult(transId: string, orderId: string) {
         }
     });
 }
-
-

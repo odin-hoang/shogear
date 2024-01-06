@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { productSchema } from '../../../lib/types';
 import { z } from 'zod';
 import Button from '../../../components/Button';
 import { AiOutlineLoading } from 'react-icons/ai';
-import { LuLogIn } from 'react-icons/lu';
+
 import { cn } from '../../../lib/utils/cn';
 import FileUploader from './components/FileUploader';
-import { FileWithPath } from 'react-dropzone';
+
 import { getCategories, postProduct, uploadImage } from '../../../services/postService';
-import { FaFontAwesome } from 'react-icons/fa';
+
 import { CloseSquareFilled } from '@ant-design/icons';
 const NewPost = () => {
     const form = useForm<z.infer<typeof productSchema>>({
         resolver: zodResolver(productSchema),
         defaultValues: {},
     });
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitting] = useState(false);
     const [categories, setCategories] = useState<any>([]);
     const [category, setCategory] = useState<any>();
     const [fields, setFields] = useState<any>([]);
@@ -36,7 +36,7 @@ const NewPost = () => {
         setFields(selectedCategory[0]?.fields);
         console.log(selectedCategory[0]?.fields);
         const fieldLength = selectedCategory[0]?.fields.length;
-        const valuesInit = Array.from({ length: fieldLength }).map((item, index: number) => ({
+        const valuesInit = Array.from({ length: fieldLength }).map((_, index: number) => ({
             field: selectedCategory[0]?.fields[index]?.name,
             value: selectedCategory[0]?.fields[index]?.fieldType != 1 ? 'default' : '',
         }));

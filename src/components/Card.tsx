@@ -20,9 +20,9 @@ interface CardProps {
 }
 const Card = ({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    id,
+    // id,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    quantity,
+    // quantity,
     imageUrl,
     username,
     avatarUrl = 'https://picsum.photos/200',

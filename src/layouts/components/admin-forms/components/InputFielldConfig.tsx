@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MultiSelect, Option } from 'react-multi-select-component';
 import './menu.css';
-import Button from '../../../../components/Button';
-import { UseFormReturn, useForm } from 'react-hook-form';
-import { categoryConfigSchema } from '../../../../lib/types';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+// import Button from '../../../../components/Button';
+import { UseFormReturn } from 'react-hook-form';
+// import { categoryConfigSchema } from '../../../../lib/types';
+// import { zodResolver } from '@hookform/resolvers/zod';
+// import { z } from 'zod';
 import { FaTrash } from 'react-icons/fa';
 const fieldTypes = [
     {
@@ -43,7 +43,6 @@ const InputFieldConfig = ({
     setFieldOptions,
     deleteField,
     index,
-    form,
 }: {
     setFieldName: Function;
     setFieldType: Function;
@@ -58,7 +57,7 @@ const InputFieldConfig = ({
     const [selectFields, setSelectFields] = useState<Option[]>([]);
     const handleFieldTypeChange = (value: string) => {
         console.log('data');
-        setSelectedFieldType((prev) => value);
+        setSelectedFieldType(() => value);
         setFieldType(index, value);
         setSelectFields([]);
         setFieldOptions(index, []);

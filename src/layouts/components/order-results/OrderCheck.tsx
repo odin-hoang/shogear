@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import apiRequest from '../../../services/request';
-import { useUserContext } from '../../../utils/authContext';
+// import { useUserContext } from '../../../utils/authContext';
 import { numberWithCommas } from '../../../lib/scripts';
 import Button from '../../../components/Button';
 import { AiOutlineLoading } from 'react-icons/ai';
@@ -48,8 +48,8 @@ function getStatusString(status: number): string {
 const OrderCheck = () => {
     const [orders, setOrders] = useState<Order[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const { getUser } = useUserContext();
-    const user = getUser();
+    // const { getUser } = useUserContext();
+    // const user = getUser();
     useEffect(() => {
         setIsLoading(true);
         apiRequest.get<Order[]>(`/get/orders/${2}`).then((response) => {
@@ -63,7 +63,7 @@ const OrderCheck = () => {
     }, []);
     const handleDeleteOrder = (order_id: number) => {
         setIsLoading(true);
-        apiRequest.delete(`/orders/${order_id}`).then((response) => {
+        apiRequest.delete(`/orders/${order_id}`).then(() => {
             setIsLoading(false);
             alert('Đã xoá thành công order!');
             window.location.reload();

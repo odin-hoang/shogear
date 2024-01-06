@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { numberWithCommas } from '../../../lib/scripts';
 import { getPostDetail } from '../../../services/productService';
 
