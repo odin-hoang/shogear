@@ -25,7 +25,7 @@ export async function uploadImage(images: any) {
                 },
             });
             console.log(data);
-            // res(result.data);
+            res(data.data);
         } catch (err: any) {
             console.log(err?.response);
             rej(err);
@@ -36,8 +36,16 @@ export async function uploadImage(images: any) {
 export async function postProduct(data: any) {
     return new Promise(async (res, rej) => {
         try {
-            const result = await apiRequest.post('/', data);
-
+            console.log(JSON.stringify(data));
+            const user = localStorage.getItem('userToken');
+            if (!user) {
+                rej('Not found user token in file postService.ts when request create post');
+            }
+            const result = await apiRequest.post('/posts/create', {
+                ...data,
+                user: user,
+            });
+            console.log(result.data);
             res(result.data);
         } catch (err: any) {
             console.log(err?.response);
@@ -49,11 +57,12 @@ export async function postProduct(data: any) {
 export async function getCategories() {
     return new Promise(async (res, rej) => {
         try {
-            const categories = await apiRequest.get('/api/categories');
-            console.log(categories);
-            res(categories.data);
+            const categories = await apiRequest.get('/categories');
+            console.log(categories.data);
+            res(categories.data?.results);
         } catch (err) {
             console.log(err);
         }
     });
 }
+

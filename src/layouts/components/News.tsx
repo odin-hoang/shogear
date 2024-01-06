@@ -10,12 +10,14 @@ import {
 import { CiBoxList, CiGrid41 } from 'react-icons/ci';
 import { Link } from 'react-router-dom';
 import { cn } from '../../lib/utils/cn';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import toHyphenString from '../../lib/toHyphenString';
 import Card from '../../components/Card';
 import HeadlessTippy from '../../components/HeadlessTippy';
 import { TbBrandProducthunt, TbBuildingCommunity } from 'react-icons/tb';
+import apiRequest from '../../services/request';
+import axios from 'axios';
 type NewsProps = object;
 type InitialFilterer = {
     byZone?: string | null;
@@ -200,6 +202,73 @@ const News = ({}: NewsProps) => {
         'Phụ kiện',
         'Chuột + Lót chuột',
     ];
+    type Post = {
+        id: number;
+        name: string;
+        imageUrl: string;
+        price: number;
+        description: string;
+        username: string;
+        postedAt: string;
+        zone: string;
+        isUsed?: boolean;
+    };
+    const [urls, setUrls] = useState('');
+    const [posts, setPosts] = useState<Post[]>([]);
+    useEffect(() => {
+        apiRequest.get('/posts').then((response) => {
+            const datas: Post[] = [];
+            for (const post of response.data.results) {
+                const data: Post = {
+                    id: post.id,
+                    imageUrl: post.attachments.length
+                        ? post.attachments[0].file
+                        : 'https://product.hstatic.net/200000722513/product/km086w_facd6092154b4d769a04f1859a0c4b8e_medium.png',
+                    description: post.description,
+                    username: post.user,
+                    price: post.product.price,
+                    postedAt: post.updatedAt,
+                    zone: post.zone,
+                    name: post.product.name,
+                };
+                datas.push(data);
+            }
+            setPosts((prev) => {
+                const newPosts = [...prev, ...datas];
+                return newPosts.filter((post, index, self) => index === self.findIndex((p) => p.id === post.id));
+            });
+            console.log({ data: response.data });
+            setUrls(response.data.next);
+        });
+    }, []);
+    const handleViewMore = () => {
+        if (!urls) return;
+        console.log(urls);
+        axios.get(urls).then((response) => {
+            const datas: Post[] = [];
+            for (const post of response.data.results) {
+                const data: Post = {
+                    id: post.id,
+                    imageUrl: post.attachments.length
+                        ? post.attachments[0].file
+                        : 'https://product.hstatic.net/200000722513/product/km086w_facd6092154b4d769a04f1859a0c4b8e_medium.png',
+                    description: post.description,
+                    username: post.user,
+                    price: post.product.price,
+                    postedAt: post.updatedAt,
+                    zone: post.zone,
+                    name: post.product.name,
+                };
+                datas.push(data);
+            }
+            setPosts((prev) => {
+                const newPosts = [...prev, ...datas];
+                return newPosts.filter((post, index, self) => index === self.findIndex((p) => p.id === post.id));
+            });
+            console.log({ data: response.data });
+            setUrls(response.data.next);
+        });
+    };
     const zoneTags = ['TP Hồ Chí Minh', 'Đà Nẵng', 'Cao Bằng', 'Hà Nội', 'Long An', 'Kiên Giang'];
     // default layout = grid
     const [layout, setLayout] = useState(false);
@@ -243,6 +312,7 @@ const News = ({}: NewsProps) => {
         if (type === 'byProductTag') setFilterer((prev) => ({ ...prev, byProductTag: [] }));
         handleApplyFilter();
     };
+    console.log(posts);
     return (
         <div className='min-h-screen  rounded-md bg-white p-4'>
             {/* username and filterer */}
@@ -357,7 +427,7 @@ const News = ({}: NewsProps) => {
             {layout ? (
                 // List
                 <div className='flex flex-col gap-2'>
-                    {data.map((item, index) => (
+                    {posts.map((item, index) => (
                         <div className={cn(' flex gap-4 rounded-sm border p-2')} key={index}>
                             <Card
                                 id={item.id}
@@ -381,7 +451,7 @@ const News = ({}: NewsProps) => {
             ) : (
                 // Grid
                 <div className='grid grid-cols-2 gap-4 sm:grid-cols-3  lg:grid-cols-5'>
-                    {data.map((item, index) => (
+                    {posts.map((item, index) => (
                         <Link
                             to={`/products/${toHyphenString(item.name)}`}
                             state={{ item }}
@@ -404,12 +474,17 @@ const News = ({}: NewsProps) => {
                     ))}
                 </div>
             )}
-            <div className='mt-2 flex cursor-pointer flex-col items-center p-2 text-center font-bold'>
-                Xem thêm{' '}
-                <span>
-                    <FaAngleDoubleDown />
-                </span>
-            </div>
+            {urls && (
+                <div
+                    className='mt-2 flex cursor-pointer flex-col items-center p-2 text-center font-bold'
+                    onClick={handleViewMore}
+                >
+                    Xem thêm{' '}
+                    <span>
+                        <FaAngleDoubleDown />
+                    </span>
+                </div>
+            )}
         </div>
     );
 };

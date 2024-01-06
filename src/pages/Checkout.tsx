@@ -1,13 +1,15 @@
 import bgImage from '../assets/images/page-cart-bg.jpg';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
 import { numberWithCommas } from '../lib/scripts';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../app/store';
 import { apiGetPublicProvinces, apiGetPublicDistrict, apiGetPublicWard } from '../services/app';
 import { Province, District, Ward } from '../services/app';
+import { createOrder } from '../services/orderService';
+import { useUserContext } from '../utils/authContext';
 import { updateShippingFee } from '../features/cart/cart-slice';
 
 const Checkout = () => {
@@ -25,11 +27,65 @@ const Checkout = () => {
     const [name, setName] = useState<string>('');
     const [nameError, setNameError] = useState<string | null>(null);
     const [phone, setPhone] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
     const [phoneError, setPhoneError] = useState<string | null>(null);
     const [provinceError, setProvinceError] = useState<string | null>(null);
     const [districtError, setDistrictError] = useState<string | null>(null);
     const [wardError, setWardError] = useState<string | null>(null);
     const [streetError, setStreetError] = useState<string | null>(null);
+    const { getUser } = useUserContext();
+    const navigate = useNavigate();
+    const handleSubmit = async () => {
+        const isNameValid = validateName(name);
+        const isPhoneValid = validatePhoneForm(phone);
+        const isProvinceValid = validateProvince(selectedProvince);
+        const isDistrictValid = validateDistrict(selectedDistrict);
+        const isWardValid = validateWard(selectedWard);
+        const isStreetValid = validateStreet(street);
+        if (
+            isNameValid &&
+            isPhoneValid &&
+            isProvinceValid &&
+            isDistrictValid &&
+            isWardValid &&
+            isStreetValid &&
+            cart !== -1
+        ) {
+            toast.success('Form has validation success');
+            //send request here
+            console.log(cartItems);
+            const provinceName = provinces.filter((item) => item.province_id == parseInt(selectedProvince));
+            const districtName = districts.filter((item) => item.district_id == parseInt(selectedDistrict));
+            const wardName = wards.filter((item) => item.ward_id == parseInt(selectedWard));
+            let items = cartItems.map((item) => ({
+                product_id: item.id,
+                quantity: item.quantity,
+            }));
+            console.log(getUser());
+            const data = {
+                user: '2',
+                total_price: 100000,
+                full_name: name,
+                phone_number: phone,
+                ward: wardName?.[0]?.ward_name,
+                district: provinceName?.[0]?.province_name,
+                province: districtName?.[0].district_name,
+                discountCode: discountCode,
+                email: email,
+                items: items,
+            };
+            const order: any = await createOrder(data);
+            if (order?.data) {
+                console.log(order);
+                // navigate(order?.data?.orderUrl);
+                localStorage.setItem('order', JSON.stringify(order?.data));
+                window.location = order?.data?.orderUrl;
+            }
+            console.log(JSON.stringify(data));
+        } else {
+            toast.error('Form has validation errors');
+        }
+    };
 
     const dispatch = useDispatch();
     useEffect(() => {
@@ -145,6 +201,7 @@ const Checkout = () => {
         const phoneRegex = /^(03|05|07|08|09)\d{8}$/;
         if (!phoneRegex.test(numericValue)) {
             setPhoneError('Invalid phone number format!');
+
             return false;
         }
         return true;
@@ -162,7 +219,6 @@ const Checkout = () => {
             setDistrictError('District is required!');
             return false;
         }
-
         setDistrictError(null);
         return true;
     };
@@ -182,28 +238,11 @@ const Checkout = () => {
         setStreetError(null);
         return true;
     };
-    const handleSubmit = () => {
-        const isNameValid = validateName(name);
-        const isPhoneValid = validatePhoneForm(phone);
-        const isProvinceValid = validateProvince(selectedProvince);
-        const isDistrictValid = validateDistrict(selectedDistrict);
-        const isWardValid = validateWard(selectedWard);
-        const isStreetValid = validateStreet(street);
-
-        if (
-            isNameValid &&
-            isPhoneValid &&
-            isProvinceValid &&
-            isDistrictValid &&
-            isWardValid &&
-            isStreetValid &&
-            cart !== -1
-        ) {
-            toast.success('Form has validation success');
-        } else {
-            toast.error('Form has validation errors');
-        }
-    };
+    // useEffect(() => {
+    //     if (cartItems.length == 0) {
+    //         navigate('cart');
+    //     }
+    // }, [cartItems]);
     return (
         <div className='checkout bg-white px-6 py-6'>
             <div className='bg-cover bg-center p-0' style={{ backgroundImage: `url(${bgImage})` }}>
@@ -292,6 +331,9 @@ const Checkout = () => {
                                         className='mb-4 flex h-[40px] w-[100%] flex-col rounded-sm border-[0.05rem] border-solid border-[#d7d7d7] px-4'
                                         type='text'
                                         name='email'
+                                        onChange={(e) => {
+                                            setEmail(e.target.value);
+                                        }}
                                     />
                                 </div>
                             </div>
@@ -466,13 +508,12 @@ const Checkout = () => {
                                 </Link>
                             </div>
                             {/* Chuyển hướng sau khi đặt hàng */}
-                            <Link
-                                to='/'
+                            <div
                                 className='continue-shopping m-auto flex w-[60%] justify-center border-[0.1rem] border-solid border-[#d7d7d7] px-4 py-2'
                                 onClick={() => handleSubmit()}
                             >
                                 <span className=''>PLACE ORDER</span>
-                            </Link>
+                            </div>
                         </aside>
                     </div>
                 </div>
