@@ -43,6 +43,7 @@ const Header = () => {
             icon: Icons.order,
             name1: 'Tra cứu',
             name2: 'đơn hàng',
+            to: '/order/check',
         },
         {
             icon: Icons.shopcart,
@@ -238,13 +239,15 @@ const Header = () => {
                                             </div>
                                         </div>
                                     ) : (
-                                        <Action
-                                            name1={item.name1}
-                                            name2={item.name2}
-                                            icon={item.icon}
-                                            key={index}
-                                            count={item.count}
-                                        />
+                                        <Link to={item.to || ''}>
+                                            <Action
+                                                name1={item.name1}
+                                                name2={item.name2}
+                                                icon={item.icon}
+                                                key={index}
+                                                count={item.count}
+                                            />
+                                        </Link>
                                     )}
                                 </React.Fragment>
                             );

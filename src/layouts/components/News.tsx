@@ -24,173 +24,20 @@ type InitialFilterer = {
     byProductTag: string[];
     byPrice?: 'asc' | 'desc';
 };
+export type Post = {
+    id: number;
+    name: string;
+    imageUrl: string;
+    price: number;
+    description: string;
+    username: string;
+    postedAt: string;
+    zone: string;
+    isUsed?: boolean;
+    category: string;
+};
 // eslint-disable-next-line no-empty-pattern
 const News = ({}: NewsProps) => {
-    // Data
-    const data = [
-        {
-            id: 1,
-            imageUrl:
-                'https://product.hstatic.net/200000722513/product/km086w_facd6092154b4d769a04f1859a0c4b8e_medium.png',
-            username: 'David Smith',
-            price: 120000,
-            postedAt: '1 phút trước',
-            zone: 'Hồ Chí Minh',
-            name: 'Laptop gaming Acer Aspire 7 A715 76G 59MW',
-            isUsed: false,
-        },
-        {
-            id: 2,
-            imageUrl:
-                'https://product.hstatic.net/200000722513/product/latitude-3520-p108f001-70280538-fix_83b4c85f06d145199d87d838dc9eca04_medium.png',
-            username: 'Todo Smith',
-            price: 20890000,
-            name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
-            postedAt: '2 ngày trước',
-            zone: 'Bà Rịa - Vũng Tàu',
-            isUsed: true,
-        },
-        {
-            id: 3,
-            imageUrl:
-                'https://product.hstatic.net/200000722513/product/lg-gram-2023-fix_28f08b20a1724869a1d5da4920697371_medium.png',
-            username: 'Kelvin Smith',
-            price: 35490000,
-            postedAt: '5 phút trước',
-            name: 'Laptop LG Gram 2023 14Z90R GAH53A5',
-            zone: 'Thái Nguyên',
-            isUsed: false,
-        },
-        {
-            id: 4,
-            imageUrl: 'https://down-vn.img.susercontent.com/file/bc3903834d250fcdadf0e5c6b5761310',
-            username: 'Kelvin Smith',
-            price: 340000000,
-            postedAt: '2 giờ trước',
-            name: '[Hàng chính hãng] Bàn phím Dell KB216',
-            zone: 'Hà Nội',
-            isUsed: true,
-        },
-        {
-            id: 5,
-            imageUrl:
-                'https://product.hstatic.net/200000722513/product/vt200_1_compressed_c0a3639b9b2948bb89d600ce0640ba0d_08706b04e66d45aeb746128bfca9a29d_grande.jpg',
-            username: 'Kelvin Smith',
-            price: 120000,
-            postedAt: '1 tuần trước',
-            name: 'Chuột Rapoo Gaming VT200 RGB',
-            zone: 'Đà Nẵng',
-            isUsed: false,
-        },
-        {
-            id: 6,
-            imageUrl: 'https://picsum.photos/200/270',
-            username: 'Kelvin Smith',
-            price: 120000,
-            name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
-            postedAt: '1 tuần trước',
-            zone: 'Đà Nẵng',
-            isUsed: false,
-        },
-        {
-            id: 5,
-            imageUrl: 'https://picsum.photos/200/280',
-            username: 'Kelvin Smith',
-            price: 120000,
-            name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
-        },
-        {
-            id: 5,
-            imageUrl: 'https://picsum.photos/200/281',
-            username: 'Kelvin Smith',
-            price: 120000,
-            name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
-        },
-        {
-            id: 5,
-            imageUrl: 'https://picsum.photos/200/282',
-            username: 'Kelvin Smith',
-            price: 120000,
-            name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
-        },
-        {
-            id: 5,
-            imageUrl: 'https://picsum.photos/200/283',
-            username: 'Kelvin Smith',
-            price: 120000,
-            name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
-        },
-        {
-            id: 5,
-            imageUrl: 'https://picsum.photos/200/284',
-            username: 'Kelvin Smith',
-            price: 120000,
-            name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
-        },
-        {
-            id: 5,
-            imageUrl: 'https://picsum.photos/200/285',
-            username: 'Kelvin Smith',
-            price: 120000,
-            name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
-        },
-        {
-            id: 5,
-            imageUrl: 'https://picsum.photos/200/286',
-            username: 'Kelvin Smith',
-            price: 120000,
-            name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
-        },
-        {
-            id: 5,
-            imageUrl: 'https://picsum.photos/200/221',
-            username: 'Kelvin Smith',
-            price: 120000,
-            name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
-        },
-        {
-            id: 5,
-            imageUrl: 'https://picsum.photos/200/222',
-            username: 'Kelvin Smith',
-            price: 120000,
-            name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
-        },
-        {
-            id: 5,
-            imageUrl: 'https://picsum.photos/200/223',
-            username: 'Kelvin Smith',
-            price: 120000,
-            name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
-        },
-        {
-            id: 5,
-            imageUrl: 'https://picsum.photos/200/401',
-            username: 'Kelvin Smith',
-            price: 120000,
-            name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
-        },
-        {
-            id: 5,
-            imageUrl: 'https://picsum.photos/200/223',
-            username: 'Kelvin Smith',
-            price: 120000,
-            name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
-        },
-        {
-            id: 5,
-            imageUrl: 'https://picsum.photos/200/401',
-            username: 'Kelvin Smith',
-            price: 120000,
-            name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
-        },
-        {
-            id: 5,
-            imageUrl: 'https://picsum.photos/200/223',
-            username: 'Kelvin Smith',
-            price: 120000,
-            name: 'PC GVN x ASUS EVANGELION 2 (Intel i9-14900K/ VGA RTX 4090) (Powered by ASUS)',
-        },
-    ];
     const productTags = [
         'Laptop',
         'Laptop Gaming',
@@ -202,19 +49,10 @@ const News = ({}: NewsProps) => {
         'Phụ kiện',
         'Chuột + Lót chuột',
     ];
-    type Post = {
-        id: number;
-        name: string;
-        imageUrl: string;
-        price: number;
-        description: string;
-        username: string;
-        postedAt: string;
-        zone: string;
-        isUsed?: boolean;
-    };
+
     const [urls, setUrls] = useState('');
     const [posts, setPosts] = useState<Post[]>([]);
+    const [filterPost, setFilterPost] = useState<Post[]>([]);
     useEffect(() => {
         apiRequest.get('/posts').then((response) => {
             const datas: Post[] = [];
@@ -230,6 +68,7 @@ const News = ({}: NewsProps) => {
                     postedAt: post.updatedAt,
                     zone: post.zone,
                     name: post.product.name,
+                    category: post.product.category,
                 };
                 datas.push(data);
             }
@@ -258,6 +97,7 @@ const News = ({}: NewsProps) => {
                     postedAt: post.updatedAt,
                     zone: post.zone,
                     name: post.product.name,
+                    category: post.product.category,
                 };
                 datas.push(data);
             }
@@ -265,11 +105,13 @@ const News = ({}: NewsProps) => {
                 const newPosts = [...prev, ...datas];
                 return newPosts.filter((post, index, self) => index === self.findIndex((p) => p.id === post.id));
             });
+            setFilterPost(posts);
+
             console.log({ data: response.data });
             setUrls(response.data.next);
         });
     };
-    const zoneTags = ['TP Hồ Chí Minh', 'Đà Nẵng', 'Cao Bằng', 'Hà Nội', 'Long An', 'Kiên Giang'];
+    const zoneTags = ['TP. Hồ Chí Minh', 'Đà Nẵng', 'Cao Bằng', 'Hà Nội', 'Long An', 'Kiên Giang'];
     // default layout = grid
     const [layout, setLayout] = useState(false);
 
@@ -304,13 +146,16 @@ const News = ({}: NewsProps) => {
         }
     }
     const handleApplyFilter = () => {
-        // TODO: send request filter to server
-        console.log(filterer);
+        const data = posts.filter((post) => post.zone === filterer.byZone);
+        setFilterPost(data);
+        console.log({ filter: filterPost });
     };
     const handleDeleteFilter = (type: 'byZone' | 'byProductTag') => {
-        if (type === 'byZone') setFilterer((prev) => ({ ...prev, byZone: null }));
+        if (type === 'byZone') {
+            setFilterer((prev) => ({ ...prev, byZone: null }));
+            setFilterPost(posts);
+        }
         if (type === 'byProductTag') setFilterer((prev) => ({ ...prev, byProductTag: [] }));
-        handleApplyFilter();
     };
     console.log(posts);
     return (
@@ -427,7 +272,7 @@ const News = ({}: NewsProps) => {
             {layout ? (
                 // List
                 <div className='flex flex-col gap-2'>
-                    {posts.map((item, index) => (
+                    {filterPost.map((item, index) => (
                         <div className={cn(' flex gap-4 rounded-sm border p-2')} key={index}>
                             <Card
                                 id={item.id}
@@ -451,7 +296,7 @@ const News = ({}: NewsProps) => {
             ) : (
                 // Grid
                 <div className='grid grid-cols-2 gap-4 sm:grid-cols-3  lg:grid-cols-5'>
-                    {posts.map((item, index) => (
+                    {filterPost.map((item, index) => (
                         <Link
                             to={`/products/${toHyphenString(item.name)}`}
                             state={{ item }}

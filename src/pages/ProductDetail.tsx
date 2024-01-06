@@ -10,6 +10,8 @@ import { FaClockRotateLeft, FaLocationDot } from 'react-icons/fa6';
 import { FireIcon } from '../components/Icons';
 import { useAppDispatch } from '../app/hook';
 import { addToCart } from '../features/cart/cart-slice';
+import { useEffect, useState } from 'react';
+import apiRequest from '../services/request';
 interface ProductItem {
     id: number;
     imageUrl: string;
@@ -90,6 +92,18 @@ const ProductDetail = () => {
                 'https://cdn.nhathuoclongchau.com.vn/unsafe/1080x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/Banner_Web_Mobi_640x320_b409a3d39c.png',
         },
     ];
+    const [phoneNumber, setPhoneNumber] = useState('0');
+    useEffect(() => {
+        apiRequest.get(`/products/${product.id}`).then((response) => {
+            console.log(response.data.user);
+            apiRequest.get(`/users/${response.data.user}`).then((response) => {
+                setPhoneNumber(response.data.phone);
+            });
+        });
+    }, [product.id]);
+    const handleShowPhoneNumber = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.currentTarget.textContent = phoneNumber;
+    };
     return (
         <div className='bg-bodyBg-default px-6 py-6 '>
             <div className='mx-auto max-w-[1200px]'>
@@ -116,26 +130,20 @@ const ProductDetail = () => {
                             <div className='price mb-2 text-2xl'>{numberWithCommas(product.price)}</div>
                             <div className='flex w-full items-center'>
                                 {product.isUsed ? (
-                                    <span className='bg-white/50 flex flex-1 items-center backdrop-blur-sm'>
+                                    <span className='flex flex-1 items-center bg-white/50 backdrop-blur-sm'>
                                         <span className='tag-used rounded-tl-md'>Đã qua sử dụng</span>
                                         <span className='tag-time-used'>12 năm</span>
                                     </span>
                                 ) : (
-                                    <span className='tag-like-new rounded-tl-md flex items-center gap-2'>
+                                    <span className='tag-like-new flex items-center gap-2 rounded-tl-md'>
                                         <FireIcon />
                                         Like new 99%
                                     </span>
                                 )}
                             </div>
 
-                            <p className='rounded-md rounded-tl-none shadow-lg relative mb-4 whitespace-pre-line border p-2 text-lg shadow-bodyBg-default'>
+                            <p className='relative mb-4  rounded-md rounded-tl-none border p-2 text-lg shadow-lg shadow-bodyBg-default'>
                                 {product.description}
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro vitae similique culpa
-                                magni excepturi molestiae consequuntur obcaecati nostrum ea aliquam. Dolorum nihil eos
-                                molestias vitae cupiditate laboriosam illo sed nesciunt! Lorem ipsum dolor sit amet
-                                consectetur adipisicing elit. Voluptas, nesciunt quis unde optio iusto dolores harum
-                                repellendus quo dolorum voluptatum id quod eveniet, ipsam veniam enim perferendis.
-                                Voluptatum, necessitatibus provident.
                             </p>
                             <div className='icon-text'>
                                 <FaLocationDot /> {product.zone}
@@ -177,7 +185,7 @@ const ProductDetail = () => {
                             </div>
 
                             <div className='flex flex-col items-center gap-2'>
-                                <Button variant={'fillBlue'} className='flex'>
+                                <Button variant={'fillBlue'} className='flex' onClick={(e) => handleShowPhoneNumber(e)}>
                                     <FiPhoneCall />
                                     Bấm để hiện số điện thoại
                                 </Button>
