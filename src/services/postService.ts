@@ -37,9 +37,13 @@ export async function postProduct(data: any) {
     return new Promise(async (res, rej) => {
         try {
             console.log(JSON.stringify(data));
+            const user = localStorage.getItem('userToken');
+            if (!user) {
+                rej('Not found user token in file postService.ts when request create post');
+            }
             const result = await apiRequest.post('/posts/create', {
                 ...data,
-                user: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA0NDMyMzY4LCJpYXQiOjE3MDQ0Mjg3NjgsImp0aSI6IjMzOTQyNjc0YTEzZTRlOTM4YjQ1OGEzMjM3NzA3NTc5IiwidXNlciI6MTR9.scnqCh2BA73T7-fhk1_yUQU18KJGSYy24y0TgXHl2zI',
+                user: user,
             });
             console.log(result.data);
             res(result.data);
@@ -53,11 +57,12 @@ export async function postProduct(data: any) {
 export async function getCategories() {
     return new Promise(async (res, rej) => {
         try {
-            const categories = await apiRequest.get('/api/categories');
-            console.log(categories);
-            res(categories.data);
+            const categories = await apiRequest.get('/categories');
+            console.log(categories.data);
+            res(categories.data?.results);
         } catch (err) {
             console.log(err);
         }
     });
 }
+

@@ -10,6 +10,8 @@ import { cn } from '../../../lib/utils/cn';
 import FileUploader from './components/FileUploader';
 import { FileWithPath } from 'react-dropzone';
 import { getCategories, postProduct, uploadImage } from '../../../services/postService';
+import { FaFontAwesome } from 'react-icons/fa';
+import { CloseSquareFilled } from '@ant-design/icons';
 const NewPost = () => {
     const form = useForm<z.infer<typeof productSchema>>({
         resolver: zodResolver(productSchema),
@@ -23,20 +25,26 @@ const NewPost = () => {
     useEffect(() => {
         const fetch = async function () {
             const data = await getCategories();
+            console.log(data);
             setCategories(data as Array<any>);
         };
         fetch();
     }, []);
-    // console.log(fields);
     useEffect(() => {
-        // console.log(category);
         const selectedCategory = categories.filter((item: any) => item.name == category);
-        // console.log(selectedCategory[0]);
+        console.log(selectedCategory[0]);
         setFields(selectedCategory[0]?.fields);
-        setFieldsValue([]);
+        console.log(selectedCategory[0]?.fields);
+        const fieldLength = selectedCategory[0]?.fields.length;
+        const valuesInit = Array.from({ length: fieldLength }).map((item, index: number) => ({
+            field: selectedCategory[0]?.fields[index]?.name,
+            value: selectedCategory[0]?.fields[index]?.fieldType != 1 ? 'default' : '',
+        }));
+        //  console.log(valuesInit);
+        setFieldsValue(valuesInit);
     }, [category]);
     async function onSubmit(values: z.infer<typeof productSchema>) {
-        console.log('submit');
+        //      console.log('submit');
         uploadImage(images).then(async (data: any) => {
             console.log(data);
             if (data?.data?.length > 0) {
@@ -45,9 +53,8 @@ const NewPost = () => {
                     file: item,
                     file_type: 'Photo',
                 }));
-
                 const product = await postProduct({
-                    product: values,
+                    product: { ...values, is_available: true },
                     fields: values.fields,
                     attatchments: [...newImages],
                     post_zone: 'HCM',
@@ -58,9 +65,7 @@ const NewPost = () => {
                 }
             }
         });
-        // const imageUrls = await uploadImage(images);
-        // console.log(imageUrls);
-        console.log(values);
+        //     console.log(values);
     }
     const [images, setImages] = useState<any[]>([]);
     const errors = form.formState.errors;
@@ -74,20 +79,25 @@ const NewPost = () => {
             name: 'Đã sử dụng',
         },
     ];
+    useEffect(() => {
+        console.log('fields change');
+        form.setValue('fields', [...fieldValues]);
+    }, [fieldValues]);
+
     const handleChangeFields = (value: string, field: any, index: number) => {
         const updateValues = fieldValues;
         updateValues[index] = { field: field.name, value };
-        console.log(updateValues);
-        setFieldsValue(updateValues);
-        console.log(updateValues);
-        form.setValue('fields', updateValues);
+        //        console.log(updateValues);
+        setFieldsValue([...updateValues]);
+        // console.log(updateValues);
     };
-    console.log(form.formState.errors);
+    //  console.log(form.getValues('fields'));
+    //console.log(form.formState.errors);
     return (
         <div className='p-20'>
+            <h3 className='mb-4 text-2xl font-semibold'>Tạo bài đăng mới</h3>
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div>
-                    {/* <div>{JSON.stringify(form.formState.errors)}</div> */}
                     <h1 className='mb-4'>Tên sản phẩm</h1>
                     <input
                         {...form.register('name')}
@@ -101,7 +111,7 @@ const NewPost = () => {
                     <div>
                         <h1 className='mb-4'>Loại sản phẩm</h1>
                         <select
-                            {...form.register('category_id')}
+                            {...form.register('category')}
                             onChange={(data) => setCategory(data.target.value)}
                             placeholder=''
                             className='select mb-4 w-full bg-gray-100'
@@ -114,9 +124,7 @@ const NewPost = () => {
                             ))}
                         </select>
 
-                        {errors.category_id && (
-                            <p className='mb-4 text-state-error'>{`*${errors.category_id.message}`}</p>
-                        )}
+                        {errors.category && <p className='mb-4 text-state-error'>{`*${errors.category.message}`}</p>}
                     </div>
                     <div>
                         <h1 className='mb-4'>Ngày sản xuất</h1>
@@ -128,8 +136,8 @@ const NewPost = () => {
                             placeholder='Tên sản phẩm'
                             className='input mb-4  w-full bg-gray-100'
                         />
-                        {errors.category_id && (
-                            <p className='mb-4 text-state-error'>{`*${errors.category_id.message}`}</p>
+                        {errors.createDate && (
+                            <p className='mb-4 text-state-error'>{`*${errors.createDate.message}`}</p>
                         )}
                     </div>
                 </div>
@@ -192,27 +200,25 @@ const NewPost = () => {
                     ></textarea>
                     {errors.name && <p className='mb-4 text-state-error'>{`*${errors.name.message}`}</p>}
                 </div>
+                <h3 className='mb-4 text-xl font-semibold'>Thông tin chi tiết</h3>
                 <div className='grid grid-cols-2 gap-4'>
                     {fields?.map((item: any, index: number) => {
-                        if (item.field_type == 1) {
+                        if (item.fieldType == 1) {
                             return (
                                 <div>
                                     <h1 className='mb-4'>{item.name}</h1>
                                     <input
                                         onChange={(data) => handleChangeFields(data.target.value, item, index)}
-                                        // {...form.register('', {
-                                        //     valueAsDate: true,
-                                        // })}
                                         type='input'
                                         placeholder='Nhập giá trị'
                                         className='input mb-4  w-full bg-gray-100'
                                     />
-                                    {errors.category_id && (
-                                        <p className='mb-4 text-state-error'>{`*${errors.category_id.message}`}</p>
+                                    {errors.fields && errors?.fields?.[index] && (
+                                        <p className='mt-3 text-red-600'>Thông tin không hợp lệ</p>
                                     )}
                                 </div>
                             );
-                        } else if (item.field_type == 2) {
+                        } else if (item.fieldType == 2) {
                             return (
                                 <div>
                                     <h1 className='mb-4'>{item.name}</h1>
@@ -220,8 +226,6 @@ const NewPost = () => {
                                         onChange={(data) => handleChangeFields(data.target.value, item, index)}
                                         placeholder=''
                                         className='select mb-4 w-full bg-gray-100'
-                                        defaultValue={'default'}
-                                        // multiple={true}
                                     >
                                         <option value={'default'}>{item.name}</option>
 
@@ -232,12 +236,12 @@ const NewPost = () => {
                                         ))}
                                     </select>
 
-                                    {errors.status && (
-                                        <p className='mb-4 text-state-error'>{`*${errors.status.message}`}</p>
+                                    {errors.fields && errors?.fields?.[index] && (
+                                        <p className='mt-3 text-red-600'>Thông tin không hợp lệ</p>
                                     )}
                                 </div>
                             );
-                        } else if (item.field_type == 3) {
+                        } else if (item.fieldType == 3) {
                             return (
                                 <div>
                                     <h1 className='mb-4'>{item.name}</h1>
@@ -255,21 +259,34 @@ const NewPost = () => {
                                             </option>
                                         ))}
                                     </select>
-
-                                    {errors.status && (
-                                        <p className='mb-4 text-state-error'>{`*${errors.status.message}`}</p>
+                                    {errors.fields && errors?.fields?.[index] && (
+                                        <p className='mt-3 text-red-600'>Thông tin không hợp lệ</p>
                                     )}
                                 </div>
                             );
                         }
                     })}
                 </div>
+                <h3 className='mb-4 text-xl font-semibold'>Danh sách hình ảnh</h3>
                 <div className='bg-slate-500'>
                     <div className='grid grid-flow-row grid-cols-5 object-contain'>
-                        {images?.map((item: any) => {
+                        {images?.map((item: any, index: number) => {
                             return (
-                                <div className='h-[300px] rounded-sm bg-slate-100'>
-                                    <img src={URL.createObjectURL(item)} alt='image' />
+                                <div className=' h-[150px] rounded-sm bg-stone-300'>
+                                    <CloseSquareFilled
+                                        onClick={() => {
+                                            const updateImages = images;
+                                            updateImages.splice(index, 1);
+                                            console.log(updateImages);
+                                            setImages([...updateImages]);
+                                            console.log('click');
+                                        }}
+                                    />
+                                    <img
+                                        className='h-[140px] object-cover'
+                                        src={URL.createObjectURL(item)}
+                                        alt='image'
+                                    />
                                 </div>
                             );
                         })}
