@@ -55,7 +55,7 @@ const ResultOrder = () => {
                                 <tbody>
                                     {result?.data?.items?.length > 0 ? (
                                         result?.data?.items?.map((item: any, index: number) => (
-                                            <OrderResultItem key={index} product={item} />
+                                            <OrderResultItem key={index} item={item} />
                                         ))
                                     ) : (
                                         // If there are no products in the cart
