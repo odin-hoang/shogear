@@ -13,6 +13,7 @@ export type IContextType = {
     setUser: React.Dispatch<React.SetStateAction<IUser>>;
     isAuthenticated: boolean;
     setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     logIn: (values: any) => void;
     logOut: () => void;
     getUser: () => IUser | undefined;
@@ -76,12 +77,12 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         window.location.reload();
     };
 
-    const navigate = useNavigate();
-    useEffect(() => {
-        if (getUser() == undefined) {
-            navigate('/sign-in');
-        }
-    }, []);
+    // const navigate = useNavigate();
+    // // useEffect(() => {
+    // //     if (getUser() == undefined) {
+    // //         navigate('/sign-in');
+    // //     }
+    // }, []);
 
     const value = {
         user,

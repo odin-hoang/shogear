@@ -17,6 +17,7 @@ type InitialSearchState = {
 const Header = () => {
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
     const navigate = useNavigate();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, setSearchParams] = useSearchParams({ q: '' });
     // const q = searchParams.get('q');
     // console.log(cartItems);
@@ -100,6 +101,7 @@ const Header = () => {
         setSearch((prev) => ({ ...prev, query: e.target.value, isSearching: !!e.target.value }));
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function handleSearch(e: any, type: 'click' | 'enter') {
         if (e.key === 'Enter' || type === 'click') {
             const query = search.query.trim().replace(/\s+/g, ' ');
