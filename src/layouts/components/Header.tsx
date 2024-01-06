@@ -5,7 +5,7 @@ import Action from './Action';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import Button from '../../components/Button';
 import Login from './auth-forms/Login';
 import Signup from './auth-forms/Signup';
