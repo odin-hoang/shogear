@@ -87,16 +87,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         window.location.reload();
     };
 
-<<<<<<< HEAD
-    // const navigate = useNavigate();
-    // // useEffect(() => {
-    // //     if (getUser() == undefined) {
-    // //         navigate('/sign-in');
-    // //     }
-    // }, []);
-
-=======
->>>>>>> 78efc4a69787b7bab6c42df68392b49bb7ef36b4
     const value = {
         user,
         setUser,

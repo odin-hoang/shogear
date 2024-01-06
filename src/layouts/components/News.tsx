@@ -76,7 +76,6 @@ const News = ({}: NewsProps) => {
                 const newPosts = [...prev, ...datas];
                 return newPosts.filter((post, index, self) => index === self.findIndex((p) => p.id === post.id));
             });
-            setFilterPost(posts);
             console.log({ data: response.data });
             setUrls(response.data.next);
         });
@@ -106,11 +105,11 @@ const News = ({}: NewsProps) => {
                 const newPosts = [...prev, ...datas];
                 return newPosts.filter((post, index, self) => index === self.findIndex((p) => p.id === post.id));
             });
-            setFilterPost(posts);
 
             setUrls(response.data.next);
         });
     };
+
     const zoneTags = ['TP. Hồ Chí Minh', 'Đà Nẵng', 'Cao Bằng', 'Hà Nội', 'Long An', 'Kiên Giang'];
     // default layout = grid
     const [layout, setLayout] = useState(false);
@@ -158,6 +157,9 @@ const News = ({}: NewsProps) => {
         }
         if (type === 'byProductTag') setFilterer((prev) => ({ ...prev, byProductTag: [] }));
     };
+    useEffect(() => {
+        setFilterPost(posts);
+    }, [posts]);
     console.log(filterPost);
     return (
         <div className='min-h-screen  rounded-md bg-white p-4'>
