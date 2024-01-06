@@ -58,7 +58,7 @@ const News = ({}: NewsProps) => {
             const datas: Post[] = [];
             for (const post of response.data.results) {
                 const data: Post = {
-                    id: post.id,
+                    id: post.product.id,
                     imageUrl: post.attachments.length
                         ? post.attachments[0].file
                         : 'https://product.hstatic.net/200000722513/product/km086w_facd6092154b4d769a04f1859a0c4b8e_medium.png',
@@ -76,6 +76,7 @@ const News = ({}: NewsProps) => {
                 const newPosts = [...prev, ...datas];
                 return newPosts.filter((post, index, self) => index === self.findIndex((p) => p.id === post.id));
             });
+            setFilterPost(posts);
             console.log({ data: response.data });
             setUrls(response.data.next);
         });
@@ -87,7 +88,7 @@ const News = ({}: NewsProps) => {
             const datas: Post[] = [];
             for (const post of response.data.results) {
                 const data: Post = {
-                    id: post.id,
+                    id: post.product.id,
                     imageUrl: post.attachments.length
                         ? post.attachments[0].file
                         : 'https://product.hstatic.net/200000722513/product/km086w_facd6092154b4d769a04f1859a0c4b8e_medium.png',
@@ -107,7 +108,6 @@ const News = ({}: NewsProps) => {
             });
             setFilterPost(posts);
 
-            console.log({ data: response.data });
             setUrls(response.data.next);
         });
     };
@@ -149,6 +149,7 @@ const News = ({}: NewsProps) => {
         const data = posts.filter((post) => post.zone === filterer.byZone);
         setFilterPost(data);
         console.log({ filter: filterPost });
+        console.log('zo');
     };
     const handleDeleteFilter = (type: 'byZone' | 'byProductTag') => {
         if (type === 'byZone') {
@@ -157,7 +158,7 @@ const News = ({}: NewsProps) => {
         }
         if (type === 'byProductTag') setFilterer((prev) => ({ ...prev, byProductTag: [] }));
     };
-    console.log(posts);
+    console.log(filterPost);
     return (
         <div className='min-h-screen  rounded-md bg-white p-4'>
             {/* username and filterer */}

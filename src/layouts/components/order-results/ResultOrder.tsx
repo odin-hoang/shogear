@@ -3,10 +3,15 @@ import { useParams } from 'react-router-dom';
 
 import { getOrderResult } from '../../../services/orderService';
 import OrderResultItem from './OrderResultItem';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../app/store';
+import { removeAllItems } from '../../../features/cart/cart-slice';
 
 const ResultOrder = () => {
     const params = useParams();
     const [result, setResult] = useState<any>();
+    const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+    const dispatch = useDispatch();
     useEffect(() => {
         const paymentId = params.paymentId;
         console.log(paymentId);
@@ -18,6 +23,8 @@ const ResultOrder = () => {
                 const order_id = data?.orderId;
                 const paymentId = data?.appTransId;
                 localStorage.setItem('cart', JSON.stringify(undefined));
+                // set state of cart
+                dispatch(removeAllItems());
                 const bookingResult: any = await getOrderResult(paymentId, order_id);
                 setResult(bookingResult);
                 console.log(bookingResult);
