@@ -238,6 +238,11 @@ const Checkout = () => {
         setStreetError(null);
         return true;
     };
+    // useEffect(() => {
+    //     if (cartItems.length == 0) {
+    //         navigate('cart');
+    //     }
+    // }, [cartItems]);
     return (
         <div className='checkout bg-white px-6 py-6'>
             <div className='bg-cover bg-center p-0' style={{ backgroundImage: `url(${bgImage})` }}>

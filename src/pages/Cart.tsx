@@ -272,13 +272,15 @@ const Cart = () => {
                                         </tr>
                                     </tbody>
                                 </table>
-                                <Link
-                                    to='/checkout'
-                                    className='proceed-checkout mb-[1rem] block w-[100%] border-[0.1rem] border-[#fcb941] p-[0.5rem] text-center text-[#fcb941]'
-                                    onClick={scrollToTop}
-                                >
-                                    PROCEED TO CHECKOUT
-                                </Link>
+                                {cartItems?.length > 0 && (
+                                    <Link
+                                        to='/checkout'
+                                        className='proceed-checkout mb-[1rem] block w-[100%] border-[0.1rem] border-[#fcb941] p-[0.5rem] text-center text-[#fcb941]'
+                                        onClick={scrollToTop}
+                                    >
+                                        PROCEED TO CHECKOUT
+                                    </Link>
+                                )}
                             </div>
                             <Link
                                 to='/'

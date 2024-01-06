@@ -24,7 +24,7 @@ export async function createOrder(data: any) {
     });
 }
 
-export async function getOrderResult(transId: any, orderId: any) {
+export async function getOrderResult(transId: string, orderId: string) {
     return new Promise(async (res, rej) => {
         try {
             const orderResult = await apiRequest.post('/payment/query', {
@@ -33,8 +33,10 @@ export async function getOrderResult(transId: any, orderId: any) {
             });
             res(orderResult.data);
         } catch (err: any) {
-            console.log(err?.responnse);
+            console.log(err?.response);
             rej(err);
         }
     });
 }
+
+
