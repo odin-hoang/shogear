@@ -34,6 +34,7 @@ export type Post = {
     postedAt: string;
     zone: string;
     isUsed?: boolean;
+    category: string;
 };
 // eslint-disable-next-line no-empty-pattern
 const News = ({}: NewsProps) => {
@@ -51,6 +52,7 @@ const News = ({}: NewsProps) => {
 
     const [urls, setUrls] = useState('');
     const [posts, setPosts] = useState<Post[]>([]);
+    const [filterPost, setFilterPost] = useState<Post[]>([]);
     useEffect(() => {
         apiRequest.get('/posts').then((response) => {
             const datas: Post[] = [];
@@ -66,6 +68,7 @@ const News = ({}: NewsProps) => {
                     postedAt: post.updatedAt,
                     zone: post.zone,
                     name: post.product.name,
+                    category: post.product.category,
                 };
                 datas.push(data);
             }
@@ -94,6 +97,7 @@ const News = ({}: NewsProps) => {
                     postedAt: post.updatedAt,
                     zone: post.zone,
                     name: post.product.name,
+                    category: post.product.category,
                 };
                 datas.push(data);
             }
@@ -101,11 +105,13 @@ const News = ({}: NewsProps) => {
                 const newPosts = [...prev, ...datas];
                 return newPosts.filter((post, index, self) => index === self.findIndex((p) => p.id === post.id));
             });
+            setFilterPost(posts);
+
             console.log({ data: response.data });
             setUrls(response.data.next);
         });
     };
-    const zoneTags = ['TP Hồ Chí Minh', 'Đà Nẵng', 'Cao Bằng', 'Hà Nội', 'Long An', 'Kiên Giang'];
+    const zoneTags = ['TP. Hồ Chí Minh', 'Đà Nẵng', 'Cao Bằng', 'Hà Nội', 'Long An', 'Kiên Giang'];
     // default layout = grid
     const [layout, setLayout] = useState(false);
 
@@ -140,13 +146,16 @@ const News = ({}: NewsProps) => {
         }
     }
     const handleApplyFilter = () => {
-        // TODO: send request filter to server
-        console.log(filterer);
+        const data = posts.filter((post) => post.zone === filterer.byZone);
+        setFilterPost(data);
+        console.log({ filter: filterPost });
     };
     const handleDeleteFilter = (type: 'byZone' | 'byProductTag') => {
-        if (type === 'byZone') setFilterer((prev) => ({ ...prev, byZone: null }));
+        if (type === 'byZone') {
+            setFilterer((prev) => ({ ...prev, byZone: null }));
+            setFilterPost(posts);
+        }
         if (type === 'byProductTag') setFilterer((prev) => ({ ...prev, byProductTag: [] }));
-        handleApplyFilter();
     };
     console.log(posts);
     return (
@@ -263,7 +272,7 @@ const News = ({}: NewsProps) => {
             {layout ? (
                 // List
                 <div className='flex flex-col gap-2'>
-                    {posts.map((item, index) => (
+                    {filterPost.map((item, index) => (
                         <div className={cn(' flex gap-4 rounded-sm border p-2')} key={index}>
                             <Card
                                 id={item.id}
@@ -287,7 +296,7 @@ const News = ({}: NewsProps) => {
             ) : (
                 // Grid
                 <div className='grid grid-cols-2 gap-4 sm:grid-cols-3  lg:grid-cols-5'>
-                    {posts.map((item, index) => (
+                    {filterPost.map((item, index) => (
                         <Link
                             to={`/products/${toHyphenString(item.name)}`}
                             state={{ item }}
