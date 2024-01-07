@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import apiRequest from '../../../services/request';
-import { useUserContext } from '../../../utils/authContext';
+
 import OrderItem from './OrderItem';
 import { ProductItem } from '../../../pages/ProductDetail';
+import { useUserContext } from '../../../utils/authContext';
 
 export interface Order {
     id: number;
@@ -40,13 +41,13 @@ export interface User {
 const OrderCheck = () => {
     const [orders, setOrders] = useState<Order[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    // TODO: Change userid to api request later
     const { getUser } = useUserContext();
-
     const user = getUser();
     useEffect(() => {
         setIsLoading(true);
-        // apiRequest.get<Order[]>(`/get/orders/${user?.id}`).then((response) => {
-        apiRequest.get<Order[]>(`/get/orders/${2}`).then((response) => {
+        apiRequest.get<Order[]>(`/get/orders/${user?.id}`).then((response) => {
+            // apiRequest.get<Order[]>(`/get/orders/${2}`).then((response) => {
             setOrders(response.data);
             setIsLoading(false);
             // for (const order of response.data) {
@@ -56,15 +57,15 @@ const OrderCheck = () => {
             // }
         });
     }, []);
-    const handleDeleteOrder = (order_id: number) => {
-        setIsLoading(true);
-        apiRequest.delete(`/orders/${order_id}`).then(() => {
-            setIsLoading(false);
-            alert('Đã xoá thành công order!');
-            window.location.reload();
-        });
-    };
-    const [selected, setSelected] = useState(0);
+    // const handleDeleteOrder = (order_id: number) => {
+    //     setIsLoading(true);
+    //     apiRequest.delete(`/orders/${order_id}`).then(() => {
+    //         setIsLoading(false);
+    //         alert('Đã xoá thành công order!');
+    //         window.location.reload();
+    //     });
+    // };
+    // const [selected, setSelected] = useState(0);
     return (
         <div className='min-h-[400px] bg-bodyBg-default py-5'>
             <div className=' mx-auto mt-5 max-w-[1200px] '>
@@ -157,7 +158,6 @@ const OrderCheck = () => {
                                 <div className='loading loading-bars loading-lg'></div>
                             </div>
                         )}
-                        {orders.length === 0 && !isLoading && <div>Chưa có đơn hàng nào</div>}
                         {orders.filter((order) => order.status === 4).length === 0 && !isLoading ? (
                             <div>Chưa có đơn hàng nào</div>
                         ) : (
@@ -181,7 +181,6 @@ const OrderCheck = () => {
                                 <div className='loading loading-bars loading-lg'></div>
                             </div>
                         )}
-                        {orders.length === 0 && !isLoading && <div>Chưa có đơn hàng nào</div>}
                         {orders.filter((order) => order.status === 0).length === 0 && !isLoading ? (
                             <div>Chưa có đơn hàng nào</div>
                         ) : (
