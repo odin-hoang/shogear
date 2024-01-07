@@ -9,7 +9,7 @@ const Action = (data: ActionData) => {
         <>
             {data.count !== undefined ? (
                 <div className='ml-2 hidden cursor-pointer space-x-3 align-middle md:flex '>
-                    <div className='card w-[18px] shrink-0'>
+                    <div className='card w-[18px] shrink-0 text-white'>
                         <img src={data.icon} className=' h-[36px] w-[18px]'></img>
                         <span className='count-holder'>{data.count}</span>
                     </div>

@@ -15,6 +15,7 @@ import HeadlessTippy from '../../components/HeadlessTippy';
 import toHyphenString from '../../lib/toHyphenString';
 import { PostItem } from '../../pages/ProductDetail';
 import { useDebounce } from '../../app/hook';
+import { MdOutlineImageSearch } from 'react-icons/md';
 type InitialSearchState = {
     isSearching: boolean;
     query: string;
@@ -30,16 +31,12 @@ const Header = () => {
     // const cartQuantity = useSelector((state: RootState) => state.cart.quantityTotal);
     // console.log(cartQuantity);
     const listActions = [
-        {
-            icon: Icons.headphone,
-            name1: 'Hotline',
-            name2: '1800.6975',
-        },
-        {
-            icon: Icons.showroom,
-            name1: 'Hệ thống',
-            name2: 'Showroom',
-        },
+        // {
+        //     icon: Icons.imageSearch,
+        //     name1: 'Tìm kiếm',
+        //     name2: 'hình ảnh',
+        //     to: '/search',
+        // },
         {
             icon: Icons.order,
             name1: 'Tra cứu',
@@ -60,10 +57,11 @@ const Header = () => {
     // TODO: call query API  --> search result
     const [posts, setPosts] = useState<PostItem[]>([]);
     const debounceQuery = useDebounce<string>(search.query, 300);
-
+    const [isLoading, setIsLoading] = useState(false);
     useLayoutEffect(() => {
+        setIsLoading(true);
         apiRequest.get(`/posts/?q=${debounceQuery}`).then((response) => {
-            console.log(response);
+            setIsLoading(false);
             const results: PostItem[] = response.data.results;
             setPosts(results);
         });
@@ -94,6 +92,9 @@ const Header = () => {
     const [isLoginModal, setIsLoginModal] = useState(true);
     const handleLoginModal = () => {
         setIsLoginModal(!isLoginModal);
+    };
+    const handleSearchByImage = () => {
+        navigate('/search', { state: { image: true } });
     };
     return (
         <header className='relative z-50 justify-center bg-primary-default'>
@@ -136,57 +137,77 @@ const Header = () => {
                             className='smart-search-wrapper custom-scrollbar'
                             onBlur={() => setSearch((prev) => ({ ...prev, isSearching: false }))}
                         >
-                            {posts.length > 0 ? (
-                                posts.map((item, index) => (
-                                    <React.Fragment key={index}>
-                                        <Link
-                                            to={`/products/${toHyphenString(item.product.name)}`}
-                                            state={{ item }}
-                                            className='  flex cursor-pointer items-center justify-between gap-2 hover:bg-gray-100'
-                                        >
-                                            <div className='ml-4 '>
-                                                <h3 className='line-clamp-1'>
-                                                    {item.product.name.split('').map((char, index) => (
-                                                        <span
-                                                            key={index}
-                                                            className={
-                                                                search.query.toLowerCase().includes(char.toLowerCase())
-                                                                    ? ''
-                                                                    : 'font-bold'
-                                                            }
-                                                        >
-                                                            {char}
-                                                        </span>
-                                                    ))}
-                                                </h3>
-                                                <p>
-                                                    <span className='price mr-2 '>
-                                                        {numberWithCommas(item.product.price)}{' '}
-                                                    </span>
-                                                    • <span className='ml-2'>{item.zone}</span>
-                                                </p>
-                                            </div>
-                                            <div className='mr-2 p-2'>
-                                                <img
-                                                    src={item.product.attachments[0].file}
-                                                    alt=''
-                                                    className='h-16 w-16 object-cover'
-                                                />
-                                            </div>
-                                        </Link>
-                                        <div className='divider m-0 ml-2 h-0 w-[calc(100%-24px)] text-center after:h-[1px]'></div>
-                                    </React.Fragment>
-                                ))
-                            ) : (
-                                <div className='flex items-center justify-center p-4'>
-                                    <p className='text-sm text-gray-400'>Không tìm thấy kết quả</p>
+                            {isLoading && (
+                                <div className='flex items-center justify-center'>
+                                    <span className='loading loading-dots loading-md'></span>
                                 </div>
                             )}
+                            {posts.length > 0 && !isLoading
+                                ? posts.map((item, index) => (
+                                      <React.Fragment key={index}>
+                                          <Link
+                                              to={`/products/${toHyphenString(item.product.name)}`}
+                                              state={{ item }}
+                                              className='  flex cursor-pointer items-center justify-between gap-2 hover:bg-gray-100'
+                                          >
+                                              <div className='ml-4 '>
+                                                  <h3 className='line-clamp-1'>
+                                                      {item.product.name.split('').map((char, index) => (
+                                                          <span
+                                                              key={index}
+                                                              className={
+                                                                  search.query
+                                                                      .toLowerCase()
+                                                                      .includes(char.toLowerCase())
+                                                                      ? ''
+                                                                      : 'font-bold'
+                                                              }
+                                                          >
+                                                              {char}
+                                                          </span>
+                                                      ))}
+                                                  </h3>
+                                                  <p>
+                                                      <span className='price mr-2 '>
+                                                          {numberWithCommas(item.product.price)}{' '}
+                                                      </span>
+                                                      • <span className='ml-2'>{item.zone}</span>
+                                                  </p>
+                                              </div>
+                                              <div className='mr-2 p-2'>
+                                                  <img
+                                                      src={item.product.attachments[0].file}
+                                                      alt=''
+                                                      className='h-16 w-16 object-cover'
+                                                  />
+                                              </div>
+                                          </Link>
+                                          <div className='divider m-0 ml-2 h-0 w-[calc(100%-24px)] text-center after:h-[1px]'></div>
+                                      </React.Fragment>
+                                  ))
+                                : !isLoading && (
+                                      <div className='flex items-center justify-center p-4'>
+                                          <p className='text-sm text-gray-400'>Không tìm thấy kết quả</p>
+                                      </div>
+                                  )}
                         </div>
                     )}
                 </div>
                 <div className='actions ml-3 flex w-auto align-bottom'>
                     <div className='flex items-center justify-between gap-2 '>
+                        <div
+                            className=' tooltip tooltip-bottom tooltip-warning flex items-center justify-center '
+                            data-tip='Tìm kiếm bằng hình ảnh'
+                        >
+                            <Button
+                                variant={'fill'}
+                                size={'medium'}
+                                className='bg-gradient-to-r from-indigo-300 to-purple-400 text-3xl'
+                                onClick={handleSearchByImage}
+                            >
+                                <MdOutlineImageSearch />
+                            </Button>
+                        </div>
                         {listActions.map((item, index) => {
                             return (
                                 <React.Fragment key={index}>

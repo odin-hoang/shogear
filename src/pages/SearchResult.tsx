@@ -1,7 +1,7 @@
 import Button from '../components/Button';
 import { FaCaretDown, FaFilter, FaSortAmountUpAlt, FaSortAmountDownAlt } from 'react-icons/fa';
 import { CiBoxList, CiGrid41 } from 'react-icons/ci';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { cn } from '../lib/utils/cn';
 import { useEffect, useState } from 'react';
 
@@ -14,6 +14,7 @@ import { PostItem } from './ProductDetail';
 import Loading from '../components/Loading';
 import ReactPaginate from 'react-paginate';
 import { PostResponse, SearchPost } from '../services/postService';
+import ImageForm from '../components/ImageForm';
 type InitialFilterer = {
     byZone?: string | null;
     byProductTag: string[];
@@ -21,6 +22,8 @@ type InitialFilterer = {
 };
 const SearchResult = () => {
     const [searchParams] = useSearchParams();
+    const location = useLocation();
+    const isSearchByImage = location?.state?.image;
     const q = searchParams.get('q');
     const productTags = [
         'Laptop',
@@ -112,6 +115,7 @@ const SearchResult = () => {
             setIsLoading(false);
         });
     };
+
     return (
         <div className='bg-bodyBg-default px-6 py-6 '>
             <div className='mx-auto  max-w-[1200px] '>
@@ -224,67 +228,36 @@ const SearchResult = () => {
                             <span className='ml-2 '>
                                 Tìm kiếm theo:{' '}
                                 <span className='ml-2 line-clamp-1  font-bold text-title-default'>{q}</span>
+                                {isSearchByImage && <ImageForm setPosts={setPosts} />}
                             </span>
                         </h1>
                     </div>
-                    {/* layout */}
-                    {layout ? (
-                        // List
-                        <div className='flex flex-col gap-2'>
-                            {isLoading ? (
-                                <Loading />
-                            ) : (
-                                filterPost.map((item, index) => (
-                                    <div className={cn(' flex gap-4 rounded-sm border p-2')} key={index}>
-                                        <Card
-                                            id={item.id}
-                                            name={item.product.name}
-                                            imageUrl={item.product.attachments[0].file}
-                                            price={item.product.price}
-                                            username={item.user}
-                                            postedAt={item.updatedAt}
-                                            zone={item.zone}
-                                            isUsed={!!item.product.status}
-                                            className='w-[200px]'
-                                        />
-                                        <div>
-                                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellendus
-                                            pariatur illo similique animi laborum omnis blanditiis hic ipsam facilis
-                                            sunt rem porro nulla saepe consequatur, illum reprehenderit laudantium
-                                            consequuntur obcaecati?
-                                        </div>
-                                    </div>
-                                ))
-                            )}
-                        </div>
-                    ) : (
-                        // Grid
-                        <div className='grid grid-cols-2 gap-4 sm:grid-cols-3  lg:grid-cols-5'>
-                            {isLoading && <Loading />}
-                            {filterPost.map((item, index) => (
-                                <Link
-                                    to={`/products/${toHyphenString(item.product.name)}`}
-                                    state={{ item }}
-                                    className={cn('flex flex-col rounded-sm border')}
-                                    key={index}
-                                    preventScrollReset={false}
-                                >
-                                    <Card
-                                        id={item.id}
-                                        name={item.product.name}
-                                        imageUrl={item.product.attachments[0].file}
-                                        price={item.product.price}
-                                        username={item.user}
-                                        postedAt={item.updatedAt}
-                                        zone={item.zone}
-                                        isUsed={!!item.product.status}
-                                        className='w-[200px]'
-                                        // onClick={() => handleAddCart({ ...item, quantity: 1 })}
-                                    />
-                                </Link>
-                            ))}
-                        </div>
-                    )}
+                    {/*  Grid */}
+                    <div className='grid grid-cols-2 gap-4 sm:grid-cols-3  lg:grid-cols-5'>
+                        {isLoading && <Loading />}
+                        {filterPost.map((item, index) => (
+                            <Link
+                                to={`/products/${toHyphenString(item.product.name)}`}
+                                state={{ item }}
+                                className={cn('flex flex-col rounded-sm border')}
+                                key={index}
+                                preventScrollReset={false}
+                            >
+                                <Card
+                                    id={item.id}
+                                    name={item.product.name}
+                                    imageUrl={item.product.attachments[0].file}
+                                    price={item.product.price}
+                                    username={item.user}
+                                    postedAt={item.updatedAt}
+                                    zone={item.zone}
+                                    isUsed={!!item.product.status}
+                                    className='w-[200px]'
+                                    // onClick={() => handleAddCart({ ...item, quantity: 1 })}
+                                />
+                            </Link>
+                        ))}
+                    </div>
                     <ReactPaginate
                         breakLabel='...'
                         nextLabel='Tiếp'

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Check } from './Icons';
 
 const Timeline = () => {
-    const [orderInfo, setOrderInfo] = useState({
+    const [orderInfo, _] = useState({
         amount: {
             pending: 1,
             unpaid: 1,

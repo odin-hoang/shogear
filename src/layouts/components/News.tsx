@@ -260,7 +260,12 @@ const News = ({}: NewsProps) => {
                         <div className='text-center text-gray-400'>Không có kết quả phù hợp</div>
                     )}
                     {filterPost.map((item, index) => (
-                        <div className={cn(' flex gap-4 rounded-sm border p-2')} key={index}>
+                        <Link
+                            to={`/products/${toHyphenString(item.product.name)}`}
+                            state={{ item }}
+                            className={cn(' flex gap-4 rounded-sm border p-2')}
+                            key={index}
+                        >
                             <Card
                                 id={item.id}
                                 name={item.product.name}
@@ -273,11 +278,22 @@ const News = ({}: NewsProps) => {
                                 className='w-[200px]'
                             />
                             <div>
-                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellendus pariatur illo
-                                similique animi laborum omnis blanditiis hic ipsam facilis sunt rem porro nulla saepe
-                                consequatur, illum reprehenderit laudantium consequuntur obcaecati?
+                                {item.description}
+                                <table className='table mt-5'>
+                                    <tbody>
+                                        {item.product.fieldValues.map(
+                                            (field, index) =>
+                                                index < 5 && (
+                                                    <tr key={index}>
+                                                        <td className='font-bold'>{field.tag}</td>
+                                                        <td>{field.value}</td>
+                                                    </tr>
+                                                ),
+                                        )}
+                                    </tbody>
+                                </table>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             ) : (
