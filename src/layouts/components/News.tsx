@@ -18,23 +18,13 @@ import HeadlessTippy from '../../components/HeadlessTippy';
 import { TbBrandProducthunt, TbBuildingCommunity } from 'react-icons/tb';
 import apiRequest from '../../services/request';
 import axios from 'axios';
+import { PostItem } from '../../pages/ProductDetail';
+import Loading from '../../components/Loading';
 type NewsProps = object;
 type InitialFilterer = {
     byZone?: string | null;
     byProductTag: string[];
     byPrice?: 'asc' | 'desc';
-};
-export type Post = {
-    id: number;
-    name: string;
-    imageUrl: string;
-    price: number;
-    description: string;
-    username: string;
-    postedAt: string;
-    zone: string;
-    isUsed?: boolean;
-    category: string;
 };
 // eslint-disable-next-line no-empty-pattern
 const News = ({}: NewsProps) => {
@@ -51,65 +41,37 @@ const News = ({}: NewsProps) => {
     ];
 
     const [urls, setUrls] = useState('');
-    const [posts, setPosts] = useState<Post[]>([]);
-    const [filterPost, setFilterPost] = useState<Post[]>([]);
+    const [posts, setPosts] = useState<PostItem[]>([]);
+    const [filterPost, setFilterPost] = useState<PostItem[]>([]);
     useEffect(() => {
+        setIsLoading(true);
         apiRequest.get('/posts').then((response) => {
-            const datas: Post[] = [];
-            for (const post of response.data.results) {
-                const data: Post = {
-                    id: post.product.id,
-                    imageUrl: post.attachments.length
-                        ? post.attachments[0].file
-                        : 'https://product.hstatic.net/200000722513/product/km086w_facd6092154b4d769a04f1859a0c4b8e_medium.png',
-                    description: post.description,
-                    username: post.user,
-                    price: post.product.price,
-                    postedAt: post.updatedAt,
-                    zone: post.zone,
-                    name: post.product.name,
-                    category: post.product.category,
-                };
-                datas.push(data);
-            }
-            setPosts((prev) => {
-                const newPosts = [...prev, ...datas];
-                return newPosts.filter((post, index, self) => index === self.findIndex((p) => p.id === post.id));
-            });
-            console.log({ data: response.data });
+            const datas: PostItem[] = response.data.results;
+            setPosts(datas);
+            setFilterPost(datas);
             setUrls(response.data.next);
+            setIsLoading(false);
         });
     }, []);
     const handleViewMore = () => {
         if (!urls) return;
-        console.log(urls);
+        setIsLoadingViewMore(true);
         axios.get(urls).then((response) => {
-            const datas: Post[] = [];
-            for (const post of response.data.results) {
-                const data: Post = {
-                    id: post.product.id,
-                    imageUrl: post.attachments.length
-                        ? post.attachments[0].file
-                        : 'https://product.hstatic.net/200000722513/product/km086w_facd6092154b4d769a04f1859a0c4b8e_medium.png',
-                    description: post.description,
-                    username: post.user,
-                    price: post.product.price,
-                    postedAt: post.updatedAt,
-                    zone: post.zone,
-                    name: post.product.name,
-                    category: post.product.category,
-                };
-                datas.push(data);
-            }
+            const datas: PostItem[] = response.data.results;
             setPosts((prev) => {
                 const newPosts = [...prev, ...datas];
-                return newPosts.filter((post, index, self) => index === self.findIndex((p) => p.id === post.id));
+                return newPosts;
             });
-
+            setFilterPost((prev) => {
+                const newPosts = [...prev, ...datas];
+                return newPosts;
+            });
             setUrls(response.data.next);
+            setIsLoadingViewMore(false);
         });
     };
 
+    console.log('re-render');
     const zoneTags = ['TP. Hồ Chí Minh', 'Đà Nẵng', 'Cao Bằng', 'Hà Nội', 'Long An', 'Kiên Giang'];
     // default layout = grid
     const [layout, setLayout] = useState(false);
@@ -140,29 +102,46 @@ const News = ({}: NewsProps) => {
     function handlePrice() {
         if (filterer.byPrice === 'asc') {
             setFilterer((prev) => ({ ...prev, byPrice: 'desc' }));
+            const data = filterPost.sort((a, b) => b.product.price - a.product.price);
+            setFilterPost(data);
         } else if (filterer.byPrice === 'desc') {
             setFilterer((prev) => ({ ...prev, byPrice: 'asc' }));
+            const data = filterPost.sort((a, b) => a.product.price - b.product.price);
+            setFilterPost(data);
         }
     }
+
     const handleApplyFilter = () => {
-        const data = posts.filter((post) => post.zone === filterer.byZone);
+        let data = posts.filter((post) => {
+            const isZoneMatch = filterer.byZone ? post.zone === filterer.byZone : true;
+            const isProductTagMatch =
+                filterer.byProductTag.length > 0 ? filterer.byProductTag.includes(post.product.category) : true;
+            return isZoneMatch && isProductTagMatch;
+        });
+        if (filterer.byPrice === 'asc') {
+            data.sort((a, b) => a.product.price - b.product.price);
+        } else if (filterer.byPrice === 'desc') {
+            data.sort((a, b) => b.product.price - a.product.price);
+        }
         setFilterPost(data);
-        console.log({ filter: filterPost });
-        console.log('zo');
     };
+    const [clearFilter, setClearFilter] = useState(false);
     const handleDeleteFilter = (type: 'byZone' | 'byProductTag') => {
         if (type === 'byZone') {
             setFilterer((prev) => ({ ...prev, byZone: null }));
-            setFilterPost(posts);
+        } else if (type === 'byProductTag') {
+            setFilterer((prev) => ({ ...prev, byProductTag: [] }));
         }
-        if (type === 'byProductTag') setFilterer((prev) => ({ ...prev, byProductTag: [] }));
+        setClearFilter(!clearFilter);
     };
     useEffect(() => {
-        setFilterPost(posts);
-    }, [posts]);
-    console.log(filterPost);
+        handleApplyFilter();
+    }, [posts, clearFilter]);
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingViewMore, setIsLoadingViewMore] = useState(false);
     return (
-        <div className='min-h-screen  rounded-md bg-white p-4'>
+        <div className='  rounded-md bg-white p-4'>
             {/* username and filterer */}
             <div className='mb-4 flex items-center justify-between'>
                 <h1 className='inline-block text-lg font-bold'>
@@ -271,21 +250,26 @@ const News = ({}: NewsProps) => {
                     </span>
                 </div>
             </div>
+
             {/* layout */}
             {layout ? (
                 // List
                 <div className='flex flex-col gap-2'>
+                    {isLoading && <Loading />}
+                    {filterPost.length === 0 && (
+                        <div className='text-center text-gray-400'>Không có kết quả phù hợp</div>
+                    )}
                     {filterPost.map((item, index) => (
                         <div className={cn(' flex gap-4 rounded-sm border p-2')} key={index}>
                             <Card
                                 id={item.id}
-                                name={item.name}
-                                imageUrl={item.imageUrl}
-                                price={item.price}
-                                username={item.username}
-                                postedAt={item.postedAt}
+                                name={item.product.name}
+                                imageUrl={item.product.attachments[0].file}
+                                price={item.product.price}
+                                username={item.user}
+                                postedAt={item.updatedAt}
                                 zone={item.zone}
-                                isUsed={item.isUsed}
+                                isUsed={!!item.product.status}
                                 className='w-[200px]'
                             />
                             <div>
@@ -299,9 +283,13 @@ const News = ({}: NewsProps) => {
             ) : (
                 // Grid
                 <div className='grid grid-cols-2 gap-4 sm:grid-cols-3  lg:grid-cols-5'>
+                    {isLoading && <Loading />}
+                    {filterPost.length === 0 && !isLoading && (
+                        <div className='text-center text-gray-400'>Không có kết quả phù hợp</div>
+                    )}
                     {filterPost.map((item, index) => (
                         <Link
-                            to={`/products/${toHyphenString(item.name)}`}
+                            to={`/products/${toHyphenString(item.product.name)}`}
                             state={{ item }}
                             className={cn('flex flex-col rounded-sm border')}
                             key={index}
@@ -309,24 +297,26 @@ const News = ({}: NewsProps) => {
                         >
                             <Card
                                 id={item.id}
-                                name={item.name}
-                                imageUrl={item.imageUrl}
-                                price={item.price}
-                                username={item.username}
-                                postedAt={item.postedAt}
+                                name={item.product.name}
+                                imageUrl={item.product.attachments[0].file}
+                                price={item.product.price}
+                                username={item.user}
+                                postedAt={item.updatedAt}
                                 zone={item.zone}
-                                isUsed={item.isUsed}
+                                isUsed={!!item.product.status}
                                 // onClick={() => handleAddCart({ ...item, quantity: 1 })}
                             />
                         </Link>
                     ))}
                 </div>
             )}
+
             {urls && (
                 <div
                     className='mt-2 flex cursor-pointer flex-col items-center p-2 text-center font-bold'
                     onClick={handleViewMore}
                 >
+                    {isLoadingViewMore && <div className='loading loading-bars loading-lg'></div>}
                     Xem thêm{' '}
                     <span>
                         <FaAngleDoubleDown />

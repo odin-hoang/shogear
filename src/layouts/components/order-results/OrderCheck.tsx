@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
 import apiRequest from '../../../services/request';
-// import { useUserContext } from '../../../utils/authContext';
-import { numberWithCommas } from '../../../lib/scripts';
-import Button from '../../../components/Button';
-import { AiOutlineLoading } from 'react-icons/ai';
-interface Order {
+import { useUserContext } from '../../../utils/authContext';
+import OrderItem from './OrderItem';
+import { ProductItem } from '../../../pages/ProductDetail';
+
+export interface Order {
     id: number;
     user: number;
-    items: {
-        id: number;
-        quantity: number;
-        order: number;
-        product: {
-            name: string;
-        };
-    }[];
+    items: [
+        {
+            id: number;
+            quantity: number;
+            order: number;
+            product: ProductItem;
+        },
+    ];
     totalPrice: number;
     ward: string;
     district: string;
@@ -26,39 +26,34 @@ interface Order {
     updatedAt: string;
     status: number;
 }
-function getStatusString(status: number): string {
-    switch (status) {
-        case 1:
-            return 'Đang chờ xác nhận';
-        case 2:
-            return 'Chưa thanh toán';
-        case 3:
-            return 'Đã thanh toán';
-        case 4:
-            return 'Đang vận chuyển';
-        case 5:
-            return 'Đã giao hàng';
-        case 0:
-            return 'Đã huỷ';
-        default:
-            return '';
-    }
-}
 
+export interface User {
+    id: number;
+    username: string;
+    firstName: string;
+    lastName: string;
+    isAdmin: boolean;
+    products: number[];
+    posts: number[];
+    phone: string;
+}
 const OrderCheck = () => {
     const [orders, setOrders] = useState<Order[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    // const { getUser } = useUserContext();
-    // const user = getUser();
+    const { getUser } = useUserContext();
+
+    const user = getUser();
     useEffect(() => {
         setIsLoading(true);
+        // apiRequest.get<Order[]>(`/get/orders/${user?.id}`).then((response) => {
         apiRequest.get<Order[]>(`/get/orders/${2}`).then((response) => {
+            setOrders(response.data);
             setIsLoading(false);
-            const orders: Order[] = [];
-            for (const data of response.data) {
-                orders.push(data);
-            }
-            setOrders([...orders]);
+            // for (const order of response.data) {
+            //     apiRequest.get<User>(`/users/${order.items}`).then((response) => {
+            //         setSellers((prev) => [...prev, response.data]);
+            //     });
+            // }
         });
     }, []);
     const handleDeleteOrder = (order_id: number) => {
@@ -69,51 +64,132 @@ const OrderCheck = () => {
             window.location.reload();
         });
     };
+    const [selected, setSelected] = useState(0);
     return (
-        <div className='mx-auto mt-5 max-w-[1200px]'>
-            {isLoading && (
-                <div className=''>
-                    <span className='animate-spin text-4xl'>
-                        <AiOutlineLoading />
-                    </span>
-                </div>
-            )}
-            {orders.length === 0 && <div>Chưa có đơn hàng nào</div>}
-            {orders.map((order) => (
-                <div className='mb-4 min-h-[200px] rounded-md p-4 shadow-overflow'>
-                    <table className='table'>
-                        <thead>
-                            <tr>
-                                <th>
-                                    <Button variant={'fill'} onClick={() => handleDeleteOrder(order.id)}>
-                                        Xoá
-                                    </Button>
-                                </th>
-                                <th>Tên sản phẩm</th>
-                                <th className='text-center'>Số lượng</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {order.items.map((item, index) => (
-                                <tr>
-                                    <th>{index + 1}</th>
-                                    <td>{item.product.name}</td>
-                                    <td className='text-center'>{item.quantity}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-
-                    <div className='flex items-center justify-between'>
-                        <div>
-                            Tổng giá tiền: <span className='price'>{numberWithCommas(order.totalPrice)}</span>
-                        </div>
-                        <span style={{ color: order.status === 1 ? 'green' : 'red' }} className='mr-10 font-bold'>
-                            {getStatusString(order.status)}
-                        </span>
+        <div className='min-h-[400px] bg-bodyBg-default py-5'>
+            <div className=' mx-auto mt-5 max-w-[1200px] '>
+                <h1 className='my-5  text-center text-lg font-bold text-primary-default'>Tra cứu đơn hàng</h1>
+                <div role='tablist' className='tabs tabs-lifted '>
+                    <input
+                        id='pending'
+                        type='radio'
+                        name='my_tabs_2'
+                        role='tab'
+                        className='tab !w-[200px]'
+                        aria-label={`Chờ xác nhận (${orders.filter((order) => order.status === 1).length})`}
+                    />
+                    <div
+                        id='panel-1'
+                        role='tabpanel'
+                        className='tab-content rounded-box border-base-300 bg-base-100 p-6'
+                    >
+                        {isLoading && (
+                            <div className='flex items-center justify-center'>
+                                <div className='loading loading-bars loading-lg'></div>
+                            </div>
+                        )}
+                        {orders.filter((order) => order.status === 1).length === 0 && !isLoading ? (
+                            <div>Chưa có đơn hàng nào</div>
+                        ) : (
+                            orders.filter((order) => order.status === 1).map((order) => <OrderItem order={order} />)
+                        )}
+                    </div>
+                    <input
+                        type='radio'
+                        name='my_tabs_2'
+                        role='tab'
+                        className='tab !w-[200px]'
+                        aria-label={`Chưa thanh toán (${orders.filter((order) => order.status === 2).length})`}
+                    />
+                    <div
+                        id='panel-2'
+                        role='tabpanel'
+                        className='tab-content rounded-box border-base-300 bg-base-100 p-6'
+                    >
+                        {isLoading && (
+                            <div className='flex items-center justify-center'>
+                                <div className='loading loading-bars loading-lg'></div>
+                            </div>
+                        )}
+                        {orders.filter((order) => order.status === 2).length === 0 && !isLoading ? (
+                            <div>Chưa có đơn hàng nào</div>
+                        ) : (
+                            orders.filter((order) => order.status === 2).map((order) => <OrderItem order={order} />)
+                        )}
+                    </div>
+                    <input
+                        type='radio'
+                        name='my_tabs_2'
+                        role='tab'
+                        className='tab !w-[200px]'
+                        aria-label={`Đang giao hàng (${orders.filter((order) => order.status === 3).length})`}
+                    />
+                    <div
+                        id='panel-3'
+                        role='tabpanel'
+                        className='tab-content rounded-box border-base-300 bg-base-100 p-6'
+                    >
+                        {isLoading && (
+                            <div className='flex items-center justify-center'>
+                                <div className='loading loading-bars loading-lg'></div>
+                            </div>
+                        )}
+                        {orders.filter((order) => order.status === 3).length === 0 && !isLoading ? (
+                            <div>Chưa có đơn hàng nào</div>
+                        ) : (
+                            orders.filter((order) => order.status === 3).map((order) => <OrderItem order={order} />)
+                        )}
+                    </div>
+                    <input
+                        type='radio'
+                        name='my_tabs_2'
+                        role='tab'
+                        className='tab !w-[200px]'
+                        aria-label={`Đã giao thành công (${orders.filter((order) => order.status === 4).length})`}
+                    />
+                    <div
+                        id='panel-4'
+                        role='tabpanel'
+                        className='tab-content rounded-box border-base-300 bg-base-100 p-6'
+                    >
+                        {isLoading && (
+                            <div className='flex items-center justify-center'>
+                                <div className='loading loading-bars loading-lg'></div>
+                            </div>
+                        )}
+                        {orders.length === 0 && !isLoading && <div>Chưa có đơn hàng nào</div>}
+                        {orders.filter((order) => order.status === 4).length === 0 && !isLoading ? (
+                            <div>Chưa có đơn hàng nào</div>
+                        ) : (
+                            orders.filter((order) => order.status === 4).map((order) => <OrderItem order={order} />)
+                        )}
+                    </div>
+                    <input
+                        type='radio'
+                        name='my_tabs_2'
+                        role='tab'
+                        className='tab !w-[200px]'
+                        aria-label={`Đã huỷ (${orders.filter((order) => order.status === 0).length})`}
+                    />
+                    <div
+                        id='panel-0'
+                        role='tabpanel'
+                        className='tab-content rounded-box border-base-300 bg-base-100 p-6'
+                    >
+                        {isLoading && (
+                            <div className='flex items-center justify-center'>
+                                <div className='loading loading-bars loading-lg'></div>
+                            </div>
+                        )}
+                        {orders.length === 0 && !isLoading && <div>Chưa có đơn hàng nào</div>}
+                        {orders.filter((order) => order.status === 0).length === 0 && !isLoading ? (
+                            <div>Chưa có đơn hàng nào</div>
+                        ) : (
+                            orders.filter((order) => order.status === 0).map((order) => <OrderItem order={order} />)
+                        )}
                     </div>
                 </div>
-            ))}
+            </div>
         </div>
     );
 };
