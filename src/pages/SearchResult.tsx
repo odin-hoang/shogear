@@ -1,6 +1,5 @@
 import Button from '../components/Button';
 import { FaCaretDown, FaFilter, FaSortAmountUpAlt, FaSortAmountDownAlt } from 'react-icons/fa';
-import { CiBoxList, CiGrid41 } from 'react-icons/ci';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { cn } from '../lib/utils/cn';
 import { useEffect, useState } from 'react';
@@ -40,6 +39,7 @@ const SearchResult = () => {
     const [filterPost, setFilterPost] = useState<PostItem[]>([]);
     useEffect(() => {
         setIsLoading(true);
+        setFilterPost([]);
         SearchPost(q, 1).then((response) => {
             const res = response as PostResponse;
             const datas: PostItem[] = res.posts;
@@ -49,11 +49,9 @@ const SearchResult = () => {
             setFilterPost(datas);
             setIsLoading(false);
         });
-    }, []);
-
+    }, [q]);
+    useEffect(() => setFilterPost(posts), [posts]);
     const zoneTags = ['TP. Hồ Chí Minh', 'Đà Nẵng', 'Cao Bằng', 'Hà Nội', 'Long An', 'Kiên Giang'];
-    // default layout = grid
-    const [layout, setLayout] = useState(false);
 
     const [filterer, setFilterer] = useState<InitialFilterer>({
         byZone: null,
@@ -81,23 +79,42 @@ const SearchResult = () => {
     function handlePrice() {
         if (filterer.byPrice === 'asc') {
             setFilterer((prev) => ({ ...prev, byPrice: 'desc' }));
+            const data = filterPost.sort((a, b) => b.product.price - a.product.price);
+            setFilterPost(data);
         } else if (filterer.byPrice === 'desc') {
             setFilterer((prev) => ({ ...prev, byPrice: 'asc' }));
+            const data = filterPost.sort((a, b) => a.product.price - b.product.price);
+            setFilterPost(data);
         }
     }
+
     const handleApplyFilter = () => {
-        const data = posts.filter((post) => post.zone === filterer.byZone);
+        let data = posts.filter((post) => {
+            const isZoneMatch = filterer.byZone ? post.zone === filterer.byZone : true;
+            const isProductTagMatch =
+                filterer.byProductTag.length > 0 ? filterer.byProductTag.includes(post.product.category) : true;
+            return isZoneMatch && isProductTagMatch;
+        });
+        if (filterer.byPrice === 'asc') {
+            data.sort((a, b) => a.product.price - b.product.price);
+        } else if (filterer.byPrice === 'desc') {
+            data.sort((a, b) => b.product.price - a.product.price);
+        }
         setFilterPost(data);
-        console.log({ filter: filterPost });
-        console.log('zo');
     };
+    const [clearFilter, setClearFilter] = useState(false);
     const handleDeleteFilter = (type: 'byZone' | 'byProductTag') => {
         if (type === 'byZone') {
             setFilterer((prev) => ({ ...prev, byZone: null }));
-            setFilterPost(posts);
+        } else if (type === 'byProductTag') {
+            setFilterer((prev) => ({ ...prev, byProductTag: [] }));
         }
-        if (type === 'byProductTag') setFilterer((prev) => ({ ...prev, byProductTag: [] }));
+        setClearFilter(!clearFilter);
     };
+    useEffect(() => {
+        handleApplyFilter();
+    }, [posts, clearFilter]);
+
     const [isLoading, setIsLoading] = useState(false);
     const [pagnination, setPagination] = useState({
         totalPage: 0,
@@ -120,12 +137,8 @@ const SearchResult = () => {
         <div className='bg-bodyBg-default px-6 py-6 '>
             <div className='mx-auto  max-w-[1200px] '>
                 <div className=' rounded-md bg-white p-4'>
-                    {/* username and filterer */}
                     <div className='mb-4 flex items-center justify-between'>
                         <div className='flex gap-3 '>
-                            <span className='cursor-pointer text-3xl' onClick={() => setLayout(!layout)}>
-                                {layout ? <CiGrid41 /> : <CiBoxList />}
-                            </span>
                             <span className='flex items-center gap-1 text-primary-900'>
                                 <span className=''>
                                     <FaFilter />
@@ -228,35 +241,38 @@ const SearchResult = () => {
                             <span className='ml-2 '>
                                 Tìm kiếm theo:{' '}
                                 <span className='ml-2 line-clamp-1  font-bold text-title-default'>{q}</span>
-                                {isSearchByImage && <ImageForm setPosts={setPosts} />}
+                                {isSearchByImage && <ImageForm setPosts={setPosts} setIsLoading={setIsLoading} />}
                             </span>
                         </h1>
                     </div>
-                    {/*  Grid */}
                     <div className='grid grid-cols-2 gap-4 sm:grid-cols-3  lg:grid-cols-5'>
                         {isLoading && <Loading />}
-                        {filterPost.map((item, index) => (
-                            <Link
-                                to={`/products/${toHyphenString(item.product.name)}`}
-                                state={{ item }}
-                                className={cn('flex flex-col rounded-sm border')}
-                                key={index}
-                                preventScrollReset={false}
-                            >
-                                <Card
-                                    id={item.id}
-                                    name={item.product.name}
-                                    imageUrl={item.product.attachments[0].file}
-                                    price={item.product.price}
-                                    username={item.user}
-                                    postedAt={item.updatedAt}
-                                    zone={item.zone}
-                                    isUsed={!!item.product.status}
-                                    className='w-[200px]'
-                                    // onClick={() => handleAddCart({ ...item, quantity: 1 })}
-                                />
-                            </Link>
-                        ))}
+                        {filterPost.length === 0 && !isLoading ? (
+                            <div className='text-gray-400'> Không tìm thấy kết quả phù hợp.</div>
+                        ) : (
+                            filterPost.map((item, index) => (
+                                <Link
+                                    to={`/products/${toHyphenString(item.product.name)}`}
+                                    state={{ item }}
+                                    className={cn('flex flex-col rounded-sm border')}
+                                    key={index}
+                                    preventScrollReset={false}
+                                >
+                                    <Card
+                                        id={item.id}
+                                        name={item.product.name}
+                                        imageUrl={item.product.attachments[0].file}
+                                        price={item.product.price}
+                                        username={item.user}
+                                        postedAt={item.updatedAt}
+                                        zone={item.zone}
+                                        isUsed={!!item.product.status}
+                                        className='w-[200px] '
+                                        // onClick={() => handleAddCart({ ...item, quantity: 1 })}
+                                    />
+                                </Link>
+                            ))
+                        )}
                     </div>
                     <ReactPaginate
                         breakLabel='...'
@@ -277,8 +293,8 @@ const SearchResult = () => {
                         containerClassName='flex justify-center items-center gap-2 mt-4'
                         activeClassName=''
                         activeLinkClassName='text-white bg-primary-default'
-                        disabledLinkClassName='border-gray-200 text-gray-300  select-none'
-                        disabledClassName='hover:bg-white select-none'
+                        disabledLinkClassName='border-gray-200 text-gray-300 cursor:not-allowed  select-none hover:text-gray-300 hover:bg-transparent cursor-not-allowed'
+                        disabledClassName='hover:bg-white select-none '
                     />
                 </div>
             </div>

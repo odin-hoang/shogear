@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Button from './Button';
 import { PostItem } from '../pages/ProductDetail';
+import { toast } from 'react-toastify';
 interface SearchPostProps {
     setPosts: React.Dispatch<React.SetStateAction<PostItem[]>>;
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const ImageForm = ({ setPosts }: SearchPostProps) => {
+const ImageForm = ({ setPosts, setIsLoading }: SearchPostProps) => {
     const [previewImg, setPreviewImg] = useState(
         'https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn//News/1499078//laptop-15-800x450-1.jpg',
     );
@@ -19,8 +21,19 @@ const ImageForm = ({ setPosts }: SearchPostProps) => {
     };
     const handleSubmitImage = (event: React.FormEvent) => {
         event.preventDefault();
+        if (!(inputRef.current && inputRef.current.files && inputRef.current.files.length > 0)) {
+            toast.error('Vui lòng chọn hình ảnh!');
+            return;
+        }
         // TODO: call api to get all of ids of products
+        setIsLoading(true);
+        setTimeout(() => {
+            console.log('hello');
+            setIsLoading(false);
+        }, 3000);
+        setPosts([]);
     };
+    const inputRef = useRef<HTMLInputElement>(null);
     return (
         <form onSubmit={handleSubmitImage} className='flex items-center justify-around'>
             <div className='flex items-center justify-center gap-5'>
@@ -35,6 +48,7 @@ const ImageForm = ({ setPosts }: SearchPostProps) => {
                 <label className='block'>
                     <span className='sr-only'>Choose profile photo</span>
                     <input
+                        ref={inputRef}
                         name='image'
                         type='file'
                         onChange={handleFileChange}
