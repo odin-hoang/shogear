@@ -16,7 +16,7 @@ export const publicRoutes = [
     { path: '/search', component: SearchResult },
     { path: '/new/config', component: CategoryConfig },
     { path: '/new/product', component: NewPost },
-    { path: '/order/check', component: OrderCheck },
+    { path: '/order/check', component: OrderCheck }, 
     { path: '/order/result/:paymentId', component: ResultOrder },
 ];
 // need to sign in to access routes
