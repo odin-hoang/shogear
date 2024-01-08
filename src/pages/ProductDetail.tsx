@@ -1,8 +1,7 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ImageSlider, { Images } from '../components/ImageSlider';
 import { numberWithCommas } from '../lib/scripts';
 import Button from '../components/Button';
-import { FaRegClock } from 'react-icons/fa';
 import { FiPhoneCall } from 'react-icons/fi';
 import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
 import { BsCartPlusFill } from 'react-icons/bs';
@@ -12,6 +11,7 @@ import { useAppDispatch } from '../app/hook';
 import { addToCart } from '../features/cart/cart-slice';
 import { useEffect, useState } from 'react';
 import apiRequest from '../services/request';
+import DefaultImages from '../assets/images';
 export interface ProductItem {
     id: number;
     fieldValues: [{ tag: string; value: string }];
@@ -112,6 +112,7 @@ const ProductDetail = () => {
     const handleShowPhoneNumber = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.currentTarget.textContent = 'SMS: ' + phoneNumber;
     };
+    const navigate = useNavigate();
     return (
         <div className='bg-bodyBg-default px-6 py-6 '>
             <div className='mx-auto max-w-[1200px]'>
@@ -177,7 +178,21 @@ const ProductDetail = () => {
                                 </div>
                             )}
                             <div className='mt-2 flex flex-col gap-2'>
-                                <Button variant={'fill'} size={'medium'} className='justify-center'>
+                                <Button
+                                    variant={'fill'}
+                                    size={'medium'}
+                                    className='justify-center'
+                                    onClick={() => {
+                                        handleAddCart({
+                                            id: post.product.id,
+                                            imageUrl: post.product.attachments[0].file,
+                                            name: post.product.name,
+                                            price: post.product.price,
+                                            quantity: 1,
+                                        } as CartItem);
+                                        navigate('/cart');
+                                    }}
+                                >
                                     Mua ngay
                                 </Button>
                                 <Button
@@ -201,17 +216,22 @@ const ProductDetail = () => {
                         </div>
                         <div className='sticky top-2 h-min shrink-0'>
                             {/* seller info */}
-                            <div className='mb-2 flex items-center gap-2'>
+                            <Link
+                                to={'/user/profile'}
+                                state={{ seller: post.product.user }}
+                                className='tooltip tooltip-warning mb-2 flex items-center gap-2'
+                                data-tip='Truy cập trang cá nhân'
+                            >
                                 <div className='avatar offline relative h-16 w-16 '>
-                                    <img src={'https://picsum.photos/200'} alt='' className='rounded-full' />
+                                    <img src={DefaultImages.defaultAvatar} alt='' className='rounded-full' />
                                 </div>
                                 <div>
                                     <div className='font-bold'>{post.user}</div>
-                                    <div className='flex items-center gap-1'>
+                                    {/* <div className='flex items-center gap-1'>
                                         <FaRegClock /> 1 phút trước
-                                    </div>
+                                    </div> */}
                                 </div>
-                            </div>
+                            </Link>
 
                             <div className='flex flex-col items-center gap-2'>
                                 <Button variant={'fillBlue'} className='flex' onClick={(e) => handleShowPhoneNumber(e)}>

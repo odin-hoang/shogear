@@ -2,9 +2,14 @@ import React, { useRef, useState } from 'react';
 import Button from './Button';
 import { PostItem } from '../pages/ProductDetail';
 import { toast } from 'react-toastify';
+import axios from 'axios';
+import apiRequest from '../services/request';
 interface SearchPostProps {
     setPosts: React.Dispatch<React.SetStateAction<PostItem[]>>;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
+interface ListProduct {
+    product_ids: number[];
 }
 const ImageForm = ({ setPosts, setIsLoading }: SearchPostProps) => {
     const [previewImg, setPreviewImg] = useState(
@@ -27,11 +32,29 @@ const ImageForm = ({ setPosts, setIsLoading }: SearchPostProps) => {
         }
         // TODO: call api to get all of ids of products
         setIsLoading(true);
-        setTimeout(() => {
-            console.log('hello');
-            setIsLoading(false);
-        }, 3000);
+        var formData = new FormData();
+        var imageFile = inputRef.current.files[0];
+        formData.append('file', imageFile);
         setPosts([]);
+        axios
+            .post<ListProduct>('http://127.0.0.1:5000/api/search', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+                },
+            })
+            .then((response) => {
+                console.log(response.data);
+                const result = response.data.product_ids;
+                const postPromises = result.slice(0, 5).map((post) => apiRequest.get<PostItem>(`/get/posts/${post}`));
+
+                Promise.all(postPromises).then((responses) => {
+                    const fetchedPosts = responses.map((response) => response.data);
+                    setPosts(fetchedPosts);
+                    setIsLoading(false);
+                });
+            });
     };
     const inputRef = useRef<HTMLInputElement>(null);
     return (

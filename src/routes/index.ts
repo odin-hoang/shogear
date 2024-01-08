@@ -1,4 +1,5 @@
 import DefaultLayout from '../layouts/DefaultLayout';
+import UserProfile from '../layouts/components/UserProfile';
 import CategoryConfig from '../layouts/components/admin-forms/CategoryConfig';
 import NewPost from '../layouts/components/new-post/NewPost';
 import OrderCheck from '../layouts/components/order-results/OrderCheck';
@@ -16,8 +17,9 @@ export const publicRoutes = [
     { path: '/search', component: SearchResult },
     { path: '/new/config', component: CategoryConfig },
     { path: '/new/product', component: NewPost },
-    { path: '/order/check', component: OrderCheck },
+    { path: '/user/order', component: OrderCheck },
     { path: '/order/result/:paymentId', component: ResultOrder },
+    { path: '/user/profile', component: UserProfile },
 ];
 // need to sign in to access routes
 export const privateRoutes = [];

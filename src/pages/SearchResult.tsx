@@ -113,7 +113,7 @@ const SearchResult = () => {
     };
     useEffect(() => {
         handleApplyFilter();
-    }, [posts, clearFilter]);
+    }, [clearFilter]);
 
     const [isLoading, setIsLoading] = useState(false);
     const [pagnination, setPagination] = useState({

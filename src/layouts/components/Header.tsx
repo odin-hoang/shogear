@@ -41,7 +41,7 @@ const Header = () => {
             icon: Icons.order,
             name1: 'Tra cứu',
             name2: 'đơn hàng',
-            to: '/order/check',
+            to: '/user/order',
         },
         {
             icon: Icons.shopcart,
