@@ -12,6 +12,7 @@ import FileUploader from './components/FileUploader';
 import { getCategories, postProduct, uploadImage } from '../../../services/postService';
 
 import { CloseSquareFilled } from '@ant-design/icons';
+import { toast } from 'react-toastify';
 const NewPost = () => {
     const form = useForm<z.infer<typeof productSchema>>({
         resolver: zodResolver(productSchema),
@@ -45,6 +46,7 @@ const NewPost = () => {
     }, [category]);
     async function onSubmit(values: z.infer<typeof productSchema>) {
         //      console.log('submit');
+        setIsLoading(true);
         uploadImage(images).then(async (data: any) => {
             console.log(data);
             if (data?.data?.length > 0) {
@@ -54,15 +56,19 @@ const NewPost = () => {
                     file_type: 'Photo',
                 }));
                 const product = await postProduct({
-                    product: { ...values, is_available: true },
+                    product: { ...values, is_available: true, status: values.status },
                     fields: values.fields,
-                    attatchments: [...newImages],
-                    post_zone: 'HCM',
-                    post_description: 'hehe',
+                    attachments: [...newImages],
+                    post_zone: values.zone,
+                    post_description: values.description,
                 });
                 if (product) {
                     console.log(product);
+                    toast.success('Đăng bài thành công');
+                } else {
+                    toast.error('Hãy kiểm tra lại thông tin sản phẩm!');
                 }
+                setIsLoading(false);
             }
         });
         //     console.log(values);
@@ -71,12 +77,34 @@ const NewPost = () => {
     const errors = form.formState.errors;
     const statusList = [
         {
-            value: 'new',
+            value: 1,
             name: 'Mới',
         },
         {
-            value: 'used',
+            value: 0,
             name: 'Đã sử dụng',
+        },
+    ];
+    const zoneList = [
+        {
+            value: 'HCM',
+            name: 'Tp. Hồ Chí Minh',
+        },
+        {
+            value: 'HN',
+            name: 'Hà Nội',
+        },
+        {
+            value: 'DN',
+            name: 'Đà Nẵng',
+        },
+        {
+            value: 'CT',
+            name: 'Cần Thơ',
+        },
+        {
+            value: 'HP',
+            name: 'Hải Phòng',
         },
     ];
     useEffect(() => {
@@ -93,8 +121,9 @@ const NewPost = () => {
     };
     //  console.log(form.getValues('fields'));
     //console.log(form.formState.errors);
+    const [isLoading, setIsLoading] = useState(true);
     return (
-        <div className='p-20'>
+        <div className='mx-auto max-w-[1200px] p-20'>
             <h3 className='mb-4 text-2xl font-semibold'>Tạo bài đăng mới</h3>
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div>
@@ -200,6 +229,17 @@ const NewPost = () => {
                     ></textarea>
                     {errors.name && <p className='mb-4 text-state-error'>{`*${errors.name.message}`}</p>}
                 </div>
+                <div>
+                    <h1 className='mb-4'>Khu vực</h1>
+                    <select {...form.register('zone')} placeholder='' className='select mb-4 w-full bg-gray-100'>
+                        {zoneList.map((item) => (
+                            <option key={item.value} value={item.value}>
+                                {item.name}
+                            </option>
+                        ))}
+                    </select>
+                    {errors.zone && <p className='mb-4 text-state-error'>{`*${errors.zone.message}`}</p>}
+                </div>
                 <h3 className='mb-4 text-xl font-semibold'>Thông tin chi tiết</h3>
                 <div className='grid grid-cols-2 gap-4'>
                     {fields?.map((item: any, index: number) => {
@@ -230,7 +270,7 @@ const NewPost = () => {
                                         <option value={'default'}>{item.name}</option>
 
                                         {item.options.map((option: any) => (
-                                            <option key={option.name} value={item.name}>
+                                            <option key={option.name} value={option.name}>
                                                 {option.name}
                                             </option>
                                         ))}
@@ -268,7 +308,7 @@ const NewPost = () => {
                     })}
                 </div>
                 <h3 className='mb-4 text-xl font-semibold'>Danh sách hình ảnh</h3>
-                <div className='bg-slate-500'>
+                <div className='mb-4 rounded-md bg-gray-200 p-4'>
                     <div className='grid grid-flow-row grid-cols-5 object-contain'>
                         {images?.map((item: any, index: number) => {
                             return (
@@ -301,11 +341,13 @@ const NewPost = () => {
                     size={'medium'}
                 >
                     Thêm sản phẩm{' '}
-                    {isSubmitting ? (
+                    {isLoading ? (
                         <span className='animate-spin'>
                             <AiOutlineLoading />
                         </span>
-                    ) : null}
+                    ) : (
+                        ''
+                    )}
                 </Button>
             </form>
         </div>

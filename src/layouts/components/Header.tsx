@@ -5,7 +5,7 @@ import Action from './Action';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../../components/Button';
 import Login from './auth-forms/Login';
 import Signup from './auth-forms/Signup';
@@ -16,6 +16,7 @@ import toHyphenString from '../../lib/toHyphenString';
 import { PostItem } from '../../pages/ProductDetail';
 import { useDebounce } from '../../app/hook';
 import { MdOutlineImageSearch } from 'react-icons/md';
+import { CiEdit, CiReceipt } from 'react-icons/ci';
 type InitialSearchState = {
     isSearching: boolean;
     query: string;
@@ -56,13 +57,14 @@ const Header = () => {
     });
     // TODO: call query API  --> search result
     const [posts, setPosts] = useState<PostItem[]>([]);
-    const debounceQuery = useDebounce<string>(search.query, 300);
+    const debounceQuery = useDebounce<string>(search.query, 500);
     const [isLoading, setIsLoading] = useState(false);
-    useLayoutEffect(() => {
+    useEffect(() => {
         setIsLoading(true);
         apiRequest.get(`/posts/?q=${debounceQuery}`).then((response) => {
             setIsLoading(false);
             const results: PostItem[] = response.data.results;
+            console.log(results);
             setPosts(results);
         });
     }, [debounceQuery]);
@@ -309,8 +311,26 @@ const Header = () => {
                             <HeadlessTippy
                                 content={
                                     <div className=' '>
-                                        <Link to={'/new/product'}>Tạo bài đăng</Link>
-                                        <Button variant={'fill'} className='mt-2' onClick={() => logOut()}>
+                                        <Link
+                                            to={'/new/product'}
+                                            className='border-md mb-2 flex items-center gap-2 p-2 hover:bg-gray-200'
+                                        >
+                                            <CiEdit /> Tạo bài đăng
+                                        </Link>
+                                        <Link
+                                            to={'/seller/order'}
+                                            className='border-md flex  items-center gap-2 p-2 hover:bg-gray-200'
+                                        >
+                                            <CiReceipt /> Hoá đơn bán hàng
+                                        </Link>
+                                        <Button
+                                            variant={'fill'}
+                                            className='mt-2'
+                                            onClick={() => {
+                                                logOut();
+                                                navigate('/');
+                                            }}
+                                        >
                                             Đăng xuất
                                         </Button>
                                     </div>

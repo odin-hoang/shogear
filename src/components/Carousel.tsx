@@ -51,7 +51,7 @@ const Carousel = () => {
         apiRequest.get('/posts').then((response) => {
             const datas: PostItem[] = response.data.results;
             setPosts(datas);
-            setIsLoading(true);
+            setIsLoading(false);
         });
     }, []);
     return (

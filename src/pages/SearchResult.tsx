@@ -293,8 +293,8 @@ const SearchResult = () => {
                         containerClassName='flex justify-center items-center gap-2 mt-4'
                         activeClassName=''
                         activeLinkClassName='text-white bg-primary-default'
-                        disabledLinkClassName='border-gray-200 text-gray-300 cursor:not-allowed  select-none hover:text-gray-300 hover:bg-transparent cursor-not-allowed'
-                        disabledClassName='hover:bg-white select-none '
+                        disabledLinkClassName='border-gray-200 text-gray-300 cursor:not-allowed  select-none hover:!text-gray-300 hover:bg-transparent cursor-not-allowed'
+                        disabledClassName='hover:!text-gray-300 select-none hover:bg-transparent'
                     />
                 </div>
             </div>

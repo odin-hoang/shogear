@@ -12,6 +12,7 @@ import { addToCart } from '../features/cart/cart-slice';
 import { useEffect, useState } from 'react';
 import apiRequest from '../services/request';
 import DefaultImages from '../assets/images';
+import { User } from '../layouts/components/order-results/OrderCheck';
 export interface ProductItem {
     id: number;
     fieldValues: [{ tag: string; value: string }];
@@ -23,7 +24,7 @@ export interface ProductItem {
     amount: string;
     category: string;
     status?: string;
-    user: number;
+    user: User;
 }
 export interface PostItem {
     id: number;
@@ -67,42 +68,6 @@ const ProductDetail = () => {
         console.log('add product success');
     };
     // TODO: Call api to get detail information of user and product
-    // const banners = [
-    //     {
-    //         alt: 'Vui lễ lớn giảm nhiều hơn',
-    //         imageUrl:
-    //             'https://product.hstatic.net/200000722513/product/zero_msi_-_3_7723ef0bfeaa45c88b40cc0216973eb8_grande.png',
-    //         imageUrlMobile:
-    //             'https://cdn.nhathuoclongchau.com.vn/unsafe/1080x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/Banner_Web_Mobi640x320_e80f26f0ce.png',
-    //     },
-    //     {
-    //         alt: 'Tiêm chủng vắc xin',
-    //         imageUrl: `${product.imageUrl}`,
-    //         imageUrlMobile:
-    //             'https://cdn.nhathuoclongchau.com.vn/unsafe/1080x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/640x320_47f588ca90.jpg',
-    //     },
-    //     {
-    //         alt: 'Brauer',
-    //         imageUrl:
-    //             'https://product.hstatic.net/200000722513/product/post-02_ff8d6f3df77a4932b65a0fbbfa1ddf39_grande.jpg',
-    //         imageUrlMobile:
-    //             'https://cdn.nhathuoclongchau.com.vn/unsafe/1080x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/M1_375x188_9f4cf0b250.png',
-    //     },
-    //     {
-    //         alt: 'Vi chất dinh dưỡng từ Anh quốc',
-    //         imageUrl:
-    //             'https://product.hstatic.net/200000722513/product/post-03_bd47d3613e214d9e948b3b5c9eac515d_grande.jpg',
-    //         imageUrlMobile:
-    //             'https://cdn.nhathuoclongchau.com.vn/unsafe/1080x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/Banner_Mobile_a947a6bbf0.jpg',
-    //     },
-    //     {
-    //         alt: 'Tiêu hoá khoẻ dạ dày',
-    //         imageUrl:
-    //             'https://product.hstatic.net/200000722513/product/post-04_e10b4bd422824ee5a5dbbaaaae27a50f_grande.jpg',
-    //         imageUrlMobile:
-    //             'https://cdn.nhathuoclongchau.com.vn/unsafe/1080x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/Banner_Web_Mobi_640x320_b409a3d39c.png',
-    //     },
-    // ];
     const [phoneNumber, setPhoneNumber] = useState('0');
     useEffect(() => {
         apiRequest.get(`/users/${post.product.user}`).then((response) => {

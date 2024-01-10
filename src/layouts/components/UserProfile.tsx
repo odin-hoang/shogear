@@ -4,6 +4,7 @@ import apiRequest from '../../services/request';
 import { User } from './order-results/OrderCheck';
 import { PostItem } from '../../pages/ProductDetail';
 import toHyphenString from '../../lib/toHyphenString';
+import DefaultImages from '../../assets/images';
 
 const UserProfile = () => {
     const location = useLocation();
@@ -41,7 +42,7 @@ const UserProfile = () => {
                 <div className='relative mx-auto w-5/6 rounded-lg bg-white shadow md:w-5/6 lg:w-4/6 xl:w-3/6'>
                     <div className='flex justify-center'>
                         <img
-                            src='/src/assets/images/default-avatar.png'
+                            src={DefaultImages.defaultAvatar}
                             alt=''
                             className='absolute -top-20 mx-auto h-32 w-32 transform rounded-full border-4 border-white shadow-md transition duration-200 hover:scale-110'
                         />

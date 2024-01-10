@@ -1,24 +1,21 @@
-import { Order, User } from './OrderCheck';
+import { Order } from './OrderCheck';
 import { formatISODate, numberWithCommas } from '../../../lib/scripts';
-import { useEffect, useState } from 'react';
+import { FaCircleCheck } from 'react-icons/fa6';
+import { cn } from '../../../lib/utils/cn';
+import Button from '../../../components/Button';
 import apiRequest from '../../../services/request';
+import { toast } from 'react-toastify';
 
 const OrderItem = ({ order }: { order: Order }) => {
-    const [sellers, setSellers] = useState<User[]>([]);
-    useEffect(() => {
-        for (const item of order.items) {
-            apiRequest.get<User>(`/users/${item.product.user}`).then((response) => {
-                setSellers((prev) => [...prev, response.data]);
-            });
-        }
-    }, []);
+    const handleCancelOrder = () => {
+        console.log(order.user);
+        apiRequest.put(`/buyer/orders/${order.user}`, { order: order.id }).then((response) => {
+            toast(response.data.message);
+        });
+    };
     return (
-        <div className=' my-5 flex flex-col justify-center gap-2 rounded-lg border bg-white p-2'>
+        <div className=' my-5 flex flex-col justify-center gap-2 rounded-lg border bg-white p-5'>
             <div className='flex items-center justify-between'>
-                {/* <div className='flex items-center'>
-                                        <Check className='mr-2' />
-                                        <div className='font-bold'>Đang chờ xác nhận</div>
-                                    </div> */}
                 <div>
                     Mã đơn hàng: <span className='font-bold'>{order.id}</span>
                 </div>
@@ -64,7 +61,7 @@ const OrderItem = ({ order }: { order: Order }) => {
                 </thead>
                 <tbody>
                     {order.items.map((item) => (
-                        <tr key={item.id}>
+                        <tr>
                             <td className='flex items-center'>
                                 <div className='flex items-center'>
                                     <img
@@ -77,14 +74,36 @@ const OrderItem = ({ order }: { order: Order }) => {
                             </td>
                             <td className='price'>{numberWithCommas(item.product.price)}</td>
                             <td className='text-center'>{item.quantity}</td>
-                            <td className=''>
-                                {sellers.filter((user) => user.id === item.product.user)[0]?.firstName}
+                            <td className=''>{item.product.user.firstName + ' ' + item.product.user.lastName}</td>
+
+                            <td
+                                className={
+                                    item.confirmationStatus > item.order.status || item.order.status == 4
+                                        ? 'text-green-500'
+                                        : 'text-gray-300'
+                                }
+                            >
+                                <span
+                                    className={cn(
+                                        'flex items-center justify-center text-center text-xl',
+                                        item.confirmationStatus == 5 && '!text-red-500',
+                                    )}
+                                >
+                                    <FaCircleCheck />
+                                </span>
                             </td>
-                            <td>{}</td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+            {order.status <= 2 && (
+                <div className=''>
+                    <Button className='float-right' variant={'fill'} onClick={handleCancelOrder}>
+                        {' '}
+                        Huỷ
+                    </Button>
+                </div>
+            )}
         </div>
     );
 };
