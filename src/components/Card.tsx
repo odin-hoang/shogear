@@ -19,9 +19,7 @@ interface CardProps {
     isSaved?: boolean;
 }
 const Card = ({
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     // id,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     // quantity,
     imageUrl,
     username,
