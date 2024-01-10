@@ -378,7 +378,10 @@ const NewPost = () => {
                 <Button
                     type='submit'
                     disabled={isSubmitting}
-                    className={cn('w-full justify-center font-normal ', isSubmitting && 'bg-inputFill-default')}
+                    className={cn(
+                        'w-full justify-center bg-gradient-to-r from-red-500 to-red-800 font-normal',
+                        isSubmitting && 'pointer-events-none bg-inputFill-default',
+                    )}
                     variant={'fill'}
                     size={'medium'}
                 >

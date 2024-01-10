@@ -82,7 +82,7 @@ const Card = ({
                         <MdLocationPin />
                         <span className='text-right text-xs text-secondary-default'>{zone}</span>
                     </span>
-                    {isSaved ? (
+                    {/* {isSaved ? (
                         <span className='text-primary-default'>
                             <FaHeart />
                         </span>
@@ -90,7 +90,7 @@ const Card = ({
                         <span className=''>
                             <FaRegHeart />
                         </span>
-                    )}
+                    )} */}
                 </h2>
             </div>
         </div>

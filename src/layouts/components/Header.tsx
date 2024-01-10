@@ -18,6 +18,7 @@ import { useAppDispatch, useDebounce } from '../../app/hook';
 import { MdOutlineImageSearch } from 'react-icons/md';
 import { CiEdit, CiReceipt } from 'react-icons/ci';
 import { active, inactive } from '../../features/blur/blur-slice';
+import DefaultImages from '../../assets/images';
 type InitialSearchState = {
     isSearching: boolean;
     query: string;
@@ -101,25 +102,22 @@ const Header = () => {
         navigate('/search', { state: { image: true } });
     };
     return (
-        <header className='relative z-50 justify-center bg-primary-default'>
-            <div className='mx-auto my-auto flex justify-center bg-primary-default px-4 py-3 lg:mx-auto lg:max-w-[1200px] xl:px-0'>
+        <header className='relative z-50 justify-center bg-gradient-to-r from-pink-500 to-rose-500'>
+            <div className='mx-auto my-auto flex items-center justify-center  px-4 py-3 lg:mx-auto lg:max-w-[1200px] xl:px-0'>
                 <div className='my-auto text-white '>
                     <FaBars className='h-6 w-6' />
                 </div>
-                <Link to={'/'} className='logo my-auto ml-4'>
-                    <img
-                        src='https://file.hstatic.net/200000636033/file/logo_fd11946b31524fbe98765f34f3de0628.svg'
-                        className=' hidden w-[140px] lg:inline-block'
-                    ></img>
+                <Link to={'/'} className='logo my-auto ml-4 shadow-2xl'>
+                    <img src={DefaultImages.logoShogear} className=' hidden w-[140px] lg:inline-block'></img>
                     <img
                         src='https://file.hstatic.net/200000636033/file/logo-mobile_1e5b7fc485b24cf985b3d63cfa1f88be.svg'
                         className=' w-[40px] lg:hidden'
                     ></img>
                 </Link>
-                <div className='search relative ml-4 flex h-10 w-[60%] rounded-sm  bg-white ring-slate-100 focus-within:shadow-overflow sm:w-[80%] md:w-[35%] lg:w-[45%]'>
-                    <div className='relative z-10 w-full overflow-hidden rounded-sm'>
+                <div className='search relative ml-4 flex h-10 w-[60%] rounded-md  bg-white ring-slate-100 focus-within:shadow-overflow sm:w-[80%] md:w-[35%] lg:w-[45%]'>
+                    <div className='relative z-10 w-full overflow-hidden rounded-md'>
                         <input
-                            className='font-italic z-10 h-full w-full rounded-sm rounded-bl-none border-none pl-4 font-sf text-base text-placeholder outline-none placeholder:text-placeholder'
+                            className='font-italic z-10 h-full w-full rounded-md rounded-bl-none border-none pl-4 font-sf text-base text-placeholder outline-none placeholder:text-placeholder'
                             placeholder='Bạn cần tìm gì?'
                             onFocus={() => {
                                 setSearch((prev) => ({ ...prev, isSearching: !!prev.query }));

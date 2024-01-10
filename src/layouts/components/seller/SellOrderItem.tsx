@@ -54,13 +54,13 @@ const SellOrderItem = ({ item }: ItemProps) => {
         <div
             className={cn(
                 ' my-5 flex flex-col justify-center gap-2 rounded-lg border bg-white p-5',
-                item.order.status == 2 && 'bg-gradient-to-r from-yellow-500 to-amber-200',
+                item.order.status >= 2 && 'bg-gradient-to-r from-yellow-500 to-amber-200',
             )}
         >
             <div className='flex items-center justify-between'>
                 <div>
                     Mã đơn hàng: <span className='font-bold'>{item.order.id}</span>
-                    {item.order.status == 2 && (
+                    {item.order.status >= 2 && (
                         <Button className='bg-gradient-to-r from-blue-800 to-indigo-900' variant={'fill'}>
                             Đã thanh toán
                         </Button>
@@ -136,7 +136,11 @@ const SellOrderItem = ({ item }: ItemProps) => {
                 </tbody>
             </table>
             <div>
-                <Button variant={'fillBlue'} className='hover:bg-blue-6 00 float-right' onClick={handleUpdate}>
+                <Button
+                    variant={'fillBlue'}
+                    className={cn('hover:bg-blue-6 00 float-right', isLoading && ' pointer-events-none bg-gray-400')}
+                    onClick={handleUpdate}
+                >
                     Cập nhật
                     {isLoading && (
                         <span className='animate-spin'>
