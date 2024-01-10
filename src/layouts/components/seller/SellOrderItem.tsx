@@ -54,13 +54,13 @@ const SellOrderItem = ({ item }: ItemProps) => {
         <div
             className={cn(
                 ' my-5 flex flex-col justify-center gap-2 rounded-lg border bg-white p-5',
-                item.order.status >= 2 && 'bg-gradient-to-r from-yellow-500 to-amber-200',
+                item.order.status >= 2 && item.order.status != 5 && 'bg-gradient-to-r from-yellow-500 to-amber-200',
             )}
         >
             <div className='flex items-center justify-between'>
                 <div>
                     Mã đơn hàng: <span className='font-bold'>{item.order.id}</span>
-                    {item.order.status >= 2 && (
+                    {item.order.status >= 2 && item.order.status != 5 && (
                         <Button className='bg-gradient-to-r from-blue-800 to-indigo-900' variant={'fill'}>
                             Đã thanh toán
                         </Button>
