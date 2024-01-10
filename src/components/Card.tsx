@@ -1,8 +1,8 @@
 import { numberWithCommas } from '../lib/scripts';
 import { FaClockRotateLeft } from 'react-icons/fa6';
 import { MdLocationPin } from 'react-icons/md';
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { FireIcon } from './Icons';
+import DefaultImages from '../assets/images';
 interface CardProps {
     id?: number;
     quantity?: number;
@@ -25,7 +25,6 @@ const Card = ({
     // quantity,
     imageUrl,
     username,
-    avatarUrl = 'https://picsum.photos/200',
     price,
     name,
     postedAt,
@@ -33,7 +32,6 @@ const Card = ({
     className = '',
     draggable = true,
     isUsed = true,
-    isSaved = false,
 }: CardProps) => {
     return (
         <div className={` flex flex-col ${className}`}>
@@ -45,10 +43,10 @@ const Card = ({
                     draggable={draggable}
                 />
                 <div className='absolute bottom-0 left-0 flex w-full items-center'>
-                    {isUsed ? (
+                    {isUsed === false ? (
                         <span className='flex flex-1 items-center bg-white/50 backdrop-blur-sm'>
                             <span className='tag-used'>Đã qua sử dụng</span>
-                            <span className='tag-time-used grow'>3 tháng</span>
+                            {/* <span className='tag-time-used grow'>3 tháng</span> */}
                         </span>
                     ) : (
                         <span className='tag-like-new flex items-center gap-2'>
@@ -64,8 +62,8 @@ const Card = ({
                     <span className='price '>{numberWithCommas(price)}</span>
                 </h3>
                 <div className='flex items-center gap-4'>
-                    <div className='avatar online h-10 w-10'>
-                        <img src={avatarUrl} alt='' className=' rounded-full' draggable={draggable} />
+                    <div className='avatar online h-10 w-10 shrink-0'>
+                        <img src={DefaultImages.defaultAvatar} alt='' className=' rounded-full' draggable={draggable} />
                     </div>
                     <div className=' flex flex-col items-baseline justify-start'>
                         <h2>{username}</h2>
@@ -82,7 +80,7 @@ const Card = ({
                         <MdLocationPin />
                         <span className='text-right text-xs text-secondary-default'>{zone}</span>
                     </span>
-                    {isSaved ? (
+                    {/* {isSaved ? (
                         <span className='text-primary-default'>
                             <FaHeart />
                         </span>
@@ -90,7 +88,7 @@ const Card = ({
                         <span className=''>
                             <FaRegHeart />
                         </span>
-                    )}
+                    )} */}
                 </h2>
             </div>
         </div>

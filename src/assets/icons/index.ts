@@ -3,11 +3,12 @@ import shopcart from './shopcart.svg';
 import order from './order.svg';
 import showroom from './showroom.svg';
 import user from './user.svg';
-import search from './search.svg'
-import minus from './minus.svg'
-import plus from './plus.svg'
-import remove from './remove.svg'
-import refresh from './refresh.svg'
+import search from './search.svg';
+import minus from './minus.svg';
+import plus from './plus.svg';
+import remove from './remove.svg';
+import refresh from './refresh.svg';
+import imageSearch from './imageSearch.svg';
 const Icons = {
     headphone,
     shopcart,
@@ -18,7 +19,8 @@ const Icons = {
     minus,
     plus,
     remove,
-    refresh
+    refresh,
+    imageSearch,
 };
 
 export default Icons;

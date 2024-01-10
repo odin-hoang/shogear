@@ -3,10 +3,8 @@ import React, { useEffect, useState, useRef, MutableRefObject } from 'react';
 import { cn } from '../lib/utils/cn';
 // const MAX_WIDTH_IMAGE = 805;
 const MAX_WIDTH_IMAGE = 453;
-interface Images {
-    alt: string;
-    imageUrl: string;
-    imageUrlMobile: string;
+export interface Images {
+    file: string;
 }
 interface ImageGalleryProps {
     images: Images[];
@@ -55,12 +53,11 @@ const ImageSlider: React.FC<ImageGalleryProps> = ({ images }) => {
                     className=' flex h-full w-full snap-x snap-mandatory overflow-hidden scroll-smooth rounded-none  md:rounded-sm'
                 >
                     {images.map((banner, index) => (
-                        <picture className=' grow snap-start bg-inputBg-default object-contain'>
-                            <source srcSet={banner.imageUrl} media='(min-width: 768px)' />
+                        <picture className=' grow snap-start bg-inputBg-default object-contain' key={index}>
+                            <source srcSet={banner.file} media='(min-width: 768px)' />
                             <img
                                 id={'banner' + index}
-                                src={banner.imageUrlMobile}
-                                alt={banner.alt}
+                                src={banner.file}
                                 key={index}
                                 className={cn(
                                     'h-full  max-w-none backdrop-blur transition-all duration-500 md:w-[453px] md:object-contain',

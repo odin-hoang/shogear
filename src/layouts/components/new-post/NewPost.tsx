@@ -12,7 +12,13 @@ import FileUploader from './components/FileUploader';
 import { getCategories, postProduct, uploadImage } from '../../../services/postService';
 
 import { CloseSquareFilled } from '@ant-design/icons';
+import { toast } from 'react-toastify';
+import { useAppDispatch } from '../../../app/hook';
+import { active, inactive } from '../../../features/blur/blur-slice';
+import { flaskRequest } from '../../../services/request';
 const NewPost = () => {
+    const dispatch = useAppDispatch();
+    const [isLoading, setIsLoading] = useState(false);
     const form = useForm<z.infer<typeof productSchema>>({
         resolver: zodResolver(productSchema),
         defaultValues: {},
@@ -43,8 +49,23 @@ const NewPost = () => {
         //  console.log(valuesInit);
         setFieldsValue(valuesInit);
     }, [category]);
+    interface PostResponse {
+        id: number;
+        attachments: [
+            {
+                id: number;
+                file: string;
+                file_type: string;
+                publication: number;
+            },
+        ];
+        createdAt: string;
+        description: string;
+    }
     async function onSubmit(values: z.infer<typeof productSchema>) {
         //      console.log('submit');
+        setIsLoading(true);
+        dispatch(active());
         uploadImage(images).then(async (data: any) => {
             console.log(data);
             if (data?.data?.length > 0) {
@@ -53,16 +74,43 @@ const NewPost = () => {
                     file: item,
                     file_type: 'Photo',
                 }));
-                const product = await postProduct({
-                    product: { ...values, is_available: true },
+                const post = await postProduct({
+                    product: { ...values, is_available: true, status: values.status },
                     fields: values.fields,
-                    attatchments: [...newImages],
-                    post_zone: 'HCM',
-                    post_description: 'hehe',
+                    attachments: [...newImages],
+                    post_zone: values.zone,
+                    post_description: values.description,
                 });
-                if (product) {
-                    console.log(product);
+                const postResponse = post as PostResponse;
+                if (post) {
+                    console.log(post);
+                    // create vector database for search
+                    const postPromises = postResponse.attachments.map((attachment, index) => {
+                        return new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                                flaskRequest
+                                    .post('/create', {
+                                        id: attachment.publication,
+                                        file: attachment.file,
+                                    })
+                                    .then((response) => {
+                                        console.log('vector', response.data);
+                                        resolve(response);
+                                    })
+                                    .catch((error) => {
+                                        console.error(error);
+                                        reject(error);
+                                    });
+                            }, index * 5000);
+                        });
+                    });
+                    Promise.all(postPromises).then((responses) => console.log(responses));
+                    toast.success('Đăng bài thành công');
+                } else {
+                    toast.error('Hãy kiểm tra lại thông tin sản phẩm!');
                 }
+                setIsLoading(false);
+                dispatch(inactive());
             }
         });
         //     console.log(values);
@@ -71,12 +119,34 @@ const NewPost = () => {
     const errors = form.formState.errors;
     const statusList = [
         {
-            value: 'new',
+            value: 1,
             name: 'Mới',
         },
         {
-            value: 'used',
+            value: 0,
             name: 'Đã sử dụng',
+        },
+    ];
+    const zoneList = [
+        {
+            value: 'HCM',
+            name: 'Tp. Hồ Chí Minh',
+        },
+        {
+            value: 'HN',
+            name: 'Hà Nội',
+        },
+        {
+            value: 'DN',
+            name: 'Đà Nẵng',
+        },
+        {
+            value: 'CT',
+            name: 'Cần Thơ',
+        },
+        {
+            value: 'HP',
+            name: 'Hải Phòng',
         },
     ];
     useEffect(() => {
@@ -93,8 +163,9 @@ const NewPost = () => {
     };
     //  console.log(form.getValues('fields'));
     //console.log(form.formState.errors);
+
     return (
-        <div className='p-20'>
+        <div className='mx-auto max-w-[1200px] p-20'>
             <h3 className='mb-4 text-2xl font-semibold'>Tạo bài đăng mới</h3>
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div>
@@ -200,12 +271,23 @@ const NewPost = () => {
                     ></textarea>
                     {errors.name && <p className='mb-4 text-state-error'>{`*${errors.name.message}`}</p>}
                 </div>
+                <div>
+                    <h1 className='mb-4'>Khu vực</h1>
+                    <select {...form.register('zone')} placeholder='' className='select mb-4 w-full bg-gray-100'>
+                        {zoneList.map((item) => (
+                            <option key={item.value} value={item.value}>
+                                {item.name}
+                            </option>
+                        ))}
+                    </select>
+                    {errors.zone && <p className='mb-4 text-state-error'>{`*${errors.zone.message}`}</p>}
+                </div>
                 <h3 className='mb-4 text-xl font-semibold'>Thông tin chi tiết</h3>
                 <div className='grid grid-cols-2 gap-4'>
                     {fields?.map((item: any, index: number) => {
                         if (item.fieldType == 1) {
                             return (
-                                <div>
+                                <div key={index}>
                                     <h1 className='mb-4'>{item.name}</h1>
                                     <input
                                         onChange={(data) => handleChangeFields(data.target.value, item, index)}
@@ -220,7 +302,7 @@ const NewPost = () => {
                             );
                         } else if (item.fieldType == 2) {
                             return (
-                                <div>
+                                <div key={index}>
                                     <h1 className='mb-4'>{item.name}</h1>
                                     <select
                                         onChange={(data) => handleChangeFields(data.target.value, item, index)}
@@ -230,7 +312,7 @@ const NewPost = () => {
                                         <option value={'default'}>{item.name}</option>
 
                                         {item.options.map((option: any) => (
-                                            <option key={option.name} value={item.name}>
+                                            <option key={option.name} value={option.name}>
                                                 {option.name}
                                             </option>
                                         ))}
@@ -243,7 +325,7 @@ const NewPost = () => {
                             );
                         } else if (item.fieldType == 3) {
                             return (
-                                <div>
+                                <div key={index}>
                                     <h1 className='mb-4'>{item.name}</h1>
                                     <select
                                         onChange={(data) => handleChangeFields(data.target.value, item, index)}
@@ -268,11 +350,11 @@ const NewPost = () => {
                     })}
                 </div>
                 <h3 className='mb-4 text-xl font-semibold'>Danh sách hình ảnh</h3>
-                <div className='bg-slate-500'>
+                <div className='mb-4 rounded-md bg-gray-200 p-4'>
                     <div className='grid grid-flow-row grid-cols-5 object-contain'>
                         {images?.map((item: any, index: number) => {
                             return (
-                                <div className=' h-[150px] rounded-sm bg-stone-300'>
+                                <div className=' h-[150px] rounded-sm bg-stone-300' key={index}>
                                     <CloseSquareFilled
                                         onClick={() => {
                                             const updateImages = images;
@@ -296,16 +378,21 @@ const NewPost = () => {
                 <Button
                     type='submit'
                     disabled={isSubmitting}
-                    className={cn('w-full justify-center font-normal ', isSubmitting && 'bg-inputFill-default')}
+                    className={cn(
+                        'w-full justify-center bg-gradient-to-r from-red-500 to-red-800 font-normal',
+                        isSubmitting && 'pointer-events-none bg-inputFill-default',
+                    )}
                     variant={'fill'}
                     size={'medium'}
                 >
                     Thêm sản phẩm{' '}
-                    {isSubmitting ? (
+                    {isLoading ? (
                         <span className='animate-spin'>
                             <AiOutlineLoading />
                         </span>
-                    ) : null}
+                    ) : (
+                        ''
+                    )}
                 </Button>
             </form>
         </div>

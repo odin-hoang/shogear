@@ -85,7 +85,7 @@
         @apply font-bold text-primary-default;
     }
     .price::after {
-        content: '₫';
+        content: '\20AB';
     }
     .icon-text {
         @apply flex items-center gap-2 text-secondary-default;

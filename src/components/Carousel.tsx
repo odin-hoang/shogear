@@ -3,8 +3,10 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { cn } from '../lib/utils/cn';
 import { Link } from 'react-router-dom';
 import Card from './Card';
-import { Post } from '../layouts/components/News';
 import apiRequest from '../services/request';
+import { PostItem } from '../pages/ProductDetail';
+import Loading from './Loading';
+import toHyphenString from '../lib/toHyphenString';
 const Carousel = () => {
     const carouselRef = useRef<HTMLDivElement>(null);
     const cardRef = useRef<HTMLAnchorElement>(null);
@@ -42,30 +44,14 @@ const Carousel = () => {
             carouselRef.current.scrollLeft += side * cardRef.current?.offsetWidth;
         }
     };
-    const [posts, setPosts] = useState<Post[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [posts, setPosts] = useState<PostItem[]>([]);
     useEffect(() => {
+        setIsLoading(true);
         apiRequest.get('/posts').then((response) => {
-            const datas: Post[] = [];
-            for (const post of response.data.results) {
-                const data: Post = {
-                    id: post.id,
-                    imageUrl: post.attachments.length
-                        ? post.attachments[0].file
-                        : 'https://product.hstatic.net/200000722513/product/km086w_facd6092154b4d769a04f1859a0c4b8e_medium.png',
-                    description: post.description,
-                    username: post.user,
-                    price: post.product.price,
-                    postedAt: post.updatedAt,
-                    zone: post.zone,
-                    name: post.product.name,
-                    category: post.product.category,
-                };
-                datas.push(data);
-            }
-            setPosts((prev) => {
-                const newPosts = [...prev, ...datas];
-                return newPosts.filter((post, index, self) => index === self.findIndex((p) => p.id === post.id));
-            });
+            const datas: PostItem[] = response.data.results;
+            setPosts(datas);
+            setIsLoading(false);
         });
     }, []);
     return (
@@ -81,9 +67,11 @@ const Carousel = () => {
                 onMouseUp={handleMouseUp}
                 ref={carouselRef}
             >
+                {isLoading && <Loading />}
                 {posts.map((item, index) => (
                     <Link
-                        to={'/'}
+                        to={`/products/${toHyphenString(item.product.name)}`}
+                        state={{ item }}
                         className={cn(
                             'flex snap-start flex-col rounded-sm  bg-white shadow-lg',
                             cursor.isDragging && 'cursor-grabbing select-none snap-align-none ',
@@ -93,14 +81,14 @@ const Carousel = () => {
                         ref={cardRef}
                     >
                         <Card
-                            imageUrl={item.imageUrl}
-                            name={item.name}
-                            price={item.price}
-                            username={item.username}
-                            postedAt={item.postedAt}
+                            imageUrl={item.product.attachments[0].file}
+                            name={item.product.name}
+                            price={item.product.price}
+                            username={item.user}
+                            postedAt={item.updatedAt}
                             zone={item.zone}
                             draggable={false}
-                            isUsed={item.isUsed}
+                            isUsed={!!item.product.status}
                             isSaved={index % 2 === 0 ? true : false}
                         />
                     </Link>

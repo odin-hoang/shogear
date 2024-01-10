@@ -1,5 +1,6 @@
 import axios from 'axios';
 import apiRequest from './request';
+import { PostItem } from '../pages/ProductDetail';
 
 export async function getFields() {
     try {
@@ -60,6 +61,28 @@ export async function getCategories() {
             const categories = await apiRequest.get('/categories');
             console.log(categories.data);
             res(categories.data?.results);
+        } catch (err) {
+            console.log(err);
+        }
+    });
+}
+export interface PostResponse {
+    count: number;
+    next: string;
+    previous: string;
+    posts: PostItem[];
+}
+export async function SearchPost(q: string | null, page: number) {
+    return new Promise(async (res) => {
+        try {
+            const response = await apiRequest.get(`/posts/?q=${q}`, { params: { page } });
+            const posts: PostItem[] = response.data.results;
+            res({
+                count: response.data.count,
+                next: response.data.next,
+                previous: response.data.previous,
+                posts,
+            } as PostResponse);
         } catch (err) {
             console.log(err);
         }

@@ -5,15 +5,20 @@ import Action from './Action';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../../components/Button';
 import Login from './auth-forms/Login';
 import Signup from './auth-forms/Signup';
 import { useUserContext } from '../../utils/authContext';
 import apiRequest from '../../services/request';
-import { debounce } from 'lodash';
 import HeadlessTippy from '../../components/HeadlessTippy';
-
+import toHyphenString from '../../lib/toHyphenString';
+import { PostItem } from '../../pages/ProductDetail';
+import { useAppDispatch, useDebounce } from '../../app/hook';
+import { MdOutlineImageSearch } from 'react-icons/md';
+import { CiEdit, CiReceipt } from 'react-icons/ci';
+import { active, inactive } from '../../features/blur/blur-slice';
+import DefaultImages from '../../assets/images';
 type InitialSearchState = {
     isSearching: boolean;
     query: string;
@@ -29,21 +34,17 @@ const Header = () => {
     // const cartQuantity = useSelector((state: RootState) => state.cart.quantityTotal);
     // console.log(cartQuantity);
     const listActions = [
-        {
-            icon: Icons.headphone,
-            name1: 'Hotline',
-            name2: '1800.6975',
-        },
-        {
-            icon: Icons.showroom,
-            name1: 'Hệ thống',
-            name2: 'Showroom',
-        },
+        // {
+        //     icon: Icons.imageSearch,
+        //     name1: 'Tìm kiếm',
+        //     name2: 'hình ảnh',
+        //     to: '/search',
+        // },
         {
             icon: Icons.order,
             name1: 'Tra cứu',
             name2: 'đơn hàng',
-            to: '/order/check',
+            to: '/user/order',
         },
         {
             icon: Icons.shopcart,
@@ -57,40 +58,22 @@ const Header = () => {
         query: '',
     });
     // TODO: call query API  --> search result
-    type Post = {
-        id: number;
-        imageUrl: string;
-        heading: string;
-        price: number;
-    };
-    const [posts, setPosts] = useState<Post[]>([]);
-    const debouncedSearch = debounce((query: string) => {
-        apiRequest.get(`/products/?q=${query}`).then((response) => {
-            const datas: Post[] = [];
-            for (const post of response.data.results) {
-                const data: Post = {
-                    id: post.id,
-                    imageUrl: 'https://picsum.photos/200',
-                    heading: post.name,
-                    price: post.price,
-                };
-                datas.push(data);
-            }
-            setPosts(() => {
-                return [...datas];
-            });
+    const [posts, setPosts] = useState<PostItem[]>([]);
+    const debounceQuery = useDebounce<string>(search.query, 500);
+    const [isLoading, setIsLoading] = useState(false);
+    const dispatch = useAppDispatch();
+    useEffect(() => {
+        setIsLoading(true);
+        apiRequest.get(`/posts/?q=${debounceQuery}`).then((response) => {
+            setIsLoading(false);
+            const results: PostItem[] = response.data.results;
+            console.log(results);
+            setPosts(results);
         });
-    }, 500); // delay of 500ms
-
-    useLayoutEffect(() => {
-        if (search.query) {
-            debouncedSearch(search.query);
-        }
-    }, [search.query]);
+    }, [debounceQuery]);
 
     const { getUser, logOut } = useUserContext();
     const user = getUser();
-    console.log(user);
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.value.startsWith(' ')) return;
         setSearch((prev) => ({ ...prev, query: e.target.value, isSearching: !!e.target.value }));
@@ -98,6 +81,7 @@ const Header = () => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function handleSearch(e: any, type: 'click' | 'enter') {
+        if (posts.length === 0) return;
         if (e.key === 'Enter' || type === 'click') {
             const query = search.query.trim().replace(/\s+/g, ' ');
             setSearchParams({ q: query });
@@ -107,7 +91,6 @@ const Header = () => {
     }
     function handleDialog() {
         const modalElement = document.getElementById('modal_login') as HTMLDialogElement | null;
-        console.log(user);
         if (!user) modalElement?.showModal();
         setIsLoginModal(true);
     }
@@ -115,30 +98,37 @@ const Header = () => {
     const handleLoginModal = () => {
         setIsLoginModal(!isLoginModal);
     };
-
+    const handleSearchByImage = () => {
+        navigate('/search', { state: { image: true } });
+    };
     return (
-        <header className='relative z-50 justify-center bg-primary-default'>
-            <div className='mx-auto my-auto flex justify-center bg-primary-default px-4 py-3 lg:mx-auto lg:max-w-[1200px] xl:px-0'>
+        <header className='relative z-50 justify-center bg-gradient-to-r from-pink-500 to-rose-500'>
+            <div className='mx-auto my-auto flex items-center justify-center  px-4 py-3 lg:mx-auto lg:max-w-[1200px] xl:px-0'>
                 <div className='my-auto text-white '>
                     <FaBars className='h-6 w-6' />
                 </div>
-                <Link to={'/'} className='logo my-auto ml-4'>
-                    <img
-                        src='https://file.hstatic.net/200000636033/file/logo_fd11946b31524fbe98765f34f3de0628.svg'
-                        className=' hidden w-[140px] lg:inline-block'
-                    ></img>
+                <Link to={'/'} className='logo my-auto ml-4 shadow-2xl'>
+                    <img src={DefaultImages.logoShogear} className=' hidden w-[140px] lg:inline-block'></img>
                     <img
                         src='https://file.hstatic.net/200000636033/file/logo-mobile_1e5b7fc485b24cf985b3d63cfa1f88be.svg'
                         className=' w-[40px] lg:hidden'
                     ></img>
                 </Link>
-                <div className='search relative ml-4 flex h-10 w-[60%] rounded-sm  bg-white ring-slate-100 focus-within:shadow-overflow sm:w-[80%] md:w-[35%] lg:w-[45%]'>
-                    <div className='relative z-10 w-full overflow-hidden rounded-sm'>
+                <div className='search relative ml-4 flex h-10 w-[60%] rounded-md  bg-white ring-slate-100 focus-within:shadow-overflow sm:w-[80%] md:w-[35%] lg:w-[45%]'>
+                    <div className='relative z-10 w-full overflow-hidden rounded-md'>
                         <input
-                            className='font-italic z-10 h-full w-full rounded-sm rounded-bl-none border-none pl-4 font-sf text-base text-placeholder outline-none placeholder:text-placeholder'
+                            className='font-italic z-10 h-full w-full rounded-md rounded-bl-none border-none pl-4 font-sf text-base text-placeholder outline-none placeholder:text-placeholder'
                             placeholder='Bạn cần tìm gì?'
-                            onFocus={() => setSearch((prev) => ({ ...prev, isSearching: !!prev.query }))}
-                            onBlur={() => setSearch((prev) => ({ ...prev, isSearching: false }))}
+                            onFocus={() => {
+                                setSearch((prev) => ({ ...prev, isSearching: !!prev.query }));
+                                dispatch(active());
+                            }}
+                            onBlur={() => {
+                                setTimeout(() => {
+                                    setSearch((prev) => ({ ...prev, isSearching: false }));
+                                    dispatch(inactive());
+                                }, 200);
+                            }}
                             onChange={(e) => handleChange(e)}
                             onKeyDown={(e) => handleSearch(e, 'enter')}
                             value={search.query}
@@ -151,29 +141,81 @@ const Header = () => {
                         <img src={Icons.search} alt='search' className='h-4 w-4' />
                     </div>
                     {!!search.isSearching && (
-                        <div className='smart-search-wrapper custom-scrollbar'>
-                            {posts.map((item, index) => (
-                                <React.Fragment key={index}>
-                                    <div className='  flex cursor-pointer items-center justify-between gap-2 hover:bg-gray-100'>
-                                        <div className='ml-4'>
-                                            <h3 className='line-clamp-1'>{item.heading}</h3>
-                                            <p>
-                                                <span className='price mr-2 '>{numberWithCommas(item.price)} </span>•{' '}
-                                                {/* <span className='ml-2'>{item.zone}</span> */}
-                                            </p>
-                                        </div>
-                                        <div className='mr-2 p-2'>
-                                            <img src={item.imageUrl} alt='' className='h-16 w-16 object-cover' />
-                                        </div>
-                                    </div>
-                                    <div className='divider m-0 ml-2 h-0 w-[calc(100%-24px)] text-center after:h-[1px]'></div>
-                                </React.Fragment>
-                            ))}
+                        <div
+                            className='smart-search-wrapper custom-scrollbar'
+                            onBlur={() => setSearch((prev) => ({ ...prev, isSearching: false }))}
+                        >
+                            {isLoading && (
+                                <div className='flex items-center justify-center'>
+                                    <span className='loading loading-dots loading-md'></span>
+                                </div>
+                            )}
+                            {posts.length > 0 && !isLoading
+                                ? posts.map((item, index) => (
+                                      <React.Fragment key={index}>
+                                          <Link
+                                              to={`/products/${toHyphenString(item.product.name)}`}
+                                              state={{ item }}
+                                              className='  flex cursor-pointer items-center justify-between gap-2 hover:bg-gray-100'
+                                          >
+                                              <div className='ml-4 '>
+                                                  <h3 className='line-clamp-1'>
+                                                      {item.product.name.split('').map((char, index) => (
+                                                          <span
+                                                              key={index}
+                                                              className={
+                                                                  search.query
+                                                                      .toLowerCase()
+                                                                      .includes(char.toLowerCase())
+                                                                      ? ''
+                                                                      : 'font-bold'
+                                                              }
+                                                          >
+                                                              {char}
+                                                          </span>
+                                                      ))}
+                                                  </h3>
+                                                  <p>
+                                                      <span className='price mr-2 '>
+                                                          {numberWithCommas(item.product.price)}{' '}
+                                                      </span>
+                                                      • <span className='ml-2'>{item.zone}</span>
+                                                  </p>
+                                              </div>
+                                              <div className='mr-2 p-2'>
+                                                  <img
+                                                      src={item.product.attachments[0].file}
+                                                      alt=''
+                                                      className='h-16 w-16 object-cover'
+                                                  />
+                                              </div>
+                                          </Link>
+                                          <div className='divider m-0 ml-2 h-0 w-[calc(100%-24px)] text-center after:h-[1px]'></div>
+                                      </React.Fragment>
+                                  ))
+                                : !isLoading && (
+                                      <div className='flex items-center justify-center p-4'>
+                                          <p className='text-sm text-gray-400'>Không tìm thấy kết quả</p>
+                                      </div>
+                                  )}
                         </div>
                     )}
                 </div>
                 <div className='actions ml-3 flex w-auto align-bottom'>
                     <div className='flex items-center justify-between gap-2 '>
+                        <div
+                            className=' tooltip tooltip-bottom tooltip-warning flex items-center justify-center '
+                            data-tip='Tìm kiếm bằng hình ảnh'
+                        >
+                            <Button
+                                variant={'fill'}
+                                size={'medium'}
+                                className='bg-gradient-to-r from-indigo-300 to-purple-400 text-3xl'
+                                onClick={handleSearchByImage}
+                            >
+                                <MdOutlineImageSearch />
+                            </Button>
+                        </div>
                         {listActions.map((item, index) => {
                             return (
                                 <React.Fragment key={index}>
@@ -275,8 +317,26 @@ const Header = () => {
                             <HeadlessTippy
                                 content={
                                     <div className=' '>
-                                        <Link to={'/new/product'}>Tạo bài đăng</Link>
-                                        <Button variant={'fill'} className='mt-2' onClick={() => logOut()}>
+                                        <Link
+                                            to={'/new/product'}
+                                            className='border-md mb-2 flex items-center gap-2 p-2 hover:bg-gray-200'
+                                        >
+                                            <CiEdit /> Tạo bài đăng
+                                        </Link>
+                                        <Link
+                                            to={'/seller/order'}
+                                            className='border-md flex  items-center gap-2 p-2 hover:bg-gray-200'
+                                        >
+                                            <CiReceipt /> Hoá đơn bán hàng
+                                        </Link>
+                                        <Button
+                                            variant={'fill'}
+                                            className='mt-2'
+                                            onClick={() => {
+                                                logOut();
+                                                navigate('/');
+                                            }}
+                                        >
                                             Đăng xuất
                                         </Button>
                                     </div>

@@ -1,8 +1,10 @@
 import DefaultLayout from '../layouts/DefaultLayout';
+import UserProfile from '../layouts/components/UserProfile';
 import CategoryConfig from '../layouts/components/admin-forms/CategoryConfig';
 import NewPost from '../layouts/components/new-post/NewPost';
 import OrderCheck from '../layouts/components/order-results/OrderCheck';
 import ResultOrder from '../layouts/components/order-results/ResultOrder';
+import SellerOrder from '../layouts/components/seller/SellerOrder';
 import Cart from '../pages/Cart';
 import Checkout from '../pages/Checkout';
 import Home from '../pages/Home';
@@ -16,8 +18,10 @@ export const publicRoutes = [
     { path: '/search', component: SearchResult },
     { path: '/new/config', component: CategoryConfig },
     { path: '/new/product', component: NewPost },
-    { path: '/order/check', component: OrderCheck }, 
+    { path: '/user/order', component: OrderCheck },
     { path: '/order/result/:paymentId', component: ResultOrder },
+    { path: '/user/profile', component: UserProfile },
+    { path: '/seller/order', component: SellerOrder },
 ];
 // need to sign in to access routes
 export const privateRoutes = [];

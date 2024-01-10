@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import Button from '../../../components/Button';
 import React, { useState } from 'react';
 import { LuLogIn } from 'react-icons/lu';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import { cn } from '../../../lib/utils/cn';
 import { AiOutlineLoading } from 'react-icons/ai';
@@ -23,7 +23,7 @@ const Login = ({ onLoginModal }: LoginFormProps) => {
     } = useForm<TLoginSchema>({
         resolver: zodResolver(loginSchema),
     });
-
+    const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const onSubmit = async (data: TLoginSchema) => {
         // TODO: submit to server
@@ -34,6 +34,7 @@ const Login = ({ onLoginModal }: LoginFormProps) => {
         if (user) {
             logIn(user);
         }
+        navigate('/');
         reset();
     };
     return (

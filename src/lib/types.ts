@@ -61,6 +61,7 @@ export const productSchema = z.object({
                 else return false;
             }),
     ),
+    zone: z.string(),
     // images: z.custom().array(),
 });
 export type TLoginSchema = z.infer<typeof loginSchema>;
