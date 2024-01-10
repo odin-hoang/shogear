@@ -1,7 +1,6 @@
 import { numberWithCommas } from '../lib/scripts';
 import { FaClockRotateLeft } from 'react-icons/fa6';
 import { MdLocationPin } from 'react-icons/md';
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { FireIcon } from './Icons';
 import DefaultImages from '../assets/images';
 interface CardProps {
@@ -33,7 +32,6 @@ const Card = ({
     className = '',
     draggable = true,
     isUsed = true,
-    isSaved = false,
 }: CardProps) => {
     return (
         <div className={` flex flex-col ${className}`}>
