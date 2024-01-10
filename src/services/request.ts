@@ -11,4 +11,9 @@ const apiRequest = axios.create({
 //     }
 //     return config;
 // });
+export const flaskRequest = axios.create({
+    baseURL: 'https://safe-definitely-urchin.ngrok-free.app/api',
+    // baseURL: 'http://127.0.0.1:5000/api',
+});
+
 export default apiRequest;

@@ -53,7 +53,7 @@ const ImageSlider: React.FC<ImageGalleryProps> = ({ images }) => {
                     className=' flex h-full w-full snap-x snap-mandatory overflow-hidden scroll-smooth rounded-none  md:rounded-sm'
                 >
                     {images.map((banner, index) => (
-                        <picture className=' grow snap-start bg-inputBg-default object-contain'>
+                        <picture className=' grow snap-start bg-inputBg-default object-contain' key={index}>
                             <source srcSet={banner.file} media='(min-width: 768px)' />
                             <img
                                 id={'banner' + index}

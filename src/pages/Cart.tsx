@@ -78,18 +78,18 @@ const Cart = () => {
     return (
         <div className='bg-white px-6 py-6'>
             <div className='bg-cover bg-center p-0' style={{ backgroundImage: `url(${bgImage})` }}>
-                <h1 className='py-[3rem] text-center text-[4rem]'>Shopping Cart</h1>
+                <h1 className='py-[3rem] text-center text-[4rem]'>GIỎ HÀNG</h1>
             </div>
             <nav className='mb-16 border-b border-solid border-gray-300 border-opacity-50 bg-white'>
                 <div className='w-[100%] px-[10px] py-[1.4rem]'>
                     <ol className='m-0 flex rounded-none bg-transparent p-0'>
                         <li className='breadcrumb-item text-[#777]'>
                             <Link className='text-link' to='/'>
-                                Home
+                                Trang chủ
                             </Link>
                             <span className='mx-2'> / </span>
                         </li>
-                        <li className=' breadcrumb-item '>Shopping Cart</li>
+                        <li className=' breadcrumb-item '>Giỏ hàng</li>
                     </ol>
                 </div>
             </nav>
@@ -100,10 +100,10 @@ const Cart = () => {
                             <table className='table-cart'>
                                 <thead>
                                     <tr>
-                                        <th className='min-w-[350px] max-w-[450px] pl-[10px]'>Product</th>
-                                        <th className='min-w-[140px]'>Price</th>
-                                        <th className='min-w-[135px]'>Quantity</th>
-                                        <th className='min-w-[160px]'>Total</th>
+                                        <th className='min-w-[350px] max-w-[450px] pl-[10px]'>Tên sản phẩm</th>
+                                        <th className='min-w-[140px]'>Giá</th>
+                                        <th className='min-w-[135px]'>Số lượng</th>
+                                        <th className='min-w-[160px]'>Tổng tiền</th>
                                         <th className='min-w-[38px] items-center '></th>
                                     </tr>
                                 </thead>
@@ -182,9 +182,9 @@ const Cart = () => {
                                         // If there are no products in the cart
                                         <tr>
                                             <td colSpan={5} className='py-4 text-center'>
-                                                There are no products in your cart. You can go{' '}
+                                                Không có sản phẩm nào trong giỏ hàng! Quay lại{' '}
                                                 <Link className='text-[#fcb941]' to='/'>
-                                                    shopping
+                                                    trang chủ
                                                 </Link>
                                                 !
                                             </td>
@@ -196,20 +196,20 @@ const Cart = () => {
                         <aside className='flex-basis-25 min-w-[30%] max-w-[30%] flex-1 flex-shrink-0 pl-[10px]'>
                             <div className='mb-[3rem] border border-dashed border-[#d7d7d7] bg-[#f9f9f9] px-[1rem] pb-[0.5rem] pt-2'>
                                 <h3 className='boder-solid border-b border-[#cccccc] pb-[1.2rem] text-[1.5rem]'>
-                                    Cart Total
+                                    Tổng giỏ hàng
                                 </h3>
                                 <table className='table-summary w-[100%]'>
                                     <tbody>
                                         <tr>
                                             <td className='w-[50%] border-b-[0.1rem] border-solid border-[#ebebeb] py-8'>
-                                                Sumtotal:{' '}
+                                                Tổng tiền:{' '}
                                             </td>
                                             <td className='w-[50%] border-b-[0.1rem] border-solid border-[#ebebeb] py-8 text-right'>
                                                 <span>{`${numberWithCommas(sumTotal)} VND`}</span>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td className='pb-2 pt-4'>Shipping:</td>
+                                            <td className='pb-2 pt-4'>Phí vận chuyển:</td>
                                             <td className='pb-2 pt-4'>&nbsp;</td>
                                         </tr>
                                         <tr className='summary-ship'>
@@ -223,7 +223,7 @@ const Cart = () => {
                                                         checked={selectedOption === 0}
                                                     />
                                                     <label className='pl-4' htmlFor='freeShippingOption'>
-                                                        Free Shipping
+                                                        Miễn phí
                                                     </label>
                                                 </div>
                                             </td>
@@ -240,7 +240,7 @@ const Cart = () => {
                                                         checked={selectedOption === 10000}
                                                     />
                                                     <label className='pl-4' htmlFor='standardOption'>
-                                                        Standard:
+                                                        Tiêu chuẩn
                                                     </label>
                                                 </div>
                                             </td>
@@ -257,14 +257,14 @@ const Cart = () => {
                                                         checked={selectedOption === 20000}
                                                     />
                                                     <label className='pl-4' htmlFor='expressOption'>
-                                                        Express:
+                                                        Nhanh
                                                     </label>
                                                 </div>
                                             </td>
                                             <td className='last-td w-[50%] text-right'>20.000 VND</td>
                                         </tr>
                                         <tr>
-                                            <td className='w-[50%] py-[1.5rem] text-[#fcb941]'>Total:</td>
+                                            <td className='w-[50%] py-[1.5rem] text-[#fcb941]'>Tổng tiền:</td>
 
                                             <td className='w-[50%] py-[1.5rem] text-right text-[#fcb941]'>
                                                 {numberWithCommas(calculateTotal())} VND
@@ -278,7 +278,7 @@ const Cart = () => {
                                         className='proceed-checkout mb-[1rem] block w-[100%] border-[0.1rem] border-[#fcb941] p-[0.5rem] text-center text-[#fcb941]'
                                         onClick={scrollToTop}
                                     >
-                                        PROCEED TO CHECKOUT
+                                        THANH TOÁN
                                     </Link>
                                 )}
                             </div>
@@ -286,25 +286,24 @@ const Cart = () => {
                                 to='/'
                                 className='continue-shopping flex w-[100%] justify-center border-[0.1rem] border-solid border-[#d7d7d7] p-4'
                             >
-                                <span className='pr-[20px]'>CONTINUE SHOPPING</span>
+                                <span className='pr-[20px]'>QUAY VỀ TRANG CHỦ</span>
                                 <img src={Icons.refresh} alt='' className='refresh-icon h-auto w-[14px]' />
                             </Link>
                         </aside>
                         {/* modal remove*/}
                         <dialog id='my_modal_1' className='modal'>
                             <div className='modal-box'>
-                                <h3 className='text-lg font-bold text-[#e30005]'>Notice</h3>
+                                <h3 className='text-lg font-bold text-[#e30005]'>Thông báo</h3>
                                 <p className='py-4'>
-                                    Are you sure you want to <span className='text-[#e30005]'>remove</span> this
-                                    product?
+                                    Bạn chắc rằng muốn <span className='text-[#e30005]'>xoá</span> sản phẩm này?
                                 </p>
                                 <div className='modal-action'>
                                     <form method='dialog'>
-                                        <button className='btn-yes btn'>No</button>
+                                        <button className='btn-yes btn'>Thoát</button>
                                     </form>
                                     <form method='dialog'>
                                         <button onClick={() => handleRemove(idRemove)} className='btn-no btn'>
-                                            Yes
+                                            Xoá
                                         </button>
                                     </form>
                                 </div>

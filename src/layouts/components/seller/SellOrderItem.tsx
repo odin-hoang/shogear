@@ -4,35 +4,39 @@ import Button from '../../../components/Button';
 import { useState } from 'react';
 import apiRequest from '../../../services/request';
 import { toast } from 'react-toastify';
+import { AiOutlineLoading } from 'react-icons/ai';
+import { cn } from '../../../lib/utils/cn';
 
 interface ItemProps {
     item: TOrderItem;
 }
-const getStatus = (status: number) => {
-    switch (status) {
-        case 1:
-            return 'Chưa xác nhận';
-        case 2:
-            return 'Đã xác nhận';
-        case 3:
-            return 'Đã nhận tiền';
-        case 4:
-            return 'Đơn hàng đã giao';
-        case 5:
-            return 'Chờ huỷ';
-    }
-};
-const statuses = [
-    { id: 1, name: 'Chưa xác nhận' },
-    { id: 2, name: 'Đã xác nhận' },
-    { id: 3, name: 'Đã nhận tiền' },
-    { id: 4, name: 'Đã giao thành công' },
-    { id: 5, name: 'Đã huỷ' },
-];
-
 const SellOrderItem = ({ item }: ItemProps) => {
+    const getStatus = (status: number) => {
+        switch (status) {
+            case 1:
+                return 'Chưa xác nhận';
+            case 2:
+                return 'Đã xác nhận';
+            case 3:
+                return 'Đã nhận tiền';
+            case 4:
+                return 'Đơn hàng đã giao';
+            case 5:
+                return 'Chờ huỷ';
+        }
+    };
+    const statuses = [
+        { id: 1, name: 'Chưa xác nhận' },
+        { id: 2, name: 'Đã xác nhận' },
+        { id: 3, name: 'Đã nhận tiền' },
+        { id: 4, name: 'Đã giao thành công' },
+        { id: 5, name: 'Đã huỷ' },
+    ];
+
     const [selectedStatus, setSelectedStatus] = useState(item.confirmationStatus);
+    const [isLoading, setIsLoading] = useState(false);
     const handleUpdate = () => {
+        setIsLoading(true);
         const updateData = {
             order: item.order.id,
             confirmationStatus: selectedStatus,
@@ -41,15 +45,26 @@ const SellOrderItem = ({ item }: ItemProps) => {
         apiRequest
             .put(`/seller/orders/${item.product.user.id}`, updateData)
             .then((response) => {
-                toast(response.data.message);
+                setIsLoading(false);
+                toast.success(response.data.message);
             })
             .catch((err) => console.log(err.response.data.message));
     };
     return (
-        <div className=' my-5 flex flex-col justify-center gap-2 rounded-lg border bg-white p-5'>
+        <div
+            className={cn(
+                ' my-5 flex flex-col justify-center gap-2 rounded-lg border bg-white p-5',
+                item.order.status == 2 && 'bg-gradient-to-r from-yellow-500 to-amber-200',
+            )}
+        >
             <div className='flex items-center justify-between'>
                 <div>
                     Mã đơn hàng: <span className='font-bold'>{item.order.id}</span>
+                    {item.order.status == 2 && (
+                        <Button className='bg-gradient-to-r from-blue-800 to-indigo-900' variant={'fill'}>
+                            Đã thanh toán
+                        </Button>
+                    )}
                 </div>
             </div>
             <div className='flex items-center justify-between'>
@@ -103,33 +118,32 @@ const SellOrderItem = ({ item }: ItemProps) => {
                         <td className='text-center'>{item.quantity}</td>
                         <td className=''>{item.product.user.firstName + ' ' + item.product.user.lastName}</td>
                         <td className=''>
-                            {statuses.filter((status) => status.id > selectedStatus).length === 0 ? (
-                                <span className='font-medium text-red-500'>Đã huỷ</span>
-                            ) : (
-                                <select onChange={(data) => setSelectedStatus(Number(data.target.value))}>
-                                    <option value={selectedStatus}>{getStatus(item.order.status)}</option>
-                                    {statuses
-                                        .filter((status) => status.id > selectedStatus)
-                                        .map((status) => (
-                                            <option key={status.id} value={status.id}>
-                                                {status.name}
-                                            </option>
-                                        ))}
-                                </select>
-                            )}
+                            <select
+                                onChange={(data) => setSelectedStatus(Number(data.target.value))}
+                                className='border px-2 py-1'
+                            >
+                                <option value={selectedStatus}>{getStatus(selectedStatus)}</option>
+                                {statuses
+                                    .filter((status) => status.id > selectedStatus)
+                                    .map((status) => (
+                                        <option key={status.id} value={status.id}>
+                                            {status.name}
+                                        </option>
+                                    ))}
+                            </select>
                         </td>
                     </tr>
                 </tbody>
             </table>
             <div>
-                {statuses.filter((status) => status.id > selectedStatus).length === 0 ||
-                item.confirmationStatus == 4 ? (
-                    ''
-                ) : (
-                    <Button variant={'fillBlue'} className='hover:bg-blue-6 00 float-right' onClick={handleUpdate}>
-                        Cập nhật
-                    </Button>
-                )}
+                <Button variant={'fillBlue'} className='hover:bg-blue-6 00 float-right' onClick={handleUpdate}>
+                    Cập nhật
+                    {isLoading && (
+                        <span className='animate-spin'>
+                            <AiOutlineLoading />
+                        </span>
+                    )}
+                </Button>
             </div>
         </div>
     );

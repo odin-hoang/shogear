@@ -50,21 +50,8 @@ const OrderCheck = () => {
             console.log(response.data);
             setOrders(response.data);
             setIsLoading(false);
-            // for (const order of response.data) {
-            //     apiRequest.get<User>(`/users/${order.items}`).then((response) => {
-            //         setSellers((prev) => [...prev, response.data]);
-            //     });
-            // }
         });
     }, []);
-    // const handleDeleteOrder = (order_id: number) => {
-    //     setIsLoading(true);
-    //     apiRequest.delete(`/orders/${order_id}`).then(() => {
-    //         setIsLoading(false);
-    //         alert('Đã xoá thành công order!');
-    //         window.location.reload();
-    //     });
-    // };
     const [selected, setSelected] = useState(1);
     return (
         <div className='min-h-[400px] bg-bodyBg-default py-5'>

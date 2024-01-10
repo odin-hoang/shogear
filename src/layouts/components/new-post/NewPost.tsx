@@ -13,7 +13,12 @@ import { getCategories, postProduct, uploadImage } from '../../../services/postS
 
 import { CloseSquareFilled } from '@ant-design/icons';
 import { toast } from 'react-toastify';
+import { useAppDispatch } from '../../../app/hook';
+import { active, inactive } from '../../../features/blur/blur-slice';
+import { flaskRequest } from '../../../services/request';
 const NewPost = () => {
+    const dispatch = useAppDispatch();
+    const [isLoading, setIsLoading] = useState(false);
     const form = useForm<z.infer<typeof productSchema>>({
         resolver: zodResolver(productSchema),
         defaultValues: {},
@@ -44,9 +49,23 @@ const NewPost = () => {
         //  console.log(valuesInit);
         setFieldsValue(valuesInit);
     }, [category]);
+    interface PostResponse {
+        id: number;
+        attachments: [
+            {
+                id: number;
+                file: string;
+                file_type: string;
+                publication: number;
+            },
+        ];
+        createdAt: string;
+        description: string;
+    }
     async function onSubmit(values: z.infer<typeof productSchema>) {
         //      console.log('submit');
         setIsLoading(true);
+        dispatch(active());
         uploadImage(images).then(async (data: any) => {
             console.log(data);
             if (data?.data?.length > 0) {
@@ -55,20 +74,43 @@ const NewPost = () => {
                     file: item,
                     file_type: 'Photo',
                 }));
-                const product = await postProduct({
+                const post = await postProduct({
                     product: { ...values, is_available: true, status: values.status },
                     fields: values.fields,
                     attachments: [...newImages],
                     post_zone: values.zone,
                     post_description: values.description,
                 });
-                if (product) {
-                    console.log(product);
+                const postResponse = post as PostResponse;
+                if (post) {
+                    console.log(post);
+                    // create vector database for search
+                    const postPromises = postResponse.attachments.map((attachment, index) => {
+                        return new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                                flaskRequest
+                                    .post('/create', {
+                                        id: attachment.publication,
+                                        file: attachment.file,
+                                    })
+                                    .then((response) => {
+                                        console.log('vector', response.data);
+                                        resolve(response);
+                                    })
+                                    .catch((error) => {
+                                        console.error(error);
+                                        reject(error);
+                                    });
+                            }, index * 5000);
+                        });
+                    });
+                    Promise.all(postPromises).then((responses) => console.log(responses));
                     toast.success('Đăng bài thành công');
                 } else {
                     toast.error('Hãy kiểm tra lại thông tin sản phẩm!');
                 }
                 setIsLoading(false);
+                dispatch(inactive());
             }
         });
         //     console.log(values);
@@ -121,7 +163,7 @@ const NewPost = () => {
     };
     //  console.log(form.getValues('fields'));
     //console.log(form.formState.errors);
-    const [isLoading, setIsLoading] = useState(true);
+
     return (
         <div className='mx-auto max-w-[1200px] p-20'>
             <h3 className='mb-4 text-2xl font-semibold'>Tạo bài đăng mới</h3>
@@ -245,7 +287,7 @@ const NewPost = () => {
                     {fields?.map((item: any, index: number) => {
                         if (item.fieldType == 1) {
                             return (
-                                <div>
+                                <div key={index}>
                                     <h1 className='mb-4'>{item.name}</h1>
                                     <input
                                         onChange={(data) => handleChangeFields(data.target.value, item, index)}
@@ -260,7 +302,7 @@ const NewPost = () => {
                             );
                         } else if (item.fieldType == 2) {
                             return (
-                                <div>
+                                <div key={index}>
                                     <h1 className='mb-4'>{item.name}</h1>
                                     <select
                                         onChange={(data) => handleChangeFields(data.target.value, item, index)}
@@ -283,7 +325,7 @@ const NewPost = () => {
                             );
                         } else if (item.fieldType == 3) {
                             return (
-                                <div>
+                                <div key={index}>
                                     <h1 className='mb-4'>{item.name}</h1>
                                     <select
                                         onChange={(data) => handleChangeFields(data.target.value, item, index)}
@@ -312,7 +354,7 @@ const NewPost = () => {
                     <div className='grid grid-flow-row grid-cols-5 object-contain'>
                         {images?.map((item: any, index: number) => {
                             return (
-                                <div className=' h-[150px] rounded-sm bg-stone-300'>
+                                <div className=' h-[150px] rounded-sm bg-stone-300' key={index}>
                                     <CloseSquareFilled
                                         onClick={() => {
                                             const updateImages = images;

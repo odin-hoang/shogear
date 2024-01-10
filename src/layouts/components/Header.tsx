@@ -14,9 +14,10 @@ import apiRequest from '../../services/request';
 import HeadlessTippy from '../../components/HeadlessTippy';
 import toHyphenString from '../../lib/toHyphenString';
 import { PostItem } from '../../pages/ProductDetail';
-import { useDebounce } from '../../app/hook';
+import { useAppDispatch, useDebounce } from '../../app/hook';
 import { MdOutlineImageSearch } from 'react-icons/md';
 import { CiEdit, CiReceipt } from 'react-icons/ci';
+import { active, inactive } from '../../features/blur/blur-slice';
 type InitialSearchState = {
     isSearching: boolean;
     query: string;
@@ -59,6 +60,7 @@ const Header = () => {
     const [posts, setPosts] = useState<PostItem[]>([]);
     const debounceQuery = useDebounce<string>(search.query, 500);
     const [isLoading, setIsLoading] = useState(false);
+    const dispatch = useAppDispatch();
     useEffect(() => {
         setIsLoading(true);
         apiRequest.get(`/posts/?q=${debounceQuery}`).then((response) => {
@@ -119,9 +121,15 @@ const Header = () => {
                         <input
                             className='font-italic z-10 h-full w-full rounded-sm rounded-bl-none border-none pl-4 font-sf text-base text-placeholder outline-none placeholder:text-placeholder'
                             placeholder='Bạn cần tìm gì?'
-                            onFocus={() => setSearch((prev) => ({ ...prev, isSearching: !!prev.query }))}
+                            onFocus={() => {
+                                setSearch((prev) => ({ ...prev, isSearching: !!prev.query }));
+                                dispatch(active());
+                            }}
                             onBlur={() => {
-                                setTimeout(() => setSearch((prev) => ({ ...prev, isSearching: false })), 200);
+                                setTimeout(() => {
+                                    setSearch((prev) => ({ ...prev, isSearching: false }));
+                                    dispatch(inactive());
+                                }, 200);
                             }}
                             onChange={(e) => handleChange(e)}
                             onKeyDown={(e) => handleSearch(e, 'enter')}

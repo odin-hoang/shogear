@@ -2,8 +2,8 @@ import React, { useRef, useState } from 'react';
 import Button from './Button';
 import { PostItem } from '../pages/ProductDetail';
 import { toast } from 'react-toastify';
-import axios from 'axios';
-import apiRequest from '../services/request';
+
+import apiRequest, { flaskRequest } from '../services/request';
 interface SearchPostProps {
     setPosts: React.Dispatch<React.SetStateAction<PostItem[]>>;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,8 +36,8 @@ const ImageForm = ({ setPosts, setIsLoading }: SearchPostProps) => {
         var imageFile = inputRef.current.files[0];
         formData.append('file', imageFile);
         setPosts([]);
-        axios
-            .post<ListProduct>('http://127.0.0.1:5000/api/search', formData, {
+        flaskRequest
+            .post<ListProduct>('/search', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Access-Control-Allow-Origin': '*',

@@ -14,6 +14,8 @@ import Loading from '../components/Loading';
 import ReactPaginate from 'react-paginate';
 import { PostResponse, SearchPost } from '../services/postService';
 import ImageForm from '../components/ImageForm';
+import { useAppDispatch } from '../app/hook';
+import { active, inactive } from '../features/blur/blur-slice';
 type InitialFilterer = {
     byZone?: string | null;
     byProductTag: string[];
@@ -37,8 +39,10 @@ const SearchResult = () => {
     ];
     const [posts, setPosts] = useState<PostItem[]>([]);
     const [filterPost, setFilterPost] = useState<PostItem[]>([]);
+    const dispatch = useAppDispatch();
     useEffect(() => {
         setIsLoading(true);
+        dispatch(active());
         setFilterPost([]);
         SearchPost(q, 1).then((response) => {
             const res = response as PostResponse;
@@ -48,6 +52,7 @@ const SearchResult = () => {
             setPosts(datas);
             setFilterPost(datas);
             setIsLoading(false);
+            dispatch(inactive());
         });
     }, [q]);
     useEffect(() => setFilterPost(posts), [posts]);

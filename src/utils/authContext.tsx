@@ -1,10 +1,12 @@
 import { ReactNode, useContext, createContext, useState } from 'react';
 export const INITIAL_USER = {
     id: -1,
-    username: '',
+    firstName: '',
+    lastName: '',
     email: '',
     isAdmin: false,
-    fullName: '',
+    phone: '',
+    username: '',
 };
 export type IContextType = {
     user: IUser;
@@ -19,19 +21,23 @@ export type IContextType = {
 };
 export type IUser = {
     id: number;
-    fullName: string;
+    firstName: string;
+    lastName: string;
     username: string;
     email: string;
     isAdmin: boolean;
+    phone: string;
 };
 
 export const AuthContext = createContext<IContextType>({
     user: {
         id: -1,
-        fullName: '',
-        username: '',
+        firstName: '',
+        lastName: '',
         email: '',
         isAdmin: false,
+        phone: '',
+        username: '',
     },
     isLoading: false,
     setUser: () => {},
@@ -50,17 +56,9 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const logIn = (values: any) => {
-        console.log('hihiihi');
-        console.log(values);
         if (values.accessToken) localStorage.setItem('userToken', values.accessToken);
         localStorage.setItem('user', JSON.stringify(values.user));
-        const userdata = {
-            id: values.user.id,
-            isAdmin: values.user.isAdmin,
-            fullName: values.user.lastName + ' ' + values.user.firstName,
-            username: values.user.username,
-            email: '',
-        };
+        const userdata = values.user;
         window.document.getElementById('close_dialog')?.click();
         setUser(userdata);
         setIsAuthenticated(true);

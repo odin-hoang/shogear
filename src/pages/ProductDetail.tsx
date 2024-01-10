@@ -3,7 +3,7 @@ import ImageSlider, { Images } from '../components/ImageSlider';
 import { numberWithCommas } from '../lib/scripts';
 import Button from '../components/Button';
 import { FiPhoneCall } from 'react-icons/fi';
-import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
+// import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
 import { BsCartPlusFill } from 'react-icons/bs';
 import { FaClockRotateLeft, FaLocationDot } from 'react-icons/fa6';
 import { FireIcon } from '../components/Icons';
@@ -203,9 +203,9 @@ const ProductDetail = () => {
                                     <FiPhoneCall />
                                     Bấm để hiện số điện thoại
                                 </Button>
-                                <Button variant={'outlineBlue'}>
+                                {/* <Button variant={'outlineBlue'}>
                                     <IoChatbubbleEllipsesOutline /> Chat với người bán
-                                </Button>
+                                </Button> */}
                             </div>
                         </div>
                     </div>
