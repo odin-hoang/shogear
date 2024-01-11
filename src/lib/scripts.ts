@@ -9,7 +9,7 @@ export function formatISODate(isoDateString: string): { formattedDate: string; f
     const month = dateObject.getUTCMonth() + 1;
     const day = dateObject.getUTCDate();
 
-    const hours = dateObject.getUTCHours();
+    const hours = dateObject.getUTCHours() + 7;
     const minutes = dateObject.getUTCMinutes();
     const seconds = dateObject.getUTCSeconds();
 
