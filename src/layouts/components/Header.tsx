@@ -16,7 +16,7 @@ import toHyphenString from '../../lib/toHyphenString';
 import { PostItem } from '../../pages/ProductDetail';
 import { useAppDispatch, useDebounce } from '../../app/hook';
 import { MdOutlineImageSearch } from 'react-icons/md';
-import { CiEdit, CiReceipt } from 'react-icons/ci';
+import { CiEdit, CiReceipt, CiUser } from 'react-icons/ci';
 import { active, inactive } from '../../features/blur/blur-slice';
 import DefaultImages from '../../assets/images';
 type InitialSearchState = {
@@ -82,6 +82,7 @@ const Header = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function handleSearch(e: any, type: 'click' | 'enter') {
         if (posts.length === 0) return;
+        if (search.query === '') return;
         if (e.key === 'Enter' || type === 'click') {
             const query = search.query.trim().replace(/\s+/g, ' ');
             setSearchParams({ q: query });
@@ -91,7 +92,7 @@ const Header = () => {
     }
     function handleDialog() {
         const modalElement = document.getElementById('modal_login') as HTMLDialogElement | null;
-        if (!user) modalElement?.showModal();
+        if (!user) modalElement?.show();
         setIsLoginModal(true);
     }
     const [isLoginModal, setIsLoginModal] = useState(true);
@@ -317,6 +318,13 @@ const Header = () => {
                             <HeadlessTippy
                                 content={
                                     <div className=' '>
+                                        <Link
+                                            to={'/user/profile'}
+                                            state={{ seller: user.id }}
+                                            className='border-md mb-2 flex items-center gap-2 p-2 hover:bg-gray-200'
+                                        >
+                                            <CiUser /> Trang cá nhân
+                                        </Link>
                                         <Link
                                             to={'/new/product'}
                                             className='border-md mb-2 flex items-center gap-2 p-2 hover:bg-gray-200'

@@ -72,7 +72,16 @@ const News = ({}: NewsProps) => {
     };
 
     console.log('re-render');
-    const zoneTags = ['TP. Hồ Chí Minh', 'Đà Nẵng', 'Cao Bằng', 'Hà Nội', 'Long An', 'Kiên Giang'];
+    const zoneTags = [
+        'TP. Hồ Chí Minh',
+        'Đà Nẵng',
+        'Cao Bằng',
+        'Hà Nội',
+        'Long An',
+        'Kiên Giang',
+        'Cần Thơ',
+        'Hải Phòng',
+    ];
     // default layout = grid
     const [layout, setLayout] = useState(false);
 

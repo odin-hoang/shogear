@@ -3,13 +3,14 @@ import Button from '../../../components/Button';
 import React, { useState } from 'react';
 import { LuLogIn } from 'react-icons/lu';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaFacebook, FaGoogle } from 'react-icons/fa';
+// import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import { cn } from '../../../lib/utils/cn';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TLoginSchema, loginSchema } from '../../../lib/types';
 import { login } from '../../../services/loginService';
 import { useUserContext } from '../../../utils/authContext';
+import { toast } from 'react-toastify';
 interface LoginFormProps extends React.ComponentPropsWithRef<'form'> {
     onLoginModal: () => void;
 }
@@ -29,10 +30,13 @@ const Login = ({ onLoginModal }: LoginFormProps) => {
         // TODO: submit to server
         setIsSubmitting(true);
         const user = await login(data.email, data.password);
-        console.log(user);
+
         setIsSubmitting(false);
         if (user) {
             logIn(user);
+            toast.success('Đăng nhập thành công!');
+        } else {
+            toast.error('Thông tin tài khoản hoặc mặt khẩu không chính xác');
         }
         navigate('/');
         reset();
@@ -74,7 +78,7 @@ const Login = ({ onLoginModal }: LoginFormProps) => {
                     )}
                 </Button>
             </form>
-            <div className='divider'>hoặc đăng nhập bằng</div>
+            {/* <div className='divider'>hoặc đăng nhập bằng</div>
             <div className='flex items-center gap-4'>
                 <Button variant={'fill'} className='w-full justify-center opacity-90 hover:opacity-100'>
                     <FaGoogle /> Google
@@ -82,7 +86,7 @@ const Login = ({ onLoginModal }: LoginFormProps) => {
                 <Button variant={'fillBlue'} className='w-full justify-center opacity-90 hover:opacity-100'>
                     <FaFacebook /> Facebook
                 </Button>
-            </div>
+            </div> */}
 
             <p className='mt-4 text-center'>
                 Bạn chưa có tài khoản?{' '}
