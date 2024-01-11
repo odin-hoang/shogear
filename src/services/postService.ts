@@ -88,3 +88,19 @@ export async function SearchPost(q: string | null, page: number) {
         }
     });
 }
+export async function ShowPost(page: number) {
+    return new Promise(async (res) => {
+        try {
+            const response = await apiRequest.get(`/posts`, { params: { page } });
+            const posts: PostItem[] = response.data.results;
+            res({
+                count: response.data.count,
+                next: response.data.next,
+                previous: response.data.previous,
+                posts,
+            } as PostResponse);
+        } catch (err) {
+            console.log(err);
+        }
+    });
+}

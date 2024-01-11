@@ -34,6 +34,7 @@ export interface PostItem {
     description: string;
     createdAt: string;
     updatedAt: string;
+    review: number;
 }
 export interface CartItem {
     id: number;
