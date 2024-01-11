@@ -3,13 +3,14 @@ import Button from '../../../components/Button';
 import React from 'react';
 import { LuLogIn } from 'react-icons/lu';
 
-import { FaFacebook, FaGoogle } from 'react-icons/fa';
+// import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import { cn } from '../../../lib/utils/cn';
 import { AiOutlineLoading } from 'react-icons/ai';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TSignupSchema, signupSchema } from '../../../lib/types';
 import { registerUser } from '../../../services/loginService';
+import { toast } from 'react-toastify';
 
 interface SignupFormProps extends React.ComponentPropsWithRef<'form'> {
     onLoginModal: () => void;
@@ -30,6 +31,9 @@ const Signup = ({ onLoginModal }: SignupFormProps) => {
         if (user) {
             onLoginModal();
             reset();
+            toast.success('Đăng ký tài khoản thành công!');
+        } else {
+            toast.error('Đăng ký không thành công');
         }
     };
     return (
@@ -110,7 +114,7 @@ const Signup = ({ onLoginModal }: SignupFormProps) => {
                     )}
                 </Button>
             </form>
-            <div className='divider'>hoặc đăng ký bằng</div>
+            {/* <div className='divider'>hoặc đăng ký bằng</div>
             <div className='flex items-center gap-4'>
                 <Button variant={'fill'} className='w-full justify-center opacity-90 hover:opacity-100'>
                     <FaGoogle /> Google
@@ -118,7 +122,7 @@ const Signup = ({ onLoginModal }: SignupFormProps) => {
                 <Button variant={'fillBlue'} className='w-full justify-center opacity-90 hover:opacity-100'>
                     <FaFacebook /> Facebook
                 </Button>
-            </div>
+            </div> */}
 
             <p className='mt-4 text-center'>
                 Bạn đã có tài khoản?{' '}

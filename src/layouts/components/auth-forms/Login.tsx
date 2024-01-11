@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { TLoginSchema, loginSchema } from '../../../lib/types';
 import { login } from '../../../services/loginService';
 import { useUserContext } from '../../../utils/authContext';
+import { toast } from 'react-toastify';
 interface LoginFormProps extends React.ComponentPropsWithRef<'form'> {
     onLoginModal: () => void;
 }
@@ -29,10 +30,13 @@ const Login = ({ onLoginModal }: LoginFormProps) => {
         // TODO: submit to server
         setIsSubmitting(true);
         const user = await login(data.email, data.password);
-        console.log(user);
+
         setIsSubmitting(false);
         if (user) {
             logIn(user);
+            toast.success('Đăng nhập thành công!');
+        } else {
+            toast.error('Thông tin tài khoản hoặc mặt khẩu không chính xác');
         }
         navigate('/');
         reset();

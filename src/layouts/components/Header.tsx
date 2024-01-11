@@ -92,7 +92,7 @@ const Header = () => {
     }
     function handleDialog() {
         const modalElement = document.getElementById('modal_login') as HTMLDialogElement | null;
-        if (!user) modalElement?.showModal();
+        if (!user) modalElement?.show();
         setIsLoginModal(true);
     }
     const [isLoginModal, setIsLoginModal] = useState(true);

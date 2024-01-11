@@ -3,21 +3,22 @@ import apiRequest from './request';
 
 export async function login(username_or_email: string, password: string) {
     try {
-        const user = await apiRequest.post('/login', {
+        const response = await apiRequest.post('/login', {
             username_or_email,
             password,
         });
-        return user.data.data;
+        if (response.status == 400) return null;
+        return response.data.data;
     } catch (err) {
-        console.log(err);
+        return null;
     }
 }
 export async function registerUser(data: TSignupSchema) {
     try {
-        console.log(data);
         const response = await apiRequest.post('/register', data);
+        if (response.status == 400) return null;
         return response.data.data;
     } catch (err) {
-        console.log(err);
+        return null;
     }
 }
