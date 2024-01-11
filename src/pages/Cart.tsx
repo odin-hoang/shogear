@@ -6,8 +6,12 @@ import Icons from '../assets/icons';
 import { numberWithCommas } from '../lib/scripts';
 import { useRef, useState } from 'react';
 import { removeFromCart, updateCartItemQuantity, updateShippingFee } from '../features/cart/cart-slice';
+import { useUserContext } from '../utils/authContext';
+import { toast } from 'react-toastify';
 
 const Cart = () => {
+    const { getUser } = useUserContext();
+    const user = getUser();
     const dispatch = useDispatch();
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
     const [Items, setItems] = useState(cartItems);
@@ -273,13 +277,26 @@ const Cart = () => {
                                     </tbody>
                                 </table>
                                 {cartItems?.length > 0 && (
-                                    <Link
-                                        to='/checkout'
-                                        className='proceed-checkout mb-[1rem] block w-[100%] border-[0.1rem] border-[#fcb941] p-[0.5rem] text-center text-[#fcb941]'
-                                        onClick={scrollToTop}
-                                    >
-                                        THANH TOÁN
-                                    </Link>
+                                    <>
+                                        {!user ? (
+                                            <div
+                                                onClick={() => {
+                                                    toast.error('Đăng nhập để tiếp tục');
+                                                }}
+                                                className='proceed-checkout mb-[1rem] block w-[100%] cursor-pointer border-[0.1rem] border-[#fcb941] p-[0.5rem] text-center text-[#fcb941]'
+                                            >
+                                                THANH TOÁN
+                                            </div>
+                                        ) : (
+                                            <Link
+                                                to='/checkout'
+                                                className='proceed-checkout mb-[1rem] block w-[100%] border-[0.1rem] border-[#fcb941] p-[0.5rem] text-center text-[#fcb941]'
+                                                onClick={scrollToTop}
+                                            >
+                                                THANH TOÁN
+                                            </Link>
+                                        )}
+                                    </>
                                 )}
                             </div>
                             <Link

@@ -15,7 +15,7 @@ const Action = (data: ActionData) => {
                     </div>
 
                     <div className='hidden  w-full flex-col font-sf text-xs font-semibold  text-white md:block'>
-                        <div className='mb-0.5 whitespace-nowrap'>{data.name1}</div>
+                        <div className='mb-0.5 whitespace-nowrap text-left'>{data.name1}</div>
                         <div className='whitespace-pre'>{data.name2}</div>
                     </div>
                 </div>

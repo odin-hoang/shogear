@@ -1,6 +1,8 @@
+import AdminLayout from '../layouts/AdminLayout';
 import DefaultLayout from '../layouts/DefaultLayout';
 import UserProfile from '../layouts/components/UserProfile';
 import CategoryConfig from '../layouts/components/admin-forms/CategoryConfig';
+import AdminPage from '../layouts/components/admin/AdminPage';
 import NewPost from '../layouts/components/new-post/NewPost';
 import OrderCheck from '../layouts/components/order-results/OrderCheck';
 import ResultOrder from '../layouts/components/order-results/ResultOrder';
@@ -22,6 +24,7 @@ export const publicRoutes = [
     { path: '/order/result/:paymentId', component: ResultOrder },
     { path: '/user/profile', component: UserProfile },
     { path: '/seller/order', component: SellerOrder },
+    { path: '/admin', component: AdminPage, layout: AdminLayout },
 ];
 // need to sign in to access routes
 export const privateRoutes = [];
