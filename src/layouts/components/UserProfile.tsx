@@ -84,7 +84,7 @@ const UserProfile = () => {
                                         className=' block w-full border-t border-gray-100 py-4 pl-6 pr-3 text-gray-600 transition duration-150 hover:bg-gray-100'
                                     >
                                         <img
-                                            src='/src/assets/images/default-avatar.png'
+                                            src={post.product.attachments[0].file}
                                             alt=''
                                             className='mr-2 inline-block h-6 rounded-full shadow-md'
                                         />
