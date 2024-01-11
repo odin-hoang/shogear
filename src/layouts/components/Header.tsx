@@ -16,7 +16,7 @@ import toHyphenString from '../../lib/toHyphenString';
 import { PostItem } from '../../pages/ProductDetail';
 import { useAppDispatch, useDebounce } from '../../app/hook';
 import { MdOutlineImageSearch } from 'react-icons/md';
-import { CiEdit, CiReceipt, CiUser } from 'react-icons/ci';
+import { CiBookmarkCheck, CiEdit, CiReceipt, CiUser } from 'react-icons/ci';
 import { active, inactive } from '../../features/blur/blur-slice';
 import DefaultImages from '../../assets/images';
 type InitialSearchState = {
@@ -26,6 +26,8 @@ type InitialSearchState = {
 const Header = () => {
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
     const navigate = useNavigate();
+    const { getUser, logOut } = useUserContext();
+    const user = getUser();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, setSearchParams] = useSearchParams({ q: '' });
     // const q = searchParams.get('q');
@@ -45,6 +47,7 @@ const Header = () => {
             name1: 'Tra cứu',
             name2: 'đơn hàng',
             to: '/user/order',
+            authen: user,
         },
         {
             icon: Icons.shopcart,
@@ -72,8 +75,6 @@ const Header = () => {
         });
     }, [debounceQuery]);
 
-    const { getUser, logOut } = useUserContext();
-    const user = getUser();
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.value.startsWith(' ')) return;
         setSearch((prev) => ({ ...prev, query: e.target.value, isSearching: !!e.target.value }));
@@ -282,15 +283,32 @@ const Header = () => {
                                             </div>
                                         </div>
                                     ) : (
-                                        <Link to={item.to || ''}>
-                                            <Action
-                                                name1={item.name1}
-                                                name2={item.name2}
-                                                icon={item.icon}
-                                                key={index}
-                                                count={item.count}
-                                            />
-                                        </Link>
+                                        <>
+                                            {!item.authen ? (
+                                                <div
+                                                    className='tooltip tooltip-bottom'
+                                                    data-tip='Đăng nhập để tiếp tục'
+                                                >
+                                                    <Action
+                                                        name1={item.name1}
+                                                        name2={item.name2}
+                                                        icon={item.icon}
+                                                        key={index}
+                                                        count={item.count}
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <Link to={item.to || ''}>
+                                                    <Action
+                                                        name1={item.name1}
+                                                        name2={item.name2}
+                                                        icon={item.icon}
+                                                        key={index}
+                                                        count={item.count}
+                                                    />
+                                                </Link>
+                                            )}
+                                        </>
                                     )}
                                 </React.Fragment>
                             );
@@ -337,6 +355,14 @@ const Header = () => {
                                         >
                                             <CiReceipt /> Hoá đơn bán hàng
                                         </Link>
+                                        {user.isAdmin && (
+                                            <Link
+                                                to={'/admin'}
+                                                className='border-md flex  items-center gap-2 p-2 hover:bg-gray-200'
+                                            >
+                                                <CiBookmarkCheck /> Quản lý trang web
+                                            </Link>
+                                        )}
                                         <Button
                                             variant={'fill'}
                                             className='mt-2'
