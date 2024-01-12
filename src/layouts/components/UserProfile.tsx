@@ -34,6 +34,7 @@ const UserProfile = () => {
         products: [],
         posts: [],
         phone: '',
+        email: '',
     });
     const [posts, setPosts] = useState<PostItem[]>([]);
     return (

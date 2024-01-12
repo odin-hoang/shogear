@@ -50,7 +50,8 @@ const Carousel = () => {
         setIsLoading(true);
         apiRequest.get('/posts').then((response) => {
             const datas: PostItem[] = response.data.results;
-            setPosts(datas);
+            const reviewdPosts = datas.filter((data) => data.review == 1);
+            setPosts(reviewdPosts);
             setIsLoading(false);
         });
     }, []);

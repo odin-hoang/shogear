@@ -29,6 +29,7 @@ export interface User {
     products: number[];
     posts: number[];
     phone: string;
+    email: string;
 }
 export interface TOrderItem {
     id: number;

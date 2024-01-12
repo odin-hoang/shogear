@@ -10,21 +10,35 @@ import { cn } from '../../../lib/utils/cn';
 interface ItemProps {
     item: TOrderItem;
 }
+export const getStatus = (status: number) => {
+    switch (status) {
+        case 1:
+            return 'Chưa xác nhận';
+        case 2:
+            return 'Đã xác nhận';
+        case 3:
+            return 'Đã nhận tiền';
+        case 4:
+            return 'Đơn hàng đã giao';
+        case 5:
+            return 'Chờ huỷ';
+    }
+};
+export const getSellerStatus = (status: number) => {
+    switch (status) {
+        case 1:
+            return 'Chưa xác nhận';
+        case 2:
+            return 'Đã xác nhận';
+        case 3:
+            return 'Đã nhận tiền';
+        case 4:
+            return 'Đã giao thành công';
+        case 5:
+            return 'Đã huỷ';
+    }
+};
 const SellOrderItem = ({ item }: ItemProps) => {
-    const getStatus = (status: number) => {
-        switch (status) {
-            case 1:
-                return 'Chưa xác nhận';
-            case 2:
-                return 'Đã xác nhận';
-            case 3:
-                return 'Đã nhận tiền';
-            case 4:
-                return 'Đơn hàng đã giao';
-            case 5:
-                return 'Chờ huỷ';
-        }
-    };
     const statuses = [
         { id: 1, name: 'Chưa xác nhận' },
         { id: 2, name: 'Đã xác nhận' },

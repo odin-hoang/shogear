@@ -51,7 +51,8 @@ const ImageForm = ({ setPosts, setIsLoading }: SearchPostProps) => {
 
                 Promise.all(postPromises).then((responses) => {
                     const fetchedPosts = responses.map((response) => response.data);
-                    setPosts(fetchedPosts);
+                    const reviewdPosts = fetchedPosts.filter((post) => post.review == 1);
+                    setPosts(reviewdPosts);
                     setIsLoading(false);
                 });
             });
