@@ -47,8 +47,9 @@ const News = ({}: NewsProps) => {
         setIsLoading(true);
         apiRequest.get('/posts').then((response) => {
             const datas: PostItem[] = response.data.results;
-            setPosts(datas);
-            setFilterPost(datas);
+            const reviewdPosts = datas.filter((data) => data.review === 1);
+            setPosts(reviewdPosts);
+            setFilterPost(reviewdPosts);
             setUrls(response.data.next);
             setIsLoading(false);
         });
@@ -58,12 +59,13 @@ const News = ({}: NewsProps) => {
         setIsLoadingViewMore(true);
         axios.get(urls).then((response) => {
             const datas: PostItem[] = response.data.results;
+            const reviewdPosts = datas.filter((data) => data.review === 1);
             setPosts((prev) => {
-                const newPosts = [...prev, ...datas];
+                const newPosts = [...prev, ...reviewdPosts];
                 return newPosts;
             });
             setFilterPost((prev) => {
-                const newPosts = [...prev, ...datas];
+                const newPosts = [...prev, ...reviewdPosts];
                 return newPosts;
             });
             setUrls(response.data.next);

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import apiRequest from './request';
 import { PostItem } from '../pages/ProductDetail';
+import { Order, User } from '../layouts/components/order-results/OrderCheck';
 
 export async function getFields() {
     try {
@@ -72,6 +73,18 @@ export interface PostResponse {
     previous: string;
     posts: PostItem[];
 }
+export interface UserResponse {
+    count: number;
+    next: string;
+    previous: string;
+    users: User[];
+}
+export interface OrderResponse {
+    count: number;
+    next: string;
+    previous: string;
+    orders: Order[];
+}
 export async function SearchPost(q: string | null, page: number) {
     return new Promise(async (res) => {
         try {
@@ -83,6 +96,54 @@ export async function SearchPost(q: string | null, page: number) {
                 previous: response.data.previous,
                 posts,
             } as PostResponse);
+        } catch (err) {
+            console.log(err);
+        }
+    });
+}
+export async function ShowPost(page: number) {
+    return new Promise(async (res) => {
+        try {
+            const response = await apiRequest.get(`/posts`, { params: { page } });
+            const posts: PostItem[] = response.data.results;
+            res({
+                count: response.data.count,
+                next: response.data.next,
+                previous: response.data.previous,
+                posts,
+            } as PostResponse);
+        } catch (err) {
+            console.log(err);
+        }
+    });
+}
+export async function ShowUsers(page?: number) {
+    return new Promise(async (res) => {
+        try {
+            const response = await apiRequest.get(`/users`, { params: { page } });
+            const users: User[] = response.data.results;
+            res({
+                count: response.data.count,
+                next: response.data.next,
+                previous: response.data.previous,
+                users,
+            } as UserResponse);
+        } catch (err) {
+            console.log(err);
+        }
+    });
+}
+export async function ShowOrders(page?: number) {
+    return new Promise(async (res) => {
+        try {
+            const response = await apiRequest.get(`/orders`, { params: { page } });
+            const orders: Order[] = response.data.results;
+            res({
+                count: response.data.count,
+                next: response.data.next,
+                previous: response.data.previous,
+                orders,
+            } as OrderResponse);
         } catch (err) {
             console.log(err);
         }
