@@ -81,7 +81,7 @@ const Checkout = () => {
                 console.log(order);
                 // navigate(order?.data?.orderUrl);
                 localStorage.setItem('order', JSON.stringify(order?.data));
-                window.location = order?.data?.orderUrl;
+                window.open(order?.data?.orderUrl, '_blank');
             }
             console.log(JSON.stringify(data));
         } else {
