@@ -70,7 +70,7 @@ const Header = () => {
         apiRequest.get(`/posts/?q=${debounceQuery}`).then((response) => {
             setIsLoading(false);
             const results: PostItem[] = response.data.results;
-            const reviewedPost = results.filter((post) => post.review == 1);
+            const reviewedPost = results.filter((post) => post.review === 1);
             console.log(results);
             setPosts(reviewedPost);
         });

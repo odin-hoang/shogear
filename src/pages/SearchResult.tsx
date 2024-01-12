@@ -130,7 +130,7 @@ const SearchResult = () => {
         SearchPost(q, e.selected + 1).then((response) => {
             const res = response as PostResponse;
             const datas: PostItem[] = res.posts;
-            const reviewdPosts = datas.filter((post) => post.review == 1);
+            const reviewdPosts = datas.filter((post) => post.review === 1);
             const totalPage = Math.ceil(res.count / 10);
             setPagination({ totalPage });
 
